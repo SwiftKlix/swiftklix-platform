@@ -1,8 +1,8 @@
 {
   "stats": {
-    "totalChapters": 198,
+    "totalChapters": 199,
     "activeOrgs": 12,
-    "totalMembers": 5215,
+    "totalMembers": 5216,
     "activeProjectsCount": 85,
     "campusFootprint": 85
   },
@@ -15,7 +15,7 @@
       "image": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80",
       "foundedYear": 2020,
       "status": "Verified 501(c)(3)",
-      "activeChaptersCount": 50,
+      "activeChaptersCount": 51,
       "membersCount": 1200,
       "headquarters": "Seattle, WA",
       "website": "https://ecoroots.org",
@@ -476,6 +476,22 @@
   ],
   "matchmaking": [
     {
+      "id": "match-1788234660067",
+      "createdAt": "2026-09-01T03:51:00.067Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
       "id": "match-1788233109255",
       "createdAt": "2026-09-01T03:25:09.255Z",
       "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
@@ -732,6 +748,24 @@
     }
   ],
   "applications": [
+    {
+      "id": "app-1788234660054",
+      "status": "approved",
+      "submittedAt": "2026-09-01T03:51:00.054Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T03:51:00.058Z"
+    },
     {
       "id": "app-1788233109239",
       "status": "approved",
@@ -1266,6 +1300,19 @@
     }
   ],
   "chapters": [
+    {
+      "id": "chap-1788234660058",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 2,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active"
+    },
     {
       "id": "chap-1788233109243",
       "orgId": "org-ecoroots",
