@@ -351,6 +351,15 @@ app.post('/api/reset', (req, res) => {
   res.json({ message: 'Database reset to initial sample seed successfully.' });
 });
 
+// Dedicated Static Legal Pages for Google OAuth Compliance & Verification
+app.get('/privacy', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/privacy.html'));
+});
+
+app.get('/terms', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/terms.html'));
+});
+
 // Serve compiled Frontend statically in production
 const clientDist = path.join(__dirname, '../client/dist');
 if (fs.existsSync(clientDist)) {
