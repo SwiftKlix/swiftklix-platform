@@ -8,39 +8,24 @@ export default function UserProfileModal({ isOpen, onClose, user, onSaveProfile 
   const [activeTab, setActiveTab] = useState('view'); // 'view' or 'edit'
   
   const [profileData, setProfileData] = useState({
-    name: user?.name || 'Alex Morgan',
-    email: user?.email || 'alex.morgan@university.edu',
-    avatar: user?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
+    name: user?.name || '',
+    email: user?.email || '',
+    avatar: user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'User')}&background=2563EB&color=fff`,
     banner: user?.banner || 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80',
-    headline: user?.headline || 'Community Organizer | Stanford 2026 | Environmental Activist',
-    location: user?.location || 'San Francisco Bay Area, CA',
-    bio: user?.bio || 'Passionate student leader focused on scaling climate action chapters and youth civic participation. Experienced in community coalition building, volunteer management, and grassroots event hosting.',
-    university: user?.university || 'Stanford University',
-    degree: user?.degree || 'B.S. Earth Systems & Public Policy',
-    gradYear: user?.gradYear || '2026',
-    skills: user?.skills || ['Grassroots Organizing', 'Project Management', 'Public Speaking', 'Team Leadership', 'Event Logistics', 'Social Media Strategy'],
-    causes: user?.causes || ['Environment', 'Education & Tech', 'Civic Engagement'],
-    experience: user?.experience || [
-      {
-        id: 1,
-        title: 'Founding Chapter Lead',
-        org: 'EcoRoots Bay Area',
-        period: '2025 - Present',
-        description: 'Chartered campus branch, mobilized 45+ student volunteers, and coordinated local tree restoration events.'
-      },
-      {
-        id: 2,
-        title: 'Community Outreach Intern',
-        org: 'Sustainable Futures Coalition',
-        period: '2024 - 2025',
-        description: 'Coordinated civic town halls and youth climate roundtables across 6 high schools.'
-      }
-    ],
+    headline: user?.headline || 'SwiftKlix Community Member',
+    location: user?.location || '',
+    bio: user?.bio || '',
+    university: user?.university || '',
+    degree: user?.degree || '',
+    gradYear: user?.gradYear || '',
+    skills: user?.skills || ['Community Organizing', 'Volunteer Leadership'],
+    causes: user?.causes || ['Civic Engagement'],
+    experience: user?.experience || [],
     socials: user?.socials || {
-      linkedin: 'https://linkedin.com/in/alex-morgan',
-      github: 'https://github.com/alexmorgan',
-      twitter: 'https://x.com/alexmorgan',
-      website: 'https://alexmorgan.me'
+      linkedin: '',
+      twitter: '',
+      github: '',
+      website: ''
     }
   });
 

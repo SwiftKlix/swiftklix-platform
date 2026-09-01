@@ -225,7 +225,7 @@ export default function ApplyModal({ opportunity, org, user, chapters, onJoinBra
                 required
                 value={applicantName}
                 onChange={(e) => setApplicantName(e.target.value)}
-                placeholder="Alex Morgan"
+                placeholder="Enter your full name"
                 className="w-full p-2 rounded-xl border border-slate-200 bg-white font-medium focus:outline-none focus:border-slate-400"
               />
             </div>
@@ -237,7 +237,7 @@ export default function ApplyModal({ opportunity, org, user, chapters, onJoinBra
                 required
                 value={applicantEmail}
                 onChange={(e) => setApplicantEmail(e.target.value)}
-                placeholder="alex.morgan@university.edu"
+                placeholder="your.email@example.com"
                 className="w-full p-2 rounded-xl border border-slate-200 bg-white font-medium focus:outline-none focus:border-slate-400"
               />
             </div>

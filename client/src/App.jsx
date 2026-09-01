@@ -34,19 +34,9 @@ export default function App() {
  const [user, setUser] = useState(() => {
   try {
    const saved = localStorage.getItem('SwiftKlix_user');
-   return saved ? JSON.parse(saved) : {
-    name: 'Alex Morgan',
-    email: 'alex.morgan@university.edu',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-    role: 'admin'
-   };
+   return saved ? JSON.parse(saved) : null;
   } catch (e) {
-   return {
-    name: 'Alex Morgan',
-    email: 'alex.morgan@university.edu',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-    role: 'admin'
-   };
+   return null;
   }
  });
  const [isAuthOpen, setIsAuthOpen] = useState(false);

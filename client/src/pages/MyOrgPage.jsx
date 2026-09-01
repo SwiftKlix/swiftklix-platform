@@ -346,15 +346,15 @@ export default function MyOrgPage({
   const handleOpenCharterNewBranch = () => {
     setIsCharteringNewBranch(true);
     setBranchFormData({
-      name: `${currentOrg?.name || 'Local'} Campus Chapter`,
-      location: 'Austin, TX',
-      institution: 'University of Texas at Austin',
-      leadName: 'Jordan Rivera',
-      leadEmail: 'jordan.rivera@university.edu',
-      activeMembers: 12,
-      eventsHosted: 1,
-      recentEvent: 'Inaugural Chapter Kickoff',
-      meetingSchedule: 'Every Tuesday 7:00 PM',
+      name: `${currentOrg?.name || 'Local'} Chapter`,
+      location: '',
+      institution: '',
+      leadName: '',
+      leadEmail: '',
+      activeMembers: 1,
+      eventsHosted: 0,
+      recentEvent: 'Chapter Inauguration',
+      meetingSchedule: 'TBD',
       status: 'Active'
     });
   };

@@ -72,11 +72,10 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
     if (!isOpen) return;
 
     const timer = setTimeout(() => {
-      if (window.google?.accounts?.id && googleBtnRef.current) {
+      if (window.google?.accounts?.id && googleBtnRef.current && googleClientId.trim()) {
         try {
-          const effectiveClientId = googleClientId.trim() || '715367623912-demo.apps.googleusercontent.com';
           window.google.accounts.id.initialize({
-            client_id: effectiveClientId,
+            client_id: googleClientId.trim(),
             callback: handleGoogleCredentialResponse,
             auto_select: false
           });
@@ -103,19 +102,25 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
   if (!isOpen) return null;
 
   const handleManualGooglePrompt = () => {
+    if (!googleClientId.trim()) {
+      setShowConfig(true);
+      setError('Please enter your Google Cloud OAuth Client ID below to enable Google authentication.');
+      return;
+    }
+
     if (window.google?.accounts?.id) {
       try {
-        const effectiveClientId = googleClientId.trim() || '715367623912-demo.apps.googleusercontent.com';
         window.google.accounts.id.initialize({
-          client_id: effectiveClientId,
+          client_id: googleClientId.trim(),
           callback: handleGoogleCredentialResponse
         });
         window.google.accounts.id.prompt();
       } catch (e) {
         console.error(e);
+        setError('Google Sign-In failed. Please verify your Google Client ID and authorized origins.');
       }
     } else {
-      setError('Google Identity Service script is loading. Please check your internet connection or try again.');
+      setError('Google Identity Service script is loading. Please check your connection or use Email sign-in.');
     }
   };
 
@@ -194,29 +199,6 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
       onLogin(loggedUser);
       onClose();
     }
-  };
-
-  const handleDemoLogin = (roleType) => {
-    if (roleType === 'org_admin') {
-      onLogin({
-        name: 'Jordan Rivera',
-        email: 'jordan@ecoroots.org',
-        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-        role: 'admin',
-        accountType: 'National Director (EcoRoots)',
-        provider: 'demo'
-      });
-    } else {
-      onLogin({
-        name: 'Alex Morgan',
-        email: 'alex.morgan@university.edu',
-        avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=300&q=80',
-        role: 'user',
-        accountType: 'Student Changemaker & Chapter Founder',
-        provider: 'demo'
-      });
-    }
-    onClose();
   };
 
   return (
@@ -424,33 +406,12 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
 
             <button
               type="submit"
-              className="w-full py-2.5 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-colors shadow-2xs mt-2 flex items-center justify-center gap-1.5"
+              className="w-full py-2.5 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-colors shadow-2xs mt-2 flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <span>{authMode === 'signin' ? "Sign In" : "Create SwiftKlix Account"}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </form>
-
-          {/* Quick Demo Access */}
-          <div className="mt-4 pt-3 border-t border-slate-100 text-left">
-            <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block mb-2">
-              Instant Demo Access:
-            </span>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => handleDemoLogin('changemaker')}
-                className="flex-1 p-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 text-[11px] font-semibold text-center transition-colors"
-              >
-                Alex (Changemaker)
-              </button>
-              <button
-                onClick={() => handleDemoLogin('org_admin')}
-                className="flex-1 p-2 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-900 text-[11px] font-semibold text-center transition-colors"
-              >
-                Jordan (Org Admin)
-              </button>
-            </div>
-          </div>
 
         </div>
       </div>

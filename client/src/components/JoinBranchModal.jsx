@@ -175,7 +175,7 @@ export default function JoinBranchModal({ isOpen, branch, org, user, onClose, on
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Alex Morgan"
+                  placeholder="Enter your full name"
                   className="w-full p-2.5 rounded-xl border border-slate-200 bg-white font-medium text-slate-900 focus:outline-none focus:border-blue-600 text-xs"
                 />
               </div>
@@ -187,7 +187,7 @@ export default function JoinBranchModal({ isOpen, branch, org, user, onClose, on
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="alex.morgan@university.edu"
+                  placeholder="your.email@example.com"
                   className="w-full p-2.5 rounded-xl border border-slate-200 bg-white font-medium text-slate-900 focus:outline-none focus:border-blue-600 text-xs"
                 />
               </div>
