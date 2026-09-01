@@ -314,76 +314,83 @@ export default function ExplorePage({
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {featuredOpportunities.slice(0, 4).map((opp) => {
-            const org = orgs.find(o => o.id === opp.orgId);
-            const oppMatch = calculateMatch(opp);
-            const img = org?.image || "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=600&q=80";
+        {featuredOpportunities.length === 0 ? (
+          <div className="clean-card p-8 text-center space-y-2 border border-dashed border-slate-200">
+            <p className="text-slate-700 font-semibold text-xs">No branch founding campaigns currently open</p>
+            <p className="text-slate-400 text-[11px]">Check back soon or register an organization to post new chapter campaigns.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {featuredOpportunities.slice(0, 4).map((opp) => {
+              const org = orgs.find(o => o.id === opp.orgId);
+              const oppMatch = calculateMatch(opp);
+              const img = org?.image || "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=600&q=80";
 
-            return (
-              <div key={opp.id} className="clean-card overflow-hidden flex flex-col justify-between group hover:border-slate-300 transition-all">
-                <div className="relative h-36 w-full bg-slate-100 overflow-hidden">
-                  <img src={img} alt={opp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                  <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/95 text-slate-900 shadow-xs">
-                      {opp.category}
-                    </span>
-                    {oppMatch && (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-700 text-white shadow-xs">
-                        {oppMatch}% Match
+              return (
+                <div key={opp.id} className="clean-card overflow-hidden flex flex-col justify-between group hover:border-slate-300 transition-all">
+                  <div className="relative h-36 w-full bg-slate-100 overflow-hidden">
+                    <img src={img} alt={opp.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/95 text-slate-900 shadow-xs">
+                        {opp.category}
                       </span>
-                    )}
-                  </div>
+                      {oppMatch && (
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-700 text-white shadow-xs">
+                          {oppMatch}% Match
+                        </span>
+                      )}
+                    </div>
 
-                  {/* Logo badge - Circular Crop */}
-                  <div className="absolute -bottom-3 left-3 w-10 h-10 rounded-full bg-white p-0.5 shadow-md border border-slate-200 flex items-center justify-center z-10 overflow-hidden">
-                    {org?.logo ? (
-                      <img src={org.logo} alt={org.name} className="w-full h-full object-cover rounded-full" />
-                    ) : (
-                      <div className="w-full h-full rounded-full bg-slate-900 text-white font-extrabold text-xs flex items-center justify-center">
-                        {(opp?.orgName || "O").charAt(0)}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="p-5 pt-4 flex-1 flex flex-col justify-between text-xs">
-                  <div>
-                    <h3 className="font-bold text-sm text-slate-900 mb-1 leading-snug">{opp.title}</h3>
-                    <div className="flex items-center justify-between mb-3">
-                      <button
-                        onClick={() => onViewOrg(opp.orgId)}
-                        className="font-semibold text-blue-700 hover:underline flex items-center gap-1 text-xs"
-                      >
-                        <span>{opp.orgName}</span>
-                        <VerifiedBadge />
-                      </button>
-                      <span className="text-slate-500 flex items-center gap-1 text-[11px] font-medium">
-                        <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                        {opp.targetLocation}
-                      </span>
+                    {/* Logo badge - Circular Crop */}
+                    <div className="absolute -bottom-3 left-3 w-10 h-10 rounded-full bg-white p-0.5 shadow-md border border-slate-200 flex items-center justify-center z-10 overflow-hidden">
+                      {org?.logo ? (
+                        <img src={org.logo} alt={org.name} className="w-full h-full object-cover rounded-full" />
+                      ) : (
+                        <div className="w-full h-full rounded-full bg-slate-900 text-white font-extrabold text-xs flex items-center justify-center">
+                          {(opp?.orgName || "O").charAt(0)}
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-                    <button
-                      onClick={() => onViewOrg(opp.orgId)}
-                      className="text-xs font-semibold text-slate-600 hover:text-slate-900"
-                    >
-                      View Organization
-                    </button>
-                    <button
-                      onClick={() => onApply(opp)}
-                      className="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold hover:bg-slate-800 transition-colors shadow-2xs"
-                    >
-                      Apply for Branch
-                    </button>
+                  <div className="p-5 pt-4 flex-1 flex flex-col justify-between text-xs">
+                    <div>
+                      <h3 className="font-bold text-sm text-slate-900 mb-1 leading-snug">{opp.title}</h3>
+                      <div className="flex items-center justify-between mb-3">
+                        <button
+                          onClick={() => onViewOrg(opp.orgId)}
+                          className="font-semibold text-blue-700 hover:underline flex items-center gap-1 text-xs"
+                        >
+                          <span>{opp.orgName}</span>
+                          <VerifiedBadge />
+                        </button>
+                        <span className="text-slate-500 flex items-center gap-1 text-[11px] font-medium">
+                          <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                          {opp.targetLocation}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+                      <button
+                        onClick={() => onViewOrg(opp.orgId)}
+                        className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+                      >
+                        View Organization
+                      </button>
+                      <button
+                        onClick={() => onApply(opp)}
+                        className="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold hover:bg-slate-800 transition-colors shadow-2xs"
+                      >
+                        Apply for Branch
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
     </div>

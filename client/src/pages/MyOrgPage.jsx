@@ -470,7 +470,29 @@ export default function MyOrgPage({
   );
 
   const orgChapters = (chapters || []).filter(c => c?.orgId === currentOrg?.id);
-  const totalVolunteers = orgChapters.reduce((acc, chap) => acc + (chap?.activeMembers || 0), 24);
+  const totalVolunteers = orgChapters.reduce((acc, chap) => acc + (chap?.activeMembers || 0), 0);
+
+  if (!currentOrg && !isRegisterMode) {
+    return (
+      <div className="space-y-6 pb-24 max-w-4xl mx-auto text-center py-12">
+        <div className="clean-card p-12 space-y-4">
+          <div className="w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto shadow-xs">
+            <Building2 className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900">No Organization Registered Yet</h2>
+          <p className="text-slate-500 text-xs max-w-md mx-auto">
+            Register your non-profit or student club on SwiftKlix to scale local branches, post core team roles, and manage candidate screening pipelines.
+          </p>
+          <button
+            onClick={() => setIsRegisterMode(true)}
+            className="px-6 py-3 bg-slate-900 text-white rounded-xl font-bold text-xs hover:bg-slate-800 transition-colors shadow-xs"
+          >
+            Register Your Organization
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 pb-24 max-w-6xl mx-auto">
@@ -494,23 +516,27 @@ export default function MyOrgPage({
         <div className="flex items-center gap-2">
           {!isRegisterMode && (
             <>
-              <select
-                value={selectedOrgId}
-                onChange={(e) => setSelectedOrgId(e.target.value)}
-                className="text-xs px-3.5 py-2 rounded-xl border border-slate-200 bg-white font-bold text-slate-800 focus:outline-none"
-              >
-                {(orgs || []).map(o => (
-                  <option key={o.id} value={o.id}>{o.name}</option>
-                ))}
-              </select>
+              {(orgs || []).length > 1 && (
+                <select
+                  value={selectedOrgId}
+                  onChange={(e) => setSelectedOrgId(e.target.value)}
+                  className="text-xs px-3.5 py-2 rounded-xl border border-slate-200 bg-white font-bold text-slate-800 focus:outline-none"
+                >
+                  {(orgs || []).map(o => (
+                    <option key={o.id} value={o.id}>{o.name}</option>
+                  ))}
+                </select>
+              )}
 
-              <button
-                onClick={() => onViewLiveProfile && onViewLiveProfile(currentOrg.id)}
-                className="flex items-center gap-1 px-3 py-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold"
-              >
-                <span>Live Page</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </button>
+              {currentOrg && (
+                <button
+                  onClick={() => onViewLiveProfile && onViewLiveProfile(currentOrg.id)}
+                  className="flex items-center gap-1 px-3 py-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold"
+                >
+                  <span>Live Page</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </button>
+              )}
             </>
           )}
 

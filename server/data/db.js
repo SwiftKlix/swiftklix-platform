@@ -34,7 +34,17 @@ function writeData(data) {
 export const db = {
   getStats() {
     const data = readData();
-    return data.stats;
+    const orgs = data.organizations || [];
+    const chapters = data.chapters || [];
+    const opps = data.opportunities || [];
+    const totalMembers = chapters.reduce((sum, c) => sum + (c.activeMembers || 0), 0) + orgs.reduce((sum, o) => sum + (o.membersCount || 0), 0);
+    return {
+      totalChapters: chapters.length,
+      activeOrgs: orgs.length,
+      totalMembers: totalMembers,
+      activeProjectsCount: opps.length,
+      campusFootprint: chapters.length
+    };
   },
 
   getOrgs() {
