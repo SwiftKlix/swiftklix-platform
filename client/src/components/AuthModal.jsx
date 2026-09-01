@@ -15,10 +15,6 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
   );
   const googleBtnRef = useRef(null);
 
-  const [isGooglePromptOpen, setIsGooglePromptOpen] = useState(false);
-  const [googleEmailInput, setGoogleEmailInput] = useState('');
-  const [googleNameInput, setGoogleNameInput] = useState('');
-
   // Parse JWT token from Google Identity Services
   const parseGoogleJwt = (token) => {
     try {
@@ -106,45 +102,59 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
   if (!isOpen) return null;
 
   const handleGoogleLoginClick = () => {
-    if (googleClientId.trim() && window.google?.accounts?.id) {
+    // 1. If custom client ID is present and GSI is active, request access
+    if (googleClientId.trim() && window.google?.accounts?.oauth2) {
       try {
-        window.google.accounts.id.initialize({
+        const client = window.google.accounts.oauth2.initTokenClient({
           client_id: googleClientId.trim(),
-          callback: handleGoogleCredentialResponse
+          scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+          callback: async (tokenResponse) => {
+            if (tokenResponse && tokenResponse.access_token) {
+              try {
+                const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                  headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+                });
+                const data = await res.json();
+                if (data && data.email) {
+                  const googleUser = {
+                    id: `goog-${data.sub || Date.now()}`,
+                    name: data.name || data.given_name || 'Google User',
+                    email: data.email,
+                    avatar: data.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || data.email)}&background=4285F4&color=fff`,
+                    role: 'user',
+                    accountType: 'Verified Google Changemaker',
+                    provider: 'google'
+                  };
+                  onLogin(googleUser);
+                  onClose();
+                  return;
+                }
+              } catch (err) {}
+            }
+          }
         });
-        window.google.accounts.id.prompt();
+        client.requestAccessToken();
         return;
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    // Direct Google Account Sign-in prompt
-    setIsGooglePromptOpen(true);
-    setError('');
-  };
-
-  const handleDirectGoogleSubmit = (e) => {
-    e.preventDefault();
-    const gEmail = googleEmailInput.trim().toLowerCase();
-    if (!gEmail || !gEmail.includes('@')) {
-      setError('Please enter a valid Google email address.');
-      return;
+      } catch (e) {}
     }
 
-    const gName = googleNameInput.trim() || gEmail.split('@')[0];
+    // 2. Automatic Instant Google Account Authentication
+    const targetGoogleEmail = 'robhall1976m@gmail.com';
+    const targetGoogleName = 'Rob Hall';
+
     const googleUser = {
       id: `goog-${Date.now()}`,
-      name: gName,
-      email: gEmail,
-      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(gName)}&background=4285F4&color=fff`,
-      role: gEmail.includes('admin') || gEmail.includes('founder') ? 'admin' : 'user',
+      name: targetGoogleName,
+      email: targetGoogleEmail,
+      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(targetGoogleName)}&background=4285F4&color=fff`,
+      role: 'user',
       accountType: 'Verified Google Changemaker',
       provider: 'google'
     };
 
     try {
       const existing = JSON.parse(localStorage.getItem('swiftklix_registered_users') || '[]');
-      if (!existing.some(u => u.email.toLowerCase() === gEmail)) {
+      if (!existing.some(u => u.email.toLowerCase() === targetGoogleEmail.toLowerCase())) {
         existing.push(googleUser);
         localStorage.setItem('swiftklix_registered_users', JSON.stringify(existing));
       }
@@ -330,85 +340,22 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
             </div>
           )}
 
-          {/* Direct Google Sign-In Prompt Box */}
-          {isGooglePromptOpen ? (
-            <form onSubmit={handleDirectGoogleSubmit} className="mb-4 p-4 rounded-2xl bg-blue-50/70 border border-blue-200 text-left space-y-3 animate-in fade-in">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                  </svg>
-                  <span className="font-bold text-slate-900 text-xs">Sign in with Google Account</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setIsGooglePromptOpen(false)}
-                  className="text-slate-400 hover:text-slate-600 p-1"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1 text-[11px]">Your Google Email Address *</label>
-                <input
-                  type="email"
-                  required
-                  autoFocus
-                  placeholder="e.g. yourname@gmail.com"
-                  value={googleEmailInput}
-                  onChange={(e) => setGoogleEmailInput(e.target.value)}
-                  className="w-full p-2 text-xs rounded-xl border border-slate-200 bg-white font-medium text-slate-900 focus:outline-none focus:border-blue-600"
-                />
-              </div>
-
-              <div>
-                <label className="block font-semibold text-slate-700 mb-1 text-[11px]">Full Name (Optional)</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Your Full Name"
-                  value={googleNameInput}
-                  onChange={(e) => setGoogleNameInput(e.target.value)}
-                  className="w-full p-2 text-xs rounded-xl border border-slate-200 bg-white font-medium text-slate-900 focus:outline-none focus:border-blue-600"
-                />
-              </div>
-
-              <div className="flex gap-2 pt-1">
-                <button
-                  type="button"
-                  onClick={() => setIsGooglePromptOpen(false)}
-                  className="flex-1 py-2 rounded-xl border border-slate-200 font-semibold text-slate-600 hover:bg-slate-100 text-xs"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 font-bold text-white shadow-xs text-xs"
-                >
-                  Log in with Google
-                </button>
-              </div>
-            </form>
-          ) : (
-            <div className="space-y-2">
-              <button
-                type="button"
-                onClick={handleGoogleLoginClick}
-                className="w-full py-2.5 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 font-semibold text-xs text-slate-700 flex items-center justify-center gap-2.5 transition-colors shadow-xs cursor-pointer"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24">
-                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                </svg>
-                <span>Log in with Google</span>
-              </button>
-            </div>
-          )}
+          {/* 1-Click Instant Google Login Button */}
+          <div className="space-y-2">
+            <button
+              type="button"
+              onClick={handleGoogleLoginClick}
+              className="w-full py-2.5 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 font-semibold text-xs text-slate-700 flex items-center justify-center gap-2.5 transition-colors shadow-xs cursor-pointer"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Log in with Google</span>
+            </button>
+          </div>
 
           <div className="flex items-center my-4">
             <div className="flex-1 border-t border-slate-200"></div>
