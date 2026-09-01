@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Lock, Mail, User, ShieldCheck, Sparkles, ArrowRight, Check, AlertCircle } from 'lucide-react';
 import Logo from './Logo';
 
+const GOOGLE_CLIENT_ID = '1030077245460-hv5a4m6642h7kdfigi5bf8j0pk28ieeo.apps.googleusercontent.com';
+
 export default function AuthModal({ isOpen, onClose, onLogin }) {
   const [authMode, setAuthMode] = useState('signin'); // 'signin' or 'signup'
   const [email, setEmail] = useState('');
@@ -9,9 +11,6 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
   const [password, setPassword] = useState('');
   const [userRole, setUserRole] = useState('changemaker'); // 'changemaker' or 'org_admin'
   const [error, setError] = useState('');
-  const [googleClientId, setGoogleClientId] = useState(
-    localStorage.getItem('swiftklix_google_client_id') || ''
-  );
   const googleBtnRef = useRef(null);
 
   // Parse JWT token from Google Identity Services
@@ -45,7 +44,7 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
     }
 
     const verifiedUser = {
-      name: payload.name || payload.given_name || 'Google User',
+      name: payload.name || payload.given_name || payload.email.split('@')[0],
       email: payload.email,
       avatar: payload.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(payload.name || payload.email)}&background=2563EB&color=fff`,
       role: 'user',
@@ -71,24 +70,26 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
     if (!isOpen) return;
 
     const timer = setTimeout(() => {
-      if (window.google?.accounts?.id && googleBtnRef.current && googleClientId.trim()) {
+      if (window.google?.accounts?.id) {
         try {
           window.google.accounts.id.initialize({
-            client_id: googleClientId.trim(),
+            client_id: GOOGLE_CLIENT_ID,
             callback: handleGoogleCredentialResponse,
             auto_select: false
           });
 
-          googleBtnRef.current.innerHTML = '';
-          window.google.accounts.id.renderButton(googleBtnRef.current, {
-            theme: 'outline',
-            size: 'large',
-            type: 'standard',
-            shape: 'rectangular',
-            text: 'continue_with',
-            logo_alignment: 'left',
-            width: 360
-          });
+          if (googleBtnRef.current) {
+            googleBtnRef.current.innerHTML = '';
+            window.google.accounts.id.renderButton(googleBtnRef.current, {
+              theme: 'outline',
+              size: 'large',
+              type: 'standard',
+              shape: 'rectangular',
+              text: 'continue_with',
+              logo_alignment: 'left',
+              width: 360
+            });
+          }
         } catch (err) {
           console.warn('Google GSI button initialization notice:', err);
         }
@@ -96,21 +97,19 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
     }, 150);
 
     return () => clearTimeout(timer);
-  }, [isOpen, googleClientId]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   const handleGoogleLoginClick = () => {
     setError('');
 
-    // 1. Google OAuth Token Flow
-    const effectiveClientId = googleClientId.trim() || '715367623912-production.apps.googleusercontent.com';
-
+    // 1. Google OAuth Token Popup Client
     if (window.google?.accounts?.oauth2) {
       try {
         const client = window.google.accounts.oauth2.initTokenClient({
-          client_id: effectiveClientId,
-          scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+          client_id: GOOGLE_CLIENT_ID,
+          scope: 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email openid',
           callback: async (tokenResponse) => {
             if (tokenResponse && tokenResponse.access_token) {
               try {
@@ -141,25 +140,32 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
                   onClose();
                   return;
                 }
-              } catch (err) {}
+              } catch (err) {
+                console.error('Userinfo error:', err);
+              }
             }
           }
         });
         client.requestAccessToken();
         return;
-      } catch (e) {}
+      } catch (e) {
+        console.warn('Token client init notice:', e);
+      }
     }
 
+    // 2. Google GSI prompt
     if (window.google?.accounts?.id) {
       try {
         window.google.accounts.id.initialize({
-          client_id: effectiveClientId,
+          client_id: GOOGLE_CLIENT_ID,
           callback: handleGoogleCredentialResponse,
           auto_select: false
         });
         window.google.accounts.id.prompt();
         return;
-      } catch (e) {}
+      } catch (e) {
+        console.warn('GSI prompt notice:', e);
+      }
     }
 
     // Direct Google authentication fallback (Instant Verified Google Sign-In)
