@@ -1,0 +1,1553 @@
+{
+  "stats": {
+    "totalChapters": 198,
+    "activeOrgs": 12,
+    "totalMembers": 5215,
+    "activeProjectsCount": 85,
+    "campusFootprint": 85
+  },
+  "organizations": [
+    {
+      "id": "org-ecoroots",
+      "name": "EcoRoots",
+      "tagline": "Planting trees and creating community park gardens.",
+      "category": "Environment",
+      "image": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80",
+      "foundedYear": 2020,
+      "status": "Verified 501(c)(3)",
+      "activeChaptersCount": 50,
+      "membersCount": 1200,
+      "headquarters": "Seattle, WA",
+      "website": "https://ecoroots.org",
+      "contactEmail": "hello@ecoroots.org",
+      "description": "EcoRoots helps students and community volunteers plant native trees, clean up local parks, and create urban gardens. When you start a local chapter, HQ sends you saplings, gardening tools, and guidelines to organize local events.",
+      "customQuestions": [
+        "What specific parks or public areas in your city need tree planting?",
+        "Have you organized campus or community events before?",
+        "How many volunteers do you estimate you can gather for your first event?"
+      ],
+      "branchGuide": {
+        "curriculumOverview": "Step-by-step tree planting guide and workshop templates for volunteers.",
+        "legalSupport": "Official non-profit tax exemption status and city planting permit help.",
+        "toolkitAssets": [
+          "Tree Planting Step-by-Step Guide",
+          "Volunteer Sign-up Template",
+          "Flyer and Poster Designs",
+          "Tool Checklist"
+        ],
+        "guidelines": "Official chapter resources, meeting agendas, and event guides."
+      },
+      "logo": "",
+      "externalApplyUrl": "",
+      "socials": {
+        "linkedin": "https://linkedin.com",
+        "twitter": "https://x.com",
+        "instagram": "https://instagram.com",
+        "github": "",
+        "discord": ""
+      },
+      "verification": {
+        "ein": "84-1928472",
+        "registryDoc": "",
+        "status": "Verified Official"
+      },
+      "externalMembershipUrl": "xvfdsfxc",
+      "membershipRequirements": "Open to all enrolled students and local community members.",
+      "membershipQuestions": [
+        "What specific projects or initiatives in our cause area interest you most?",
+        "What previous volunteering or campus club experience do you bring?"
+      ],
+      "membershipCommittees": [
+        "Event Organizing & Planning",
+        "Community Outreach & Partnerships",
+        "Marketing & Social Media",
+        "Logistics & Operations",
+        "General Volunteer & Participant"
+      ],
+      "updatedAt": "2026-09-01T02:44:51.680Z"
+    },
+    {
+      "id": "org-codenova",
+      "name": "CodeNova",
+      "tagline": "Free weekend coding clubs for middle and high school students.",
+      "category": "Education & Tech",
+      "image": "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
+      "foundedYear": 2021,
+      "status": "Verified 501(c)(3)",
+      "activeChaptersCount": 40,
+      "membersCount": 2100,
+      "headquarters": "San Francisco, CA",
+      "website": "https://codenova.org",
+      "contactEmail": "team@codenova.org",
+      "description": "CodeNova connects college students with local public schools to teach kids how to code games and apps. Chapters receive lesson plans, laptop grants, and mentor training.",
+      "customQuestions": [
+        "What programming languages are you comfortable helping beginners with?",
+        "What schools or community centers in your city could host sessions?",
+        "Are you able to mentor on weekend mornings?"
+      ],
+      "branchGuide": {
+        "curriculumOverview": "10 beginner-friendly coding lessons in Python and Web Design.",
+        "legalSupport": "School partnership agreements and background check support.",
+        "toolkitAssets": [
+          "Lesson Slide Decks",
+          "Parent Permission Forms",
+          "Coding Exercise Worksheets",
+          "Hackathon Playbook"
+        ],
+        "guidelines": "Official chapter resources, meeting agendas, and event guides."
+      }
+    },
+    {
+      "id": "org-mindbridge",
+      "name": "MindBridge",
+      "tagline": "Peer support and mental health wellness circles for youth.",
+      "category": "Mental Health",
+      "image": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
+      "foundedYear": 2019,
+      "status": "Verified 501(c)(3)",
+      "activeChaptersCount": 28,
+      "membersCount": 950,
+      "headquarters": "Austin, TX",
+      "website": "https://mindbridge.org",
+      "contactEmail": "info@mindbridge.org",
+      "description": "MindBridge runs student-led listening groups and wellness workshops on high school and college campuses to reduce stress, loneliness, and mental health stigma.",
+      "customQuestions": [
+        "Why is peer mental health support important to your campus or community?",
+        "Have you taken any active listening or peer counseling training?",
+        "What wellness activities would you like to organize?"
+      ],
+      "branchGuide": {
+        "curriculumOverview": "Training guide on active listening, empathy, and crisis resources.",
+        "legalSupport": "Guidance from licensed counselors and crisis escalation protocol.",
+        "toolkitAssets": [
+          "Discussion Prompts for Circles",
+          "Campus Resource Handout Template",
+          "Wellness Week Event Ideas",
+          "Leader Training Handbook"
+        ],
+        "guidelines": "Official chapter resources, meeting agendas, and event guides."
+      }
+    },
+    {
+      "id": "org-harvestshare",
+      "name": "HarvestShare",
+      "tagline": "Rescuing surplus dining hall food for local family shelters.",
+      "category": "Food & Hunger",
+      "image": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=800&q=80",
+      "foundedYear": 2018,
+      "status": "Verified 501(c)(3)",
+      "activeChaptersCount": 25,
+      "membersCount": 800,
+      "headquarters": "Chicago, IL",
+      "website": "https://harvestshare.org",
+      "contactEmail": "contact@harvestshare.org",
+      "description": "HarvestShare volunteers collect extra prepared meals from university cafeterias and bakeries and safely deliver them to local community food pantries.",
+      "customQuestions": [
+        "Do you have access to a vehicle or transport for weekly food pickups?",
+        "Which local shelters or pantries would receive the food?",
+        "What days/times work best for your volunteer shifts?"
+      ],
+      "branchGuide": {
+        "curriculumOverview": "Food safety standards and donation transport protocols.",
+        "legalSupport": "Good Samaritan Food Donation Act protection and donor agreements.",
+        "toolkitAssets": [
+          "Food Temperature Log Sheet",
+          "Pantry Drop-off Agreement",
+          "Volunteer Shift Schedule Template",
+          "Food Safety Cheat Sheet"
+        ],
+        "guidelines": "Official chapter resources, meeting agendas, and event guides."
+      }
+    },
+    {
+      "id": "org-civicpulse",
+      "name": "CivicPulse",
+      "tagline": "Non-partisan voter education and youth town halls.",
+      "category": "Civic Engagement",
+      "image": "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?auto=format&fit=crop&w=800&q=80",
+      "foundedYear": 2022,
+      "status": "Verified 501(c)(3)",
+      "activeChaptersCount": 20,
+      "membersCount": 600,
+      "headquarters": "Atlanta, GA",
+      "website": "https://civicpulse.org",
+      "contactEmail": "hello@civicpulse.org",
+      "description": "CivicPulse helps students register to vote, understand local town hall issues, and host debates on community improvements without any partisan bias.",
+      "customQuestions": [
+        "What campus or neighborhood spots are best for voter registration tables?",
+        "How will you maintain strict non-partisan balance?",
+        "What local issues do youth in your area care most about?"
+      ],
+      "branchGuide": {
+        "curriculumOverview": "Guide to running non-partisan voter drives on campus.",
+        "legalSupport": "501(c)(3) non-partisan compliance guidelines and voter registration forms.",
+        "toolkitAssets": [
+          "Voter Registration Tabling Kit",
+          "Town Hall Question Guidelines",
+          "Local Issue Guide Template",
+          "Volunteer Badges & Signage"
+        ],
+        "guidelines": "Official chapter resources, meeting agendas, and event guides."
+      }
+    },
+    {
+      "id": "org-sanctuaryhealth",
+      "name": "Sanctuary Health",
+      "tagline": "Free basic health screenings and first aid training for neighborhoods.",
+      "category": "Healthcare",
+      "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80",
+      "foundedYear": 2020,
+      "status": "Verified 501(c)(3)",
+      "activeChaptersCount": 18,
+      "membersCount": 550,
+      "headquarters": "Boston, MA",
+      "website": "https://sanctuaryhealth.org",
+      "contactEmail": "screenings@sanctuaryhealth.org",
+      "description": "Sanctuary Health trains pre-health students to host free blood pressure checks, CPR demos, and community health fairs in underserved neighborhoods.",
+      "customQuestions": [
+        "Are you or your team pre-med, nursing, or public health students?",
+        "What community center or church could host your screening fair?",
+        "Have you received CPR or basic first aid certification?"
+      ],
+      "branchGuide": {
+        "curriculumOverview": "Standard procedures for community screening fairs and CPR demos.",
+        "legalSupport": "Medical oversight policies and patient consent forms.",
+        "toolkitAssets": [
+          "Health Fair Setup Checklist",
+          "Participant Intake Form",
+          "Community Resource Directory",
+          "CPR Workshop Slides"
+        ],
+        "guidelines": "Official chapter resources, meeting agendas, and event guides."
+      }
+    }
+  ],
+  "posts": [
+    {
+      "id": "post-1",
+      "orgId": "org-ecoroots",
+      "orgName": "EcoRoots",
+      "authorName": "Marcus Vance",
+      "authorRole": "Seattle Branch Lead",
+      "title": "50 Native Cedar Saplings Planted at Ravenna Park!",
+      "content": "Huge thank you to the 45 student volunteers from UW who joined us this Saturday morning. We successfully planted 50 native cedar trees and cleaned up 12 bags of litter along the creek trails!",
+      "image": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80",
+      "likes": 34,
+      "commentsCount": 6,
+      "createdAt": "2026-08-28T16:00:00Z"
+    },
+    {
+      "id": "post-2",
+      "orgId": "org-codenova",
+      "orgName": "CodeNova",
+      "authorName": "Aaliyah Washington",
+      "authorRole": "Bay Area Chapter Director",
+      "title": "Fall Coding Workshop Series Kicks Off at Berkeley Public Library",
+      "content": "Our first 10-week cohort of middle schoolers just built their first interactive Python games today! Laptops and snacks funded by CodeNova's semester grant.",
+      "image": "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
+      "likes": 42,
+      "commentsCount": 8,
+      "createdAt": "2026-08-29T11:30:00Z"
+    }
+  ],
+  "opportunities": [
+    {
+      "id": "branch-1",
+      "orgId": "org-ecoroots",
+      "orgName": "EcoRoots",
+      "title": "Founding Chapter Lead - Austin & Central Texas",
+      "type": "Start a Chapter",
+      "targetLocation": "Austin, TX",
+      "commitment": "3-4 hours / week",
+      "focusArea": "Active Chapter",
+      "category": "Environment & Climate",
+      "deadline": "Open",
+      "spotsAvailable": 2,
+      "description": "Establish an EcoRoots branch in Austin. Mobilize students and community volunteers for urban tree canopy planting and local park cleanups with official toolkits.",
+      "tags": [
+        "Environment & Climate",
+        "Austin, TX"
+      ]
+    },
+    {
+      "id": "branch-2",
+      "orgId": "org-codenova",
+      "orgName": "CodeNova",
+      "title": "Founding Branch Director - Boston Metro & Cambridge",
+      "type": "Start a Chapter",
+      "targetLocation": "Boston, MA",
+      "commitment": "4-5 hours / week",
+      "focusArea": "Local Branch",
+      "category": "Technology & Coding",
+      "deadline": "Open",
+      "spotsAvailable": 2,
+      "description": "Launch a CodeNova youth coding branch in Boston. Coordinate free weekend Python and Web development workshops for middle and high school students.",
+      "tags": [
+        "Technology & Coding",
+        "Boston, MA"
+      ]
+    },
+    {
+      "id": "branch-3",
+      "orgId": "org-mindbridge",
+      "orgName": "MindBridge",
+      "title": "Founding Chapter Lead - Ann Arbor & University of Michigan",
+      "type": "Start a Chapter",
+      "targetLocation": "Ann Arbor, MI",
+      "commitment": "2-3 hours / week",
+      "focusArea": "Local Branch",
+      "category": "Mental Health & Wellness",
+      "deadline": "Open",
+      "spotsAvailable": 2,
+      "description": "Create a welcoming peer wellness chapter at the University of Michigan. Host decompression circles, peer listening lounges, and mental health awareness panels.",
+      "tags": [
+        "Mental Health & Wellness",
+        "Michigan"
+      ]
+    },
+    {
+      "id": "branch-4",
+      "orgId": "org-harvestshare",
+      "orgName": "HarvestShare",
+      "title": "Founding Chapter Director - Atlanta Metro",
+      "type": "Start a Chapter",
+      "targetLocation": "Atlanta, GA",
+      "commitment": "3-4 hours / week",
+      "focusArea": "Local Branch",
+      "category": "Food Security & Hunger",
+      "deadline": "Open",
+      "spotsAvailable": 2,
+      "description": "Establish a food rescue branch in Atlanta. Partner with campus cafeterias and local bakeries to transport surplus meals to community food pantries.",
+      "tags": [
+        "Food Security & Hunger",
+        "Atlanta, GA"
+      ]
+    },
+    {
+      "id": "branch-5",
+      "orgId": "org-civicpulse",
+      "orgName": "CivicPulse",
+      "title": "Founding Chapter Lead - Seattle & UW Campus",
+      "type": "Start a Chapter",
+      "targetLocation": "Seattle, WA",
+      "commitment": "3-4 hours / week",
+      "focusArea": "Local Branch",
+      "category": "Civic Engagement & Policy",
+      "deadline": "Open",
+      "spotsAvailable": 2,
+      "description": "Launch a non-partisan youth civic engagement chapter in Seattle. Host voter registration drives, policy roundtables, and youth town halls.",
+      "tags": [
+        "Civic Engagement & Policy",
+        "Seattle, WA"
+      ]
+    },
+    {
+      "id": "branch-6",
+      "orgId": "org-sanctuary",
+      "orgName": "Sanctuary Health",
+      "title": "Founding Branch Director - Chicago South Side",
+      "type": "Start a Chapter",
+      "targetLocation": "Chicago, IL",
+      "commitment": "3-5 hours / week",
+      "focusArea": "Local Branch",
+      "category": "Healthcare & Medicine",
+      "deadline": "Open",
+      "spotsAvailable": 2,
+      "description": "Lead a student healthcare outreach branch in Chicago. Coordinate free preventive health screenings, blood pressure clinics, and hygiene supply drives.",
+      "tags": [
+        "Healthcare & Medicine",
+        "Chicago, IL"
+      ]
+    },
+    {
+      "id": "pos-1",
+      "orgId": "org-codenova",
+      "orgName": "CodeNova",
+      "title": "Youth Python & Web Coding Instructor",
+      "type": "Position",
+      "targetLocation": "Remote / Hybrid (Boston & Bay Area)",
+      "commitment": "3-4 hours / week",
+      "focusArea": "Instruction & Mentorship",
+      "category": "Technology & Coding",
+      "deadline": "Rolling",
+      "spotsAvailable": 4,
+      "description": "Teach introductory Python, HTML/CSS, and game logic to middle school cohorts. Guide students through building their first interactive coding portfolio projects.",
+      "tags": [
+        "Python",
+        "Web Development",
+        "Teaching"
+      ]
+    },
+    {
+      "id": "pos-2",
+      "orgId": "org-ecoroots",
+      "orgName": "EcoRoots",
+      "title": "Urban Tree Planting Logistics Lead",
+      "type": "Position",
+      "targetLocation": "San Francisco Bay Area, CA",
+      "commitment": "4-5 hours / week",
+      "focusArea": "Field Operations",
+      "category": "Environment & Climate",
+      "deadline": "Rolling",
+      "spotsAvailable": 2,
+      "description": "Coordinate weekend sapling distribution, permit checks with city park departments, and volunteer tool staging for community planting days.",
+      "tags": [
+        "Event Planning",
+        "Logistics",
+        "Sustainability"
+      ]
+    },
+    {
+      "id": "pos-3",
+      "orgId": "org-mindbridge",
+      "orgName": "MindBridge",
+      "title": "Peer Support Facilitator & Workshop Creator",
+      "type": "Position",
+      "targetLocation": "Remote / Nationwide",
+      "commitment": "2-3 hours / week",
+      "focusArea": "Program Facilitation",
+      "category": "Mental Health & Wellness",
+      "deadline": "Rolling",
+      "spotsAvailable": 3,
+      "description": "Facilitate weekly virtual student decompression circles and assist in developing stress-management workshop modules guided by counseling advisors.",
+      "tags": [
+        "Peer Support",
+        "Facilitation",
+        "Wellness"
+      ]
+    },
+    {
+      "id": "pos-4",
+      "orgId": "org-harvestshare",
+      "orgName": "HarvestShare",
+      "title": "Food Recovery Dispatch Coordinator",
+      "type": "Position",
+      "targetLocation": "Atlanta & Southeast Hub",
+      "commitment": "3-4 hours / week",
+      "focusArea": "Operations & Route Planning",
+      "category": "Food Security & Hunger",
+      "deadline": "Rolling",
+      "spotsAvailable": 3,
+      "description": "Schedule volunteer drivers, map pickup routes between donors (dining halls, bakeries) and shelter pantries, and track pounds of food rescued.",
+      "tags": [
+        "Operations",
+        "Food Waste",
+        "Community"
+      ]
+    },
+    {
+      "id": "pos-5",
+      "orgId": "org-civicpulse",
+      "orgName": "CivicPulse",
+      "title": "Youth Civic Policy Research Analyst",
+      "type": "Position",
+      "targetLocation": "Remote",
+      "commitment": "2-4 hours / week",
+      "focusArea": "Policy Research",
+      "category": "Civic Engagement & Policy",
+      "deadline": "Rolling",
+      "spotsAvailable": 2,
+      "description": "Draft non-partisan policy briefs on local housing, education, and voting access for high school and collegiate discussion roundtables.",
+      "tags": [
+        "Research",
+        "Policy",
+        "Writing"
+      ]
+    },
+    {
+      "id": "pos-6",
+      "orgId": "org-sanctuary",
+      "orgName": "Sanctuary Health",
+      "title": "Community Health Triage & Outreach Volunteer",
+      "type": "Position",
+      "targetLocation": "Chicago & Midwest Metro",
+      "commitment": "4-5 hours / week",
+      "focusArea": "Clinical Support",
+      "category": "Healthcare & Medicine",
+      "deadline": "Rolling",
+      "spotsAvailable": 5,
+      "description": "Assist volunteer physicians and nurses at mobile weekend health clinics with patient check-in, vitals logging, and multilingual health resource translation.",
+      "tags": [
+        "Healthcare",
+        "Patient Care",
+        "Pre-Med"
+      ]
+    }
+  ],
+  "matchmaking": [
+    {
+      "id": "match-1788233109255",
+      "createdAt": "2026-09-01T03:25:09.255Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1788232777826",
+      "createdAt": "2026-09-01T03:19:37.826Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1788232553902",
+      "createdAt": "2026-09-01T03:15:53.902Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1788232379617",
+      "createdAt": "2026-09-01T03:12:59.617Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1788232019921",
+      "createdAt": "2026-09-01T03:06:59.921Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1788231761212",
+      "createdAt": "2026-09-01T03:02:41.212Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1788231534654",
+      "createdAt": "2026-09-01T02:58:54.654Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1788231364184",
+      "createdAt": "2026-09-01T02:56:04.184Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1788231204073",
+      "createdAt": "2026-09-01T02:53:24.073Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1788230928855",
+      "createdAt": "2026-09-01T02:48:48.855Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1788230734028",
+      "createdAt": "2026-09-01T02:45:34.028Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1788230489732",
+      "createdAt": "2026-09-01T02:41:29.732Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1788230343178",
+      "createdAt": "2026-09-01T02:39:03.178Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1788230085991",
+      "createdAt": "2026-09-01T02:34:45.991Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1788229841976",
+      "createdAt": "2026-09-01T02:30:41.976Z",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "name": "David Chen",
+      "headline": "Full-Stack Dev seeking Non-Profit Co-Founder for Civic Tech",
+      "location": "New York, NY",
+      "skills": [
+        "React",
+        "Python",
+        "Civic Tech"
+      ],
+      "lookingFor": "Policy or Outreach Co-Lead",
+      "bio": "Built local voter awareness portals.",
+      "contactEmail": "david@civicny.org"
+    },
+    {
+      "id": "match-1",
+      "name": "Elena Rostova",
+      "location": "Chicago, IL",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      "skills": [
+        "Event Planning",
+        "Gardening",
+        "Social Media"
+      ],
+      "headline": "Looking for a co-lead to start an EcoRoots branch in Chicago",
+      "lookingFor": "A student or friend who can help recruit volunteers and plan park events",
+      "bio": "I love the outdoors and want to plant trees in Chicago parks this spring.",
+      "contactEmail": "elena.r@example.org"
+    }
+  ],
+  "applications": [
+    {
+      "id": "app-1788233109239",
+      "status": "approved",
+      "submittedAt": "2026-09-01T03:25:09.239Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T03:25:09.243Z"
+    },
+    {
+      "id": "app-1788233072559",
+      "status": "approved",
+      "submittedAt": "2026-09-01T03:24:32.559Z",
+      "notes": "Official approval",
+      "orgId": "org-ecoroots",
+      "opportunityId": "",
+      "applicantName": "Pipeline Tester",
+      "applicantEmail": "tester@example.com",
+      "proposedLocation": "UCLA Campus",
+      "role": "Founding Chapter Lead",
+      "background": "",
+      "plan": "",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T03:24:32.574Z"
+    },
+    {
+      "id": "app-1788233006588",
+      "status": "submitted",
+      "submittedAt": "2026-09-01T03:23:26.588Z",
+      "notes": "New applicant. Ready for review.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "",
+      "applicantName": "Alex Morgan",
+      "applicantEmail": "alex.morgan@university.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Start a Branch",
+      "background": "",
+      "plan": "",
+      "answers": {
+        "What specific projects or initiatives in our cause area interest you most?": "fghghgfhfgfdgdfgdf",
+        "What previous volunteering or campus club experience do you bring?": "hfghfghgfhgfhgf"
+      },
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year"
+    },
+    {
+      "id": "app-1788232990007",
+      "status": "submitted",
+      "submittedAt": "2026-09-01T03:23:10.007Z",
+      "notes": "New applicant. Ready for review.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "",
+      "applicantName": "Alex Morgan",
+      "applicantEmail": "alex.morgan@university.edu",
+      "proposedLocation": "University of Texas at Austin",
+      "role": "Start a Branch",
+      "background": "",
+      "plan": "",
+      "answers": {
+        "What specific projects or initiatives in our cause area interest you most?": "fghghgfhfg",
+        "What previous volunteering or campus club experience do you bring?": "hfghfghgfhgfhgf"
+      },
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year"
+    },
+    {
+      "id": "app-1788232777802",
+      "status": "approved",
+      "submittedAt": "2026-09-01T03:19:37.802Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T03:19:37.812Z"
+    },
+    {
+      "id": "app-1788232672391",
+      "status": "submitted",
+      "submittedAt": "2026-09-01T03:17:52.391Z",
+      "notes": "New applicant. Ready for review.",
+      "orgId": "org-codenova",
+      "opportunityId": "",
+      "applicantName": "Alex Morgan",
+      "applicantEmail": "alex.morgan@university.edu",
+      "proposedLocation": "UC Berkeley",
+      "role": "Start a Branch",
+      "background": "",
+      "plan": "",
+      "answers": {
+        "What specific projects or initiatives in our cause area interest you most?": "fghghgfhfg",
+        "What previous volunteering or campus club experience do you bring?": "hfghfghgfhgfhgf"
+      },
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year"
+    },
+    {
+      "id": "app-1788232639171",
+      "status": "submitted",
+      "submittedAt": "2026-09-01T03:17:19.171Z",
+      "notes": "New applicant. Ready for review.",
+      "orgId": "org-codenova",
+      "opportunityId": "start-org-codenova",
+      "applicantName": "Alex Morgan",
+      "applicantEmail": "alex.morgan@university.edu",
+      "proposedLocation": "Austin, TX",
+      "role": "Found a CodeNova Chapter",
+      "background": "",
+      "plan": "",
+      "answers": {
+        "What programming languages are you comfortable helping beginners with?": "fgdfgdfgdfg",
+        "What schools or community centers in your city could host sessions?": "fdgdfgdfgdfg",
+        "Are you able to mentor on weekend mornings?": "fgdgdfgfd"
+      },
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year"
+    },
+    {
+      "id": "app-1788232581029",
+      "status": "submitted",
+      "submittedAt": "2026-09-01T03:16:21.029Z",
+      "notes": "New applicant. Ready for review.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "",
+      "applicantName": "Alex Morgan",
+      "applicantEmail": "alex.morgan@university.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Start a Branch",
+      "background": "",
+      "plan": "",
+      "answers": {
+        "What specific projects or initiatives in our cause area interest you most?": "fghghgfhfg",
+        "What previous volunteering or campus club experience do you bring?": "hfghfghgfhgfhgf"
+      },
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year"
+    },
+    {
+      "id": "app-1788232553889",
+      "status": "approved",
+      "submittedAt": "2026-09-01T03:15:53.889Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T03:15:53.894Z"
+    },
+    {
+      "id": "app-1788232379603",
+      "status": "approved",
+      "submittedAt": "2026-09-01T03:12:59.603Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T03:12:59.609Z"
+    },
+    {
+      "id": "app-1788232371649",
+      "status": "submitted",
+      "submittedAt": "2026-09-01T03:12:51.649Z",
+      "notes": "New applicant. Ready for review.",
+      "orgId": "org-codenova",
+      "opportunityId": "start-org-codenova",
+      "applicantName": "Alex Morgan",
+      "applicantEmail": "alex.morgan@university.edu",
+      "proposedLocation": "San Bernardino, CA",
+      "role": "Found a CodeNova Chapter",
+      "background": "",
+      "plan": "",
+      "answers": {
+        "What programming languages are you comfortable helping beginners with?": "nvbncbcvb",
+        "What schools or community centers in your city could host sessions?": "vcbcvbcvb",
+        "Are you able to mentor on weekend mornings?": " bcvbvcbcv"
+      },
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year"
+    },
+    {
+      "id": "app-1788232263680",
+      "status": "submitted",
+      "submittedAt": "2026-09-01T03:11:03.680Z",
+      "notes": "New applicant. Ready for review.",
+      "orgId": "org-mindbridge",
+      "opportunityId": "",
+      "applicantName": "Alex Morgan",
+      "applicantEmail": "alex.morgan@university.edu",
+      "proposedLocation": "UT Austin",
+      "role": "Start a Branch",
+      "background": "",
+      "plan": "",
+      "answers": {
+        "What specific projects or initiatives in our cause area interest you most?": "gfhgfhfg",
+        "What previous volunteering or campus club experience do you bring?": "fghfghfghfg"
+      },
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year"
+    },
+    {
+      "id": "app-1788232225011",
+      "status": "submitted",
+      "submittedAt": "2026-09-01T03:10:25.011Z",
+      "notes": "New applicant. Ready for review.",
+      "orgId": "org-mindbridge",
+      "opportunityId": "",
+      "applicantName": "Alex Morgan",
+      "applicantEmail": "alex.morgan@university.edu",
+      "proposedLocation": "UT Austin",
+      "role": "Start a Branch",
+      "background": "",
+      "plan": "",
+      "answers": {
+        "What specific projects or initiatives in our cause area interest you most?": "gfhgfhfg",
+        "What previous volunteering or campus club experience do you bring?": "fghfghfghfg"
+      },
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year"
+    },
+    {
+      "id": "app-1788232204850",
+      "status": "submitted",
+      "submittedAt": "2026-09-01T03:10:04.850Z",
+      "notes": "New applicant. Ready for review.",
+      "orgId": "org-mindbridge",
+      "opportunityId": "",
+      "applicantName": "Alex Morgan",
+      "applicantEmail": "alex.morgan@university.edu",
+      "proposedLocation": "UT Austin",
+      "role": "Start a Branch",
+      "background": "",
+      "plan": "",
+      "answers": {
+        "What previous volunteering or campus club experience do you bring?": "fhfghfg",
+        "What specific projects or initiatives in our cause area interest you most?": "hfghfg"
+      },
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year"
+    },
+    {
+      "id": "app-1788232019908",
+      "status": "approved",
+      "submittedAt": "2026-09-01T03:06:59.908Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T03:06:59.913Z"
+    },
+    {
+      "id": "app-1788231775939",
+      "status": "submitted",
+      "submittedAt": "2026-09-01T03:02:55.939Z",
+      "notes": "New applicant. Ready for review.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "",
+      "applicantName": "Alex Morgan",
+      "applicantEmail": "alex.morgan@university.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Start a Branch",
+      "background": "",
+      "plan": "",
+      "answers": {
+        "What specific projects or initiatives in our cause area interest you most?": "MindBridge\nMental Health\n99% Match\nActive in Austin\nM\nMindBridge\nPeer support and mental health wellness circles for youth.\n\nActive Local Chapter Established\nMindBridge Austin Branch • Lead: Lucas Gomez • 35 active members\n\nRequirements & Scope:\nEnrolled student or community resident • 3+ hrs/wk commitment • Passion for mission\n\nStart New Campus Chapter\n\nJoin Local Branch",
+        "What previous volunteering or campus club experience do you bring?": "MindBridge\nMental Health\n99% Match\nActive in Austin\nM\nMindBridge\nPeer support and mental health wellness circles for youth.\n\nActive Local Chapter Established\nMindBridge Austin Branch • Lead: Lucas Gomez • 35 active members\n\nRequirements & Scope:\nEnrolled student or community resident • 3+ hrs/wk commitment • Passion for mission\n\nStart New Campus Chapter\n\nJoin Local Branch"
+      },
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year"
+    },
+    {
+      "id": "app-1788231761196",
+      "status": "approved",
+      "submittedAt": "2026-09-01T03:02:41.196Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T03:02:41.200Z"
+    },
+    {
+      "id": "app-1788231742421",
+      "status": "submitted",
+      "submittedAt": "2026-09-01T03:02:22.421Z",
+      "notes": "New applicant. Ready for review.",
+      "orgId": "org-mindbridge",
+      "opportunityId": "",
+      "applicantName": "Alex Morgan",
+      "applicantEmail": "alex.morgan@university.edu",
+      "proposedLocation": "UT Austin",
+      "role": "Start a Branch",
+      "background": "",
+      "plan": "",
+      "answers": {
+        "What specific projects or initiatives in our cause area interest you most?": "MindBridge\nMental Health\n99% Match\nActive in Austin\nM\nMindBridge\nPeer support and mental health wellness circles for youth.\n\nActive Local Chapter Established\nMindBridge Austin Branch • Lead: Lucas Gomez • 35 active members\n\nRequirements & Scope:\nEnrolled student or community resident • 3+ hrs/wk commitment • Passion for mission\n\nStart New Campus Chapter\n\nJoin Local Branch",
+        "What previous volunteering or campus club experience do you bring?": "MindBridge\nMental Health\n99% Match\nActive in Austin\nM\nMindBridge\nPeer support and mental health wellness circles for youth.\n\nActive Local Chapter Established\nMindBridge Austin Branch • Lead: Lucas Gomez • 35 active members\n\nRequirements & Scope:\nEnrolled student or community resident • 3+ hrs/wk commitment • Passion for mission\n\nStart New Campus Chapter\n\nJoin Local Branch"
+      },
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year"
+    },
+    {
+      "id": "app-1788231534641",
+      "status": "approved",
+      "submittedAt": "2026-09-01T02:58:54.641Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T02:58:54.645Z"
+    },
+    {
+      "id": "app-1788231364171",
+      "status": "approved",
+      "submittedAt": "2026-09-01T02:56:04.171Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T02:56:04.175Z"
+    },
+    {
+      "id": "app-1788231204060",
+      "status": "approved",
+      "submittedAt": "2026-09-01T02:53:24.060Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T02:53:24.065Z"
+    },
+    {
+      "id": "app-1788230928844",
+      "status": "approved",
+      "submittedAt": "2026-09-01T02:48:48.844Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T02:48:48.848Z"
+    },
+    {
+      "id": "app-1788230734014",
+      "status": "approved",
+      "submittedAt": "2026-09-01T02:45:34.014Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T02:45:34.019Z"
+    },
+    {
+      "id": "app-1788230489720",
+      "status": "approved",
+      "submittedAt": "2026-09-01T02:41:29.720Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T02:41:29.725Z"
+    },
+    {
+      "id": "app-1788230343167",
+      "status": "approved",
+      "submittedAt": "2026-09-01T02:39:03.167Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T02:39:03.171Z"
+    },
+    {
+      "id": "app-1788230085980",
+      "status": "approved",
+      "submittedAt": "2026-09-01T02:34:45.980Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T02:34:45.983Z"
+    },
+    {
+      "id": "app-1788229841965",
+      "status": "approved",
+      "submittedAt": "2026-09-01T02:30:41.965Z",
+      "notes": "Approved for $2,500 branch launch and chapter charter.",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Jordan Rivera",
+      "applicantEmail": "jordan@stanford.edu",
+      "proposedLocation": "Stanford University & Palo Alto",
+      "role": "Founding Chapter Lead",
+      "background": "Organized campus zero-waste drive.",
+      "plan": "Recruit 25 students, plant native trees.",
+      "answers": {},
+      "weeklyAvailability": "3-4 hours/week",
+      "experienceYears": "1 year",
+      "updatedAt": "2026-09-01T02:30:41.969Z"
+    },
+    {
+      "id": "app-101",
+      "orgId": "org-ecoroots",
+      "opportunityId": "opp-1",
+      "applicantName": "Samira Khan",
+      "applicantEmail": "samira@example.edu",
+      "proposedLocation": "Austin, TX (UT Austin)",
+      "role": "Start an EcoRoots Branch in Austin",
+      "background": "I have helped organize campus cleanups and love gardening with friends.",
+      "plan": "Recruit 15-20 students and partner with Austin Parks for a weekend tree planting in November.",
+      "answers": {
+        "What specific parks or public areas in your city need tree planting?": "Shoal Creek greenbelt and east campus park area.",
+        "Have you organized campus or community events before?": "Yes, vice president of UT sustainability club.",
+        "How many volunteers do you estimate you can gather for your first event?": "25-35 students."
+      },
+      "weeklyAvailability": "4 hours / week",
+      "experienceYears": "1 year",
+      "status": "interview",
+      "submittedAt": "2026-08-25T14:30:00Z",
+      "notes": "Spoke over a 15-min intro call. Great enthusiasm, finalizing park location.",
+      "statement": ""
+    }
+  ],
+  "chapters": [
+    {
+      "id": "chap-1788233109243",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 2,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active"
+    },
+    {
+      "id": "chap-1788233072574",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - UCLA Campus",
+      "leadName": "Pipeline Tester",
+      "leadEmail": "tester@example.com",
+      "location": "UCLA Campus",
+      "institution": "UCLA Campus",
+      "activeMembers": 1,
+      "eventsHosted": 0,
+      "recentEvent": "Branch Chartered",
+      "status": "Active"
+    },
+    {
+      "id": "chap-1788232777812",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 3,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active",
+      "updatedAt": "2026-09-01T03:23:26.602Z"
+    },
+    {
+      "id": "chap-1788232623058",
+      "activeMembers": 13,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Chapter Kickoff",
+      "status": "Active",
+      "name": "EcoRoots Campus Chapter",
+      "location": "Austin, TX",
+      "institution": "University of Texas at Austin",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan.rivera@university.edu",
+      "meetingSchedule": "Every Tuesday 7:00 PM",
+      "orgId": "org-ecoroots",
+      "orgName": "EcoRoots",
+      "updatedAt": "2026-09-01T03:23:10.016Z"
+    },
+    {
+      "id": "chap-1788232553894",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 3,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active",
+      "updatedAt": "2026-09-01T03:16:21.042Z"
+    },
+    {
+      "id": "chap-1788232379609",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 2,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active"
+    },
+    {
+      "id": "chap-1788232019913",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 2,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active"
+    },
+    {
+      "id": "chap-1788231761200",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 2,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active"
+    },
+    {
+      "id": "chap-1788231534645",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 2,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active"
+    },
+    {
+      "id": "chap-1788231364175",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 3,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active",
+      "updatedAt": "2026-09-01T03:02:55.951Z"
+    },
+    {
+      "id": "chap-1788231204065",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 2,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active"
+    },
+    {
+      "id": "chap-1788230928848",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 2,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active"
+    },
+    {
+      "id": "chap-1788230734019",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 2,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active"
+    },
+    {
+      "id": "chap-1788230489725",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 2,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active"
+    },
+    {
+      "id": "chap-1788230343171",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 2,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active"
+    },
+    {
+      "id": "chap-1788230085983",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 2,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active"
+    },
+    {
+      "id": "chap-1788229935481",
+      "activeMembers": 10,
+      "eventsHosted": 1,
+      "recentEvent": "Charter Kickoff",
+      "status": "Active",
+      "name": "EcoRoots New Chapter",
+      "location": "New City, State",
+      "institution": "University / Community Center",
+      "leadName": "Chapter Director",
+      "leadEmail": "director@chapter.org",
+      "meetingSchedule": "Weekly Tuesdays 5:30 PM",
+      "orgId": "org-ecoroots",
+      "orgName": "EcoRoots"
+    },
+    {
+      "id": "chap-1788229841969",
+      "orgId": "org-ecoroots",
+      "name": "Founding Chapter Lead - Stanford University & Palo Alto",
+      "leadName": "Jordan Rivera",
+      "leadEmail": "jordan@stanford.edu",
+      "location": "Stanford University & Palo Alto",
+      "institution": "Stanford University & Palo Alto",
+      "activeMembers": 2,
+      "eventsHosted": 1,
+      "recentEvent": "Inaugural Campus Tree Planting",
+      "status": "Active"
+    },
+    {
+      "id": "chap-1",
+      "orgId": "org-ecoroots",
+      "name": "EcoRoots Seattle Branch",
+      "leadName": "Marcus Vance",
+      "leadEmail": "marcus@example.org",
+      "location": "Seattle, WA",
+      "institution": "University of Washington",
+      "activeMembers": 45,
+      "eventsHosted": 6,
+      "recentEvent": "Ravenna Park Cleanup and Native Shrub Planting",
+      "status": "Active"
+    },
+    {
+      "id": "chap-2",
+      "orgId": "org-codenova",
+      "name": "CodeNova Bay Area Branch",
+      "leadName": "Aaliyah Washington",
+      "leadEmail": "aaliyah@example.org",
+      "location": "Berkeley, CA",
+      "institution": "UC Berkeley",
+      "activeMembers": 61,
+      "eventsHosted": 8,
+      "recentEvent": "Weekend Python Game Building Workshop",
+      "status": "Active",
+      "updatedAt": "2026-09-01T03:17:52.406Z"
+    },
+    {
+      "id": "chap-3",
+      "orgId": "org-mindbridge",
+      "name": "MindBridge Austin Branch",
+      "leadName": "Lucas Gomez",
+      "leadEmail": "lucas@example.org",
+      "location": "Austin, TX",
+      "institution": "UT Austin",
+      "activeMembers": 39,
+      "eventsHosted": 5,
+      "recentEvent": "Finals Week De-Stress Discussion Circle",
+      "status": "Active",
+      "updatedAt": "2026-09-01T03:11:03.690Z"
+    }
+  ]
+}
