@@ -22,18 +22,24 @@ export default function OrgDashboardPage({
 
 }) {
 
-  const [selectedOrgId, setSelectedOrgId] = useState(orgs[0]?.id || 'org-ecoroots');
-
+  const [selectedOrgId, setSelectedOrgId] = useState(orgs[0]?.id || '');
   const [activeTab, setActiveTab] = useState('kanban');
 
+  const activeOrg = orgs.find(o => o.id === selectedOrgId) || orgs[0] || null;
 
-
-  const activeOrg = orgs.find(o => o.id === selectedOrgId) || orgs[0];
+  if (!activeOrg) {
+    return (
+      <div className="clean-card p-12 text-center space-y-3">
+        <h2 className="text-xl font-bold text-slate-900">No Organizations Registered</h2>
+        <p className="text-slate-500 text-xs max-w-md mx-auto">
+          Register your organization in the Organization Hub to manage branches, candidate pipelines, and chapter campaigns.
+        </p>
+      </div>
+    );
+  }
 
   const orgOpportunities = (opportunities || []).filter(o => o.orgId === selectedOrgId);
-
   const orgApplications = (applications || []).filter(a => a.orgId === selectedOrgId);
-
   const orgChapters = (chapters || []).filter(c => c.orgId === selectedOrgId);
 
 

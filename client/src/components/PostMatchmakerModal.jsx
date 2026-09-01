@@ -67,7 +67,7 @@ export default function PostMatchmakerModal({ isOpen, onClose, onCreate }) {
             <input 
               type="text" 
               required
-              placeholder="e.g. Looking for a partner to start an EcoRoots tree planting chapter in Chicago"
+              placeholder="e.g. Looking for a co-director to start a campus chapter in Chicago"
               value={formData.headline} 
               onChange={(e) => setFormData({ ...formData, headline: e.target.value })}
               className="w-full px-3 py-2 rounded-lg border border-zinc-200 text-zinc-900"

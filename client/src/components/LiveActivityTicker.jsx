@@ -1,13 +1,33 @@
 import React, { useState, useEffect } from 'react';
 
-export default function LiveActivityTicker() {
-  const activities = [
-    { text: "Marcus chartered EcoRoots Seattle Chapter with 25 founding members", time: "12m ago" },
-    { text: "CodeNova awarded new weekend youth coding workshops in Boston", time: "34m ago" },
-    { text: "Samira submitted a proposal to start a tree planting club at UT Austin", time: "1h ago" },
-    { text: "HarvestShare volunteers rescued 120 dining hall meals in Chicago", time: "2h ago" },
-    { text: "MindBridge trained 18 student peer facilitators at Michigan", time: "3h ago" }
+export default function LiveActivityTicker({ chapters = [], orgs = [], applications = [] }) {
+  const dynamicActivities = [];
+
+  (chapters || []).forEach((c) => {
+    if (c.leadName && c.orgName) {
+      dynamicActivities.push({
+        text: `${c.leadName} chartered ${c.orgName} (${c.targetLocation || 'Local Chapter'}) with ${c.activeMembers || 1} active members`,
+        time: "Active"
+      });
+    }
+  });
+
+  (orgs || []).forEach((o) => {
+    if (o.name) {
+      dynamicActivities.push({
+        text: `${o.name} is verified on SwiftKlix • ${o.category || 'Non-Profit'}`,
+        time: "Verified"
+      });
+    }
+  });
+
+  const baseActivities = [
+    { text: "SwiftKlix Network: Scale your non-profit or student club with local university & city branches", time: "Live" },
+    { text: "Verified 501(c)(3) legal toolkits, meeting guidelines, and candidate screening pipelines", time: "Live" },
+    { text: "Connect with passionate changemakers to launch chapters in your community", time: "Live" }
   ];
+
+  const activities = dynamicActivities.length > 0 ? [...dynamicActivities, ...baseActivities] : baseActivities;
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -18,7 +38,7 @@ export default function LiveActivityTicker() {
     return () => clearInterval(interval);
   }, [activities.length]);
 
-  const current = activities[currentIndex];
+  const current = activities[currentIndex] || activities[0];
 
   return (
     <div className="bg-blue-900 text-blue-100 px-4 py-2 text-xs font-medium border-b border-blue-950 flex items-center justify-center">
@@ -28,8 +48,8 @@ export default function LiveActivityTicker() {
           <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-400"></span>
         </span>
         <span className="text-[10px] uppercase font-bold tracking-wider text-blue-300 shrink-0">Live Network:</span>
-        <span className="truncate text-white font-medium">{current.text}</span>
-        <span className="text-blue-400 text-[11px] shrink-0 font-mono">({current.time})</span>
+        <span className="truncate text-white font-medium">{current?.text}</span>
+        <span className="text-blue-400 text-[11px] shrink-0 font-mono">({current?.time})</span>
       </div>
     </div>
   );

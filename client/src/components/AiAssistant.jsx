@@ -42,74 +42,47 @@ export default function AiAssistant({ orgs = [], opportunities = [], onViewOrg, 
 
       // 1. Starting a Branch / How does chartering work?
       if (lower.includes('how to start') || lower.includes('how do i start') || lower.includes('start a branch') || lower.includes('start a chapter') || lower.includes('charter')) {
-        matchedOrg = orgs[0];
-        reply = "Starting a branch on SwiftKlix is simple and open to anyone anywhere:\n\n1. Go to 'Start a Branch' and choose an organization that inspires you.\n2. Submit a 2-minute branch founding application with your city or campus.\n3. Complete a brief intro call with organization leadership to receive your official guidelines & toolkit.\n4. Recruit your founding team and host your first kickoff meeting!";
+        matchedOrg = orgs[0] || null;
+        reply = "Starting a local branch on SwiftKlix is straightforward:\n\n1. Browse 'Start a Branch' or Explore to choose an organization that inspires you.\n2. Submit a brief founding application with your city or university campus.\n3. Organization directors review your application and provide official guidelines, legal status, and event toolkits.\n4. Recruit your founding committee and start hosting local community events!";
       }
-      // 2. Tech / Coding / STEM / Software
-      else if (lower.includes('tech') || lower.includes('code') || lower.includes('coding') || lower.includes('stem') || lower.includes('software') || lower.includes('python') || lower.includes('web') || lower.includes('developer')) {
-        matchedOrg = orgs.find(o => o.category?.toLowerCase().includes('tech') || o.name?.toLowerCase().includes('code')) || orgs[1];
-        matchedOpp = opportunities.find(o => o.category?.toLowerCase().includes('tech') || o.orgId === matchedOrg?.id);
-        reply = `${matchedOrg?.name || 'CodeNova'} is dedicated to free youth coding workshops and STEM access. You can start a local CodeNova branch in your city or apply as a Python & Web development instructor!`;
+      // 2. Registering an Organization
+      else if (lower.includes('register') || lower.includes('add org') || lower.includes('create org') || lower.includes('my non-profit') || lower.includes('nonprofit') || lower.includes('501c3')) {
+        reply = "To register your non-profit or student organization:\n\n1. Go to 'Organization Hub' in the top navigation.\n2. Click 'Register Your Organization'.\n3. Provide your mission, focus cause, headquarters, and custom applicant screening questions.\n4. Publish chapter founding campaigns and specialized volunteer roles!";
       }
-      // 3. Environment / Climate / Trees / Sustainability / Green
-      else if (lower.includes('environment') || lower.includes('climate') || lower.includes('tree') || lower.includes('green') || lower.includes('nature') || lower.includes('conservation') || lower.includes('planting')) {
-        matchedOrg = orgs.find(o => o.category?.toLowerCase().includes('environment') || o.name?.toLowerCase().includes('roots')) || orgs[0];
-        matchedOpp = opportunities.find(o => o.category?.toLowerCase().includes('environment') || o.orgId === matchedOrg?.id);
-        reply = `${matchedOrg?.name || 'EcoRoots'} empowers students and community volunteers to plant urban tree canopies and restore local ecosystems. They provide full event toolkits for new branches.`;
+      // 3. Match Quiz & Compatibility
+      else if (lower.includes('quiz') || lower.includes('match') || lower.includes('score') || lower.includes('diagnostic') || lower.includes('tune')) {
+        reply = "The SwiftKlix 2-Minute Match Quiz computes a real-time compatibility score (0-100%) for every organization and position based on your causes, location, and preferred leadership role.";
       }
-      // 4. Mental Health / Wellness / Peer Support / Counseling
-      else if (lower.includes('mental') || lower.includes('health') || lower.includes('mind') || lower.includes('wellness') || lower.includes('counseling') || lower.includes('peer') || lower.includes('psych')) {
-        matchedOrg = orgs.find(o => o.category?.toLowerCase().includes('mental') || o.name?.toLowerCase().includes('mind')) || orgs[2];
-        matchedOpp = opportunities.find(o => o.category?.toLowerCase().includes('mental') || o.orgId === matchedOrg?.id);
-        reply = `${matchedOrg?.name || 'MindBridge'} facilitates student decompression circles, peer listening lounges, and mental wellness initiatives with guidance from licensed counseling advisors.`;
-      }
-      // 5. Food Security / Hunger / Surplus Rescue / Meal Sharing
-      else if (lower.includes('food') || lower.includes('hunger') || lower.includes('meal') || lower.includes('pantry') || lower.includes('rescue') || lower.includes('waste')) {
-        matchedOrg = orgs.find(o => o.category?.toLowerCase().includes('food') || o.name?.toLowerCase().includes('harvest')) || orgs[3];
-        matchedOpp = opportunities.find(o => o.category?.toLowerCase().includes('food') || o.orgId === matchedOrg?.id);
-        reply = `${matchedOrg?.name || 'HarvestShare'} redirects excess campus cafeteria and local bakery meals to food pantries. You can lead a food rescue branch or volunteer for dispatch logistics.`;
-      }
-      // 6. Civic / Policy / Voting / Democracy / Town Halls
-      else if (lower.includes('civic') || lower.includes('policy') || lower.includes('vote') || lower.includes('voting') || lower.includes('government') || lower.includes('advocacy') || lower.includes('justice')) {
-        matchedOrg = orgs.find(o => o.category?.toLowerCase().includes('civic') || o.name?.toLowerCase().includes('pulse')) || orgs[4];
-        matchedOpp = opportunities.find(o => o.category?.toLowerCase().includes('civic') || o.orgId === matchedOrg?.id);
-        reply = `${matchedOrg?.name || 'CivicPulse'} coordinates non-partisan youth voter registration, community roundtables, and policy research briefs across high schools and universities.`;
-      }
-      // 7. Healthcare / Medicine / Clinic / Clinical / Pre-Med
-      else if (lower.includes('medical') || lower.includes('clinic') || lower.includes('pre-med') || lower.includes('nurse') || lower.includes('doctor') || lower.includes('hygiene') || lower.includes('hospital')) {
-        matchedOrg = orgs.find(o => o.category?.toLowerCase().includes('healthcare') || o.name?.toLowerCase().includes('sanctuary')) || orgs[5] || orgs[0];
-        matchedOpp = opportunities.find(o => o.category?.toLowerCase().includes('healthcare') || o.orgId === matchedOrg?.id);
-        reply = `${matchedOrg?.name || 'Sanctuary Health'} organizes mobile health triage clinics, blood pressure screenings, and essential hygiene supply drives for underserved neighborhoods.`;
-      }
-      // 8. Specific City Queries
-      else if (lower.includes('austin') || lower.includes('boston') || lower.includes('seattle') || lower.includes('chicago') || lower.includes('francisco') || lower.includes('york') || lower.includes('atlanta') || lower.includes('stanford') || lower.includes('michigan') || lower.includes('denver')) {
-        const foundOpp = opportunities.find(o => 
-          lower.includes(o.targetLocation?.toLowerCase().split(',')[0]) || 
-          lower.includes(o.targetLocation?.toLowerCase().split(' ')[0])
+      // 4. Dynamic Cause/Category Search
+      else {
+        // Search in active live organizations
+        const matched = (orgs || []).find(o => 
+          lower.includes((o.category || '').toLowerCase()) ||
+          lower.includes((o.name || '').toLowerCase()) ||
+          (o.tagline && lower.includes(o.tagline.toLowerCase())) ||
+          (o.description && lower.includes(o.description.toLowerCase()))
         );
-        if (foundOpp) {
-          matchedOpp = foundOpp;
-          matchedOrg = orgs.find(o => o.id === foundOpp.orgId);
-          reply = `We have active openings in your area for ${matchedOpp.title} with ${matchedOpp.orgName}! You can also start a local branch of any organization.`;
+
+        const matchedOpportunity = (opportunities || []).find(o => 
+          lower.includes((o.category || '').toLowerCase()) ||
+          lower.includes((o.title || '').toLowerCase()) ||
+          (o.targetLocation && lower.includes(o.targetLocation.toLowerCase()))
+        );
+
+        if (matched) {
+          matchedOrg = matched;
+          matchedOpp = matchedOpportunity || (opportunities || []).find(o => o.orgId === matched.id);
+          reply = `${matched.name} is an active organization in ${matched.category || 'the community'}. ${matched.tagline || ''}\n\nYou can view their profile or apply to establish a local chapter.`;
+        } else if (matchedOpportunity) {
+          matchedOpp = matchedOpportunity;
+          matchedOrg = (orgs || []).find(o => o.id === matchedOpportunity.orgId);
+          reply = `We found an open opportunity: '${matchedOpportunity.title}' with ${matchedOpportunity.orgName} in ${matchedOpportunity.targetLocation}!\n\nCheck the Opportunities or Positions tab to apply.`;
+        } else if (orgs.length === 0) {
+          reply = "Welcome to SwiftKlix! The platform is live and ready for organizations to register. You can register your non-profit or student club via the 'Organization Hub' to post chapter campaigns and volunteer positions.";
         } else {
           matchedOrg = orgs[0];
-          reply = `You can establish a new chapter for any of our ${orgs.length} verified organizations in your city! Check out ${matchedOrg?.name} or browse the 'Start a Branch' tab.`;
+          reply = `SwiftKlix connects student changemakers with ${orgs.length} verified organizations. Explore the directory to find causes that inspire you or start a new branch in your community!`;
         }
-      }
-      // 9. Match Quiz / Scores
-      else if (lower.includes('quiz') || lower.includes('match') || lower.includes('score') || lower.includes('diagnostic')) {
-        reply = "The 5-Step Match Quiz evaluates your cause interests, location, role preference, and time availability to calculate a 1-100% compatibility score for every organization and opportunity.";
-      }
-      // 10. Positions / Volunteer Roles
-      else if (lower.includes('position') || lower.includes('volunteer') || lower.includes('job') || lower.includes('role') || lower.includes('opening')) {
-        matchedOpp = (opportunities || []).find(o => o?.type === 'Position') || opportunities?.[0];
-        matchedOrg = (orgs || []).find(o => o?.id === matchedOpp?.orgId) || orgs?.[0];
-        reply = `Check out the 'Positions' tab for specialized roles like ${matchedOpp?.title || 'Instructor or Coordinator'} where you can contribute specific technical, operational, or logistics skills!`;
-      }
-      // 11. General / Fallback
-      else {
-        matchedOrg = orgs[Math.floor(Math.random() * orgs.length)] || orgs[0];
-        reply = `SwiftKlix connects student changemakers with ${orgs.length} verified national organizations across climate, coding, mental health, food security, and civic policy. Would you like to start a local branch or explore open positions?`;
       }
 
       setMessages(prev => [

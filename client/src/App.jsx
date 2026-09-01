@@ -65,6 +65,7 @@ export default function App() {
  const [isPrivacyPolicyOpen, setIsPrivacyPolicyOpen] = useState(false);
  const [isTermsOpen, setIsTermsOpen] = useState(false);
  const [joinBranchTarget, setJoinBranchTarget] = useState(null);
+ const [pendingAction, setPendingAction] = useState(null);
 
  useEffect(() => {
   loadAllData();
@@ -93,6 +94,24 @@ export default function App() {
   setUser(userData);
   localStorage.setItem('SwiftKlix_user', JSON.stringify(userData));
   setToast({ type: 'success', title: 'Signed In', message: `Welcome, ${userData.name}!` });
+
+  // Resume pending user action if any
+  if (pendingAction) {
+    if (pendingAction.type === 'apply') {
+      setApplyOpportunity(pendingAction.data);
+    } else if (pendingAction.type === 'join') {
+      setSelectedBranch(null);
+      setJoinBranchTarget(pendingAction.data);
+    } else if (pendingAction.type === 'quiz') {
+      setIsDiagnosticOpen(true);
+    } else if (pendingAction.type === 'tab') {
+      setCurrentTab(pendingAction.data);
+      setSelectedOrgId(null);
+    } else if (pendingAction.type === 'create_campaign') {
+      setIsCreateCampaignOpen(true);
+    }
+    setPendingAction(null);
+  }
  };
 
  const handleLogout = () => {
@@ -117,6 +136,12 @@ export default function App() {
 
  const handleSelectGoal = (goalId, targetTab) => {
   setCurrentGoal(goalId);
+  if ((targetTab === 'hq_dashboard' || targetTab === 'my_org' || targetTab === 'applications') && !user) {
+    setPendingAction({ type: 'tab', data: targetTab === 'hq_dashboard' ? 'my_org' : targetTab });
+    setIsAuthOpen(true);
+    setToast({ type: 'info', title: 'Sign In Required', message: 'Please log in to access this section.' });
+    return;
+  }
   setCurrentTab(targetTab === 'hq_dashboard' ? 'my_org' : targetTab);
   setSelectedOrgId(null);
  };
@@ -159,9 +184,46 @@ export default function App() {
  };
 
 
+  const handleApply = (opp) => {
+    if (!user) {
+      setPendingAction({ type: 'apply', data: opp });
+      setIsAuthOpen(true);
+      setToast({ type: 'info', title: 'Sign In Required', message: 'Please sign in with Google or your email to apply for a branch or role.' });
+      return;
+    }
+    setApplyOpportunity(opp);
+  };
+
   const handleOpenJoinBranch = (branch) => {
+    if (!user) {
+      setPendingAction({ type: 'join', data: branch });
+      setIsAuthOpen(true);
+      setToast({ type: 'info', title: 'Sign In Required', message: 'Please sign in with Google or your email to join a chapter.' });
+      return;
+    }
     setSelectedBranch(null);
     setJoinBranchTarget(branch);
+  };
+
+  const handleOpenDiagnostic = () => {
+    if (!user) {
+      setPendingAction({ type: 'quiz' });
+      setIsAuthOpen(true);
+      setToast({ type: 'info', title: 'Sign In Required', message: 'Please sign in with Google or your email to take the match quiz.' });
+      return;
+    }
+    setIsDiagnosticOpen(true);
+  };
+
+  const handleSelectTab = (t) => {
+    if ((t === 'applications' || t === 'my_applications' || t === 'my_dashboard' || t === 'my_org' || t === 'hq_dashboard') && !user) {
+      setPendingAction({ type: 'tab', data: t });
+      setIsAuthOpen(true);
+      setToast({ type: 'info', title: 'Sign In Required', message: 'Please sign in with Google or your email to access your dashboard.' });
+      return;
+    }
+    setCurrentTab(t);
+    setSelectedOrgId(null);
   };
 
   const handleJoinMembershipSuccess = async (membershipData, branch) => {
@@ -287,7 +349,7 @@ export default function App() {
    {/* Clean Navbar */}
    <Navbar 
     currentTab={currentTab} 
-    setCurrentTab={(t) => { setCurrentTab(t); setSelectedOrgId(null); }} 
+    setCurrentTab={handleSelectTab} 
     user={user}
     onOpenAuth={() => setIsAuthOpen(true)}
     onLogout={handleLogout}
@@ -304,7 +366,7 @@ export default function App() {
       opportunities={opportunities}
       chapters={chapters}
       onBack={() => setSelectedOrgId(null)}
-      onApply={(opp) => setApplyOpportunity(opp)}
+      onApply={handleApply}
       onSelectBranch={(branch) => setSelectedBranch(branch)}
       onJoinBranch={handleOpenJoinBranch}
       diagnosticPrefs={diagnosticPrefs}
@@ -314,33 +376,33 @@ export default function App() {
       orgs={orgs}
       opportunities={opportunities}
       chapters={chapters}
-      onApply={(opp) => setApplyOpportunity(opp)}
+      onApply={handleApply}
       onViewOrg={(orgId) => setSelectedOrgId(orgId)}
-      onSelectTab={(setTab) => setCurrentTab(setTab)}
-      openCreateOrgModal={() => setCurrentTab('my_org')}
+      onSelectTab={handleSelectTab}
+      openCreateOrgModal={() => handleSelectTab('my_org')}
       diagnosticPrefs={diagnosticPrefs}
-      openDiagnosticModal={() => setIsDiagnosticOpen(true)}
+      openDiagnosticModal={handleOpenDiagnostic}
      />
     ) : currentTab === 'opportunities' ? (
      <OpportunitiesPage
       opportunities={opportunities}
       orgs={orgs}
       chapters={chapters}
-      onApply={(opp) => setApplyOpportunity(opp)}
+      onApply={handleApply}
       onViewOrg={(orgId) => setSelectedOrgId(orgId)}
       onJoinBranch={handleOpenJoinBranch}
       diagnosticPrefs={diagnosticPrefs}
-      openDiagnosticModal={() => setIsDiagnosticOpen(true)}
+      openDiagnosticModal={handleOpenDiagnostic}
      />
     ) : currentTab === 'positions' ? (
      <PositionsPage
       opportunities={opportunities}
       orgs={orgs}
       chapters={chapters}
-      onApply={(opp) => setApplyOpportunity(opp)}
+      onApply={handleApply}
       onViewOrg={(orgId) => setSelectedOrgId(orgId)}
       diagnosticPrefs={diagnosticPrefs}
-      openDiagnosticModal={() => setIsDiagnosticOpen(true)}
+      openDiagnosticModal={handleOpenDiagnostic}
      />
     ) : (currentTab === 'my_org' || currentTab === 'hq_dashboard') ? (
       <MyOrgPage
@@ -356,7 +418,15 @@ export default function App() {
         onUpdateChapter={handleUpdateChapter}
         onCreateChapter={handleCreateChapter}
         onDeleteChapter={handleDeleteChapter}
-        openCreateCampaignModal={() => setIsCreateCampaignOpen(true)}
+        openCreateCampaignModal={() => {
+          if (!user) {
+            setPendingAction({ type: 'create_campaign' });
+            setIsAuthOpen(true);
+            setToast({ type: 'info', title: 'Sign In Required', message: 'Please log in to post a campaign.' });
+            return;
+          }
+          setIsCreateCampaignOpen(true);
+        }}
         onViewLiveProfile={(orgId) => setSelectedOrgId(orgId)}
       />
      ) : (
@@ -399,7 +469,7 @@ export default function App() {
       </a>
      </div>
 
-     {/* Right: Legal Links & Data Controls */}
+     {/* Right: Legal Links */}
      <div className="flex flex-wrap items-center justify-center gap-4 font-medium">
       <span>(c) 2026 SwiftKlix Network</span>
       <button 
@@ -413,12 +483,6 @@ export default function App() {
        className="text-slate-600 hover:text-slate-900 hover:underline cursor-pointer"
       >
        Terms of Service
-      </button>
-      <button 
-       className="text-blue-700 hover:underline cursor-pointer"
-       onClick={() => api.resetDatabase().then(() => loadAllData())}
-      >
-       Reset Database
       </button>
      </div>
     </div>

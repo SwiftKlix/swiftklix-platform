@@ -16,29 +16,18 @@ export default function ChapterLeadHubPage({
 
 }) {
 
-  const myChapter = chapters[0] || {
+  const myChapter = chapters[0] || null;
 
-    id: 'chap-1',
-
-    name: 'EcoRoots Seattle Metro Chapter',
-
-    leadName: 'Marcus Vance',
-
-    leadEmail: 'marcus@ecoroots-seattle.org',
-
-    location: 'Seattle, WA',
-
-    institution: 'University of Washington & Citywide',
-
-    activeMembers: 68,
-
-    eventsHosted: 14,
-
-    recentEvent: 'Duwamish Riverbank Native Willow Rewilding',
-
-    status: 'Active & Thriving'
-
-  };
+  if (!myChapter) {
+    return (
+      <div className="clean-card p-12 text-center space-y-3">
+        <h2 className="text-xl font-bold text-slate-900">No Chartered Branches Active</h2>
+        <p className="text-slate-500 text-xs max-w-md mx-auto">
+          When your branch application is approved by organization headquarters, your leadership hub will activate with toolkits, event logging, and roster management.
+        </p>
+      </div>
+    );
+  }
 
 
 
