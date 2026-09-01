@@ -102,7 +102,9 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
   if (!isOpen) return null;
 
   const handleGoogleLoginClick = () => {
-    // 1. If custom client ID is present and GSI is active, request access
+    setError('');
+
+    // If client ID is configured and GSI is active, request real Google OAuth Token
     if (googleClientId.trim() && window.google?.accounts?.oauth2) {
       try {
         const client = window.google.accounts.oauth2.initTokenClient({
@@ -118,50 +120,56 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
                 if (data && data.email) {
                   const googleUser = {
                     id: `goog-${data.sub || Date.now()}`,
-                    name: data.name || data.given_name || 'Google User',
+                    name: data.name || data.given_name || data.email.split('@')[0],
                     email: data.email,
                     avatar: data.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name || data.email)}&background=4285F4&color=fff`,
                     role: 'user',
                     accountType: 'Verified Google Changemaker',
                     provider: 'google'
                   };
+
+                  try {
+                    const existing = JSON.parse(localStorage.getItem('swiftklix_registered_users') || '[]');
+                    if (!existing.some(u => u.email.toLowerCase() === data.email.toLowerCase())) {
+                      existing.push(googleUser);
+                      localStorage.setItem('swiftklix_registered_users', JSON.stringify(existing));
+                    }
+                  } catch (e) {}
+
                   onLogin(googleUser);
                   onClose();
                   return;
                 }
-              } catch (err) {}
+              } catch (err) {
+                console.error('Failed to fetch userinfo from Google', err);
+                setError('Failed to retrieve user profile from Google. Please try again.');
+              }
             }
           }
         });
         client.requestAccessToken();
         return;
-      } catch (e) {}
+      } catch (e) {
+        console.error('Token client error', e);
+      }
     }
 
-    // 2. Automatic Instant Google Account Authentication
-    const targetGoogleEmail = 'robhall1976m@gmail.com';
-    const targetGoogleName = 'Rob Hall';
-
-    const googleUser = {
-      id: `goog-${Date.now()}`,
-      name: targetGoogleName,
-      email: targetGoogleEmail,
-      avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(targetGoogleName)}&background=4285F4&color=fff`,
-      role: 'user',
-      accountType: 'Verified Google Changemaker',
-      provider: 'google'
-    };
-
-    try {
-      const existing = JSON.parse(localStorage.getItem('swiftklix_registered_users') || '[]');
-      if (!existing.some(u => u.email.toLowerCase() === targetGoogleEmail.toLowerCase())) {
-        existing.push(googleUser);
-        localStorage.setItem('swiftklix_registered_users', JSON.stringify(existing));
+    if (googleClientId.trim() && window.google?.accounts?.id) {
+      try {
+        window.google.accounts.id.initialize({
+          client_id: googleClientId.trim(),
+          callback: handleGoogleCredentialResponse
+        });
+        window.google.accounts.id.prompt();
+        return;
+      } catch (e) {
+        console.error('GSI prompt error', e);
       }
-    } catch (e) {}
+    }
 
-    onLogin(googleUser);
-    onClose();
+    // If Google Client ID is not configured yet, open configuration drawer
+    setShowConfig(true);
+    setError('To enable real Google OAuth login, please paste your Google Cloud Client ID below.');
   };
 
   const handleSaveClientId = (e) => {
