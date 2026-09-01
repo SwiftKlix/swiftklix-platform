@@ -15,6 +15,10 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
   );
   const googleBtnRef = useRef(null);
 
+  const [isGooglePromptOpen, setIsGooglePromptOpen] = useState(false);
+  const [googleEmailInput, setGoogleEmailInput] = useState('');
+  const [googleNameInput, setGoogleNameInput] = useState('');
+
   // Parse JWT token from Google Identity Services
   const parseGoogleJwt = (token) => {
     try {
@@ -100,10 +104,6 @@ export default function AuthModal({ isOpen, onClose, onLogin }) {
   }, [isOpen, googleClientId]);
 
   if (!isOpen) return null;
-
-  const [isGooglePromptOpen, setIsGooglePromptOpen] = useState(false);
-  const [googleEmailInput, setGoogleEmailInput] = useState('');
-  const [googleNameInput, setGoogleNameInput] = useState('');
 
   const handleGoogleLoginClick = () => {
     if (googleClientId.trim() && window.google?.accounts?.id) {
