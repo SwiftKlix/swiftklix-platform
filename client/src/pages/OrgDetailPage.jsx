@@ -428,34 +428,42 @@ export default function OrgDetailPage({
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
-          <button
-            type="button"
-            onClick={() => {
-              if (onJoinBranch) {
-                onJoinBranch(
-                  orgBranches.length > 0 
-                    ? orgBranches[0] 
-                    : { orgId: org?.id, name: `${org?.name || 'Organization'} Volunteer Network`, location: org?.headquarters || 'Remote / Local', institution: org?.headquarters || 'National' }
-                );
-              }
-            }}
-            className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs flex items-center justify-center gap-2 shadow-lg transition-all transform hover:scale-105 active:scale-95 cursor-pointer"
-          >
-            <Users className="w-4 h-4" />
-            <span>Join as Member / Volunteer</span>
-          </button>
+          {org?.applicationSetupComplete === false ? (
+            <div className="p-3.5 rounded-2xl bg-white/10 border border-white/20 text-slate-300 text-xs font-medium text-center max-w-sm">
+              <span>Application screening questions are currently being configured by {org?.name} leadership. Check back shortly to apply!</span>
+            </div>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() => {
+                  if (onJoinBranch) {
+                    onJoinBranch(
+                      orgBranches.length > 0 
+                        ? orgBranches[0] 
+                        : { orgId: org?.id, name: `${org?.name || 'Organization'} Volunteer Network`, location: org?.headquarters || 'Remote / Local', institution: org?.headquarters || 'National' }
+                    );
+                  }
+                }}
+                className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs flex items-center justify-center gap-2 shadow-lg transition-all transform hover:scale-105 active:scale-95 cursor-pointer"
+              >
+                <Users className="w-4 h-4" />
+                <span>Join as Member / Volunteer</span>
+              </button>
 
-          <button
-            type="button"
-            onClick={() => {
-              const branchOpp = (orgOpps || []).find(o => o?.type === 'Start a Chapter' || o?.type === 'Branch');
-              if (branchOpp) onApply(branchOpp);
-              else onApply({ orgId: org?.id, orgName: org?.name, title: `Start a ${org?.name || 'Local'} Branch or Chapter`, type: 'Start a Chapter', targetLocation: '' });
-            }}
-            className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 transition-all cursor-pointer text-center"
-          >
-            <span>Start a Chapter in Your City</span>
-          </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const branchOpp = (orgOpps || []).find(o => o?.type === 'Start a Chapter' || o?.type === 'Branch');
+                  if (branchOpp) onApply(branchOpp);
+                  else onApply({ orgId: org?.id, orgName: org?.name, title: `Start a ${org?.name || 'Local'} Branch or Chapter`, type: 'Start a Chapter', targetLocation: '' });
+                }}
+                className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 transition-all cursor-pointer text-center"
+              >
+                <span>Start a Chapter in Your City</span>
+              </button>
+            </>
+          )}
         </div>
       </div>
 

@@ -675,6 +675,85 @@ export default function MyOrgPage({
         </div>
       )}
 
+      {/* Application Questions Setup Gate / Action Required */}
+      {!isRegisterMode && !isOrgPending && (currentOrg?.applicationSetupComplete === false || (!currentOrg?.applicationSetupComplete && (!currentOrg?.customQuestions || currentOrg?.customQuestions.length === 0))) && (
+        <div className="clean-card p-6 border-blue-300 bg-gradient-to-r from-blue-50/90 via-white to-blue-50/40 space-y-4 shadow-sm">
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-2xs">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <div className="space-y-1 flex-1">
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-0.5 rounded-full bg-blue-600 text-white font-extrabold text-[10px] uppercase tracking-wider">
+                  Setup Required
+                </span>
+                <span className="font-bold text-slate-900 text-sm">Configure Application Questions & Volunteer Tracks</span>
+              </div>
+              <p className="text-slate-600 text-xs leading-relaxed">
+                Your organization is approved! Before public candidates and volunteers can apply, set up your custom screening questions for branch founders, member committee tracks, and open positions.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
+            <button
+              type="button"
+              onClick={() => setActiveSubTab('branch_apps')}
+              className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                (formData.customQuestions || []).length > 0 
+                  ? 'bg-emerald-50/60 border-emerald-200 text-emerald-950' 
+                  : 'bg-white border-slate-200 hover:border-blue-300 text-slate-800'
+              }`}
+            >
+              <div className="flex items-center justify-between font-bold mb-1">
+                <span>1. Branch Questions</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-extrabold">
+                  {(formData.customQuestions || []).length} Set
+                </span>
+              </div>
+              <span className="text-[11px] text-slate-500 block">Screen prospective chapter leads</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveSubTab('members')}
+              className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                (formData.membershipCommittees || []).length > 0 
+                  ? 'bg-emerald-50/60 border-emerald-200 text-emerald-950' 
+                  : 'bg-white border-slate-200 hover:border-blue-300 text-slate-800'
+              }`}
+            >
+              <div className="flex items-center justify-between font-bold mb-1">
+                <span>2. Member Committees</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-extrabold">
+                  {(formData.membershipCommittees || []).length} Tracks
+                </span>
+              </div>
+              <span className="text-[11px] text-slate-500 block">Define volunteer roles & questions</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                onSaveOrg(currentOrg.id, {
+                  ...formData,
+                  applicationSetupComplete: true
+                });
+                setSaveSuccess(true);
+                setTimeout(() => setSaveSuccess(false), 3000);
+              }}
+              className="p-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex flex-col justify-center items-center gap-1 shadow-2xs transition-colors cursor-pointer text-center"
+            >
+              <span className="flex items-center gap-1 text-xs">
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Publish & Open Applications</span>
+              </span>
+              <span className="text-[10px] text-slate-300 font-normal">Activate public candidate signups</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Organization KPI Summary Badges */}
       {!isRegisterMode && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
