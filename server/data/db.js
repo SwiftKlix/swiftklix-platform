@@ -4,7 +4,15 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DB_FILE = path.join(__dirname, 'db.json');
+const storageDir = process.env.DATA_DIR || process.env.RENDER_DISK_PATH || __dirname;
+
+if (!fs.existsSync(storageDir)) {
+  try {
+    fs.mkdirSync(storageDir, { recursive: true });
+  } catch (e) {}
+}
+
+const DB_FILE = path.join(storageDir, 'db.json');
 const INITIAL_DATA_FILE = path.join(__dirname, 'initialData.json');
 
 function initDb() {
