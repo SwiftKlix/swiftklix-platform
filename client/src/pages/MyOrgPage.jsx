@@ -645,13 +645,15 @@ export default function MyOrgPage({
             </>
           )}
 
-          <button
-            onClick={() => setIsRegisterMode(!isRegisterMode)}
-            className="flex items-center gap-1 px-3.5 py-2 rounded-xl bg-slate-900 text-white font-semibold text-xs hover:bg-slate-800 transition-colors shrink-0 shadow-2xs"
-          >
-            <Plus className="w-4 h-4" />
-            <span>{isRegisterMode ? "Back to Dashboard" : "+ Register New Organization"}</span>
-          </button>
+          {(isPlatformAdmin || !currentOrg || isRegisterMode) && (
+            <button
+              onClick={() => setIsRegisterMode(!isRegisterMode)}
+              className="flex items-center gap-1 px-3.5 py-2 rounded-xl bg-slate-900 text-white font-semibold text-xs hover:bg-slate-800 transition-colors shrink-0 shadow-2xs cursor-pointer"
+            >
+              <Plus className="w-4 h-4" />
+              <span>{isRegisterMode ? "Back to Dashboard" : "+ Register New Organization"}</span>
+            </button>
+          )}
         </div>
       </div>
 

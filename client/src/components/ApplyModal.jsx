@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Check, Save, Sparkles, MapPin, Briefcase, Globe, ArrowUpRight } from 'lucide-react';
+import { X, Check, Save, Sparkles, MapPin, Briefcase, Globe, ArrowUpRight, Building2 } from 'lucide-react';
 import LocationInput from './LocationInput';
 
 export default function ApplyModal({ opportunity, org, user, chapters, onJoinBranch, onClose, onSubmitApplication }) {
@@ -43,6 +43,14 @@ export default function ApplyModal({ opportunity, org, user, chapters, onJoinBra
       : (isJoinBranch ? defaultJoinBranchQuestions : (isBranchApplication ? defaultBranchQuestions : defaultPositionQuestions)));
 
   const externalUrl = org?.externalApplyUrl || org?.branchApplyUrl || opportunity?.externalApplyUrl || '';
+
+  const isOwnOrg = Boolean(
+    user && org && (
+      (user.email && org.submittedBy && user.email.toLowerCase() === org.submittedBy.toLowerCase()) ||
+      (user.email && org.contactEmail && user.email.toLowerCase() === org.contactEmail.toLowerCase()) ||
+      (user.id && org.creatorId && user.id === org.creatorId)
+    )
+  );
 
   const [applicantName, setApplicantName] = useState(user?.name || '');
   const [applicantEmail, setApplicantEmail] = useState(user?.email || '');
@@ -205,6 +213,19 @@ export default function ApplyModal({ opportunity, org, user, chapters, onJoinBra
             </div>
           )}
 
+          {/* Own Organization Advisory */}
+          {isOwnOrg && (
+            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 space-y-1.5">
+              <div className="flex items-center gap-2 font-bold text-xs text-amber-900">
+                <Building2 className="w-4 h-4 text-amber-600" />
+                <span>You are the Registered Founder / Administrator of {org?.name || 'this Organization'}</span>
+              </div>
+              <p className="text-[11px] text-amber-800 leading-relaxed">
+                You already manage this organization under your account. Your initial founding chapter is established directly through your organization approval. You can charter additional campus branches directly from your <strong>Organization Dashboard &rarr; Chartered Branches</strong> tab.
+              </p>
+            </div>
+          )}
+
           {/* Prerequisites Notice Banner */}
           {opportunity.prerequisites && (
             <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1">
@@ -317,16 +338,18 @@ export default function ApplyModal({ opportunity, org, user, chapters, onJoinBra
           <button
             type="submit"
             form="applyForm"
-            disabled={Boolean(existingBranch)}
+            disabled={Boolean(existingBranch) || isOwnOrg}
             className={`px-5 py-2 rounded-xl font-bold text-xs shadow-2xs transition-colors ${
-              existingBranch 
+              existingBranch || isOwnOrg
                 ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
-                : 'bg-slate-900 hover:bg-slate-800 text-white'
+                : 'bg-slate-900 hover:bg-slate-800 text-white cursor-pointer'
             }`}
           >
-            {existingBranch 
-              ? "Branch Exists in this Area" 
-              : (isBranchApplication ? "Submit Branch or Chapter Application" : "Submit Role Application")}
+            {isOwnOrg 
+              ? "Managed on Your Org Dashboard"
+              : (existingBranch 
+                  ? "Branch Exists in this Area" 
+                  : (isBranchApplication ? "Submit Branch or Chapter Application" : "Submit Role Application"))}
           </button>
         </div>
 
