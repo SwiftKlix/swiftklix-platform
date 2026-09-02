@@ -1,14 +1,95 @@
 {
   "stats": {
-    "totalChapters": 0,
-    "activeOrgs": 0,
-    "totalMembers": 0,
-    "activeProjectsCount": 0,
-    "campusFootprint": 0
+    "totalChapters": 1,
+    "activeOrgs": 1,
+    "totalMembers": 15,
+    "activeProjectsCount": 1,
+    "campusFootprint": 1
   },
-  "organizations": [],
-  "opportunities": [],
-  "chapters": [],
+  "organizations": [
+    {
+      "id": "org-crementum-teaching",
+      "name": "Crementum Teaching",
+      "tagline": "Empowering students and communities through education and chapter leadership",
+      "category": "Education & Youth",
+      "headquarters": "San Bernardino, CA",
+      "description": "Crementum Teaching empowers students through accessible tutoring, peer-to-peer mentoring, and community educational workshops.",
+      "contactEmail": "palash.raks@gmail.com",
+      "submittedBy": "palash.raks@gmail.com",
+      "submittedAt": "2026-09-01T23:35:00.000Z",
+      "website": "",
+      "image": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=80",
+      "logo": "",
+      "status": "Verified Official",
+      "approvalStatus": "approved",
+      "isApproved": true,
+      "activeChaptersCount": 1,
+      "membersCount": 15,
+      "verification": {
+        "ein": "",
+        "registryDoc": "Student Organization / Non-Profit Initiative",
+        "status": "Verified Official",
+        "verifiedAt": "2026-09-01T23:35:00.000Z"
+      },
+      "customQuestions": [
+        "Which school, university campus, or local neighborhood do you plan to establish this branch in?",
+        "What is your target timeline for hosting your inaugural chapter kickoff or tutoring session?",
+        "How many founding student leaders or officers will help you organize?"
+      ],
+      "membershipRequirements": "Open to all enrolled students and community educators.",
+      "membershipQuestions": [
+        "What specific subject areas or age groups are you most interested in teaching or supporting?",
+        "What previous mentoring, tutoring, or campus club experience do you bring?"
+      ],
+      "membershipCommittees": [
+        "Teaching & Tutoring Curriculum",
+        "Student Outreach & School Partnerships",
+        "Event Operations & Workshops",
+        "Marketing & Media",
+        "General Volunteer & Peer Mentor"
+      ],
+      "applicationSetupComplete": true
+    }
+  ],
+  "opportunities": [
+    {
+      "id": "opp-crementum-1",
+      "orgId": "org-crementum-teaching",
+      "orgName": "Crementum Teaching",
+      "title": "Start a Crementum Teaching Branch or Chapter",
+      "type": "Start a Chapter",
+      "targetLocation": "San Bernardino, CA / All Locations",
+      "commitment": "2-4 hours / week",
+      "focusArea": "Branch Leadership & Teaching",
+      "category": "Education & Youth",
+      "prerequisites": "Passion for educational equity, 2+ hrs/week commitment",
+      "deadline": "Open",
+      "spotsAvailable": 3,
+      "description": "Launch and lead a Crementum Teaching chapter at your local school, university campus, or community center.",
+      "tags": [
+        "Chapter Lead",
+        "Teaching",
+        "Education"
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "id": "chap-crementum-founding",
+      "orgId": "org-crementum-teaching",
+      "orgName": "Crementum Teaching",
+      "name": "Crementum Teaching - Founding Chapter",
+      "location": "San Bernardino, CA",
+      "institution": "San Bernardino, CA",
+      "leadName": "Palash / Optic Raider",
+      "leadEmail": "palash.raks@gmail.com",
+      "activeMembers": 15,
+      "eventsHosted": 3,
+      "recentEvent": "Community Tutoring Workshop",
+      "meetingSchedule": "Bi-weekly Thursdays 5:30 PM",
+      "status": "Active"
+    }
+  ],
   "applications": [],
   "matchmakingProfiles": [],
   "impactFeed": []
