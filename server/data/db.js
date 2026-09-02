@@ -71,38 +71,38 @@ export const db = {
     const newOrg = {
       id: `org-${Date.now()}`,
       activeChaptersCount: 1,
-      focusArea: org.focusArea || 'Active Chapter',
+      focusArea: org.focusArea || '',
       membersCount: 1,
       status: org.status || 'Pending Review',
       approvalStatus: org.approvalStatus || 'pending',
       isApproved: Boolean(org.isApproved),
       submittedBy: org.submittedBy || org.contactEmail || '',
       submittedAt: new Date().toISOString(),
-      image: org.image || 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80',
+      website: org.website || '',
+      image: org.image || '',
       logo: org.logo || '',
       socials: org.socials || {
         linkedin: '',
         twitter: '',
         instagram: '',
         github: '',
-        discord: ''
+        discord: '',
+        tiktok: ''
       },
       verification: org.verification || {
-        ein: org.ein || '84-1928472',
-        registryDoc: 'Official 501(c)(3) Letter',
+        ein: org.ein || '',
+        registryDoc: '',
+        documentUrl: '',
         status: 'Pending Review',
         submittedAt: new Date().toISOString()
       },
-      customQuestions: org.customQuestions || [
-        "Why do you want to lead a branch in your city?",
-        "What relevant volunteer or club leadership experience do you have?"
-      ],
+      customQuestions: org.customQuestions || [],
       ...org,
       branchGuide: {
-        curriculumOverview: org.curriculumOverview || 'Step-by-step meeting guide and volunteer handbook.',
-        guidelines: org.guidelines || 'Official chapter guidelines and resources.',
-        legalSupport: '501(c)(3) tax umbrella and liability coverage.',
-        toolkitAssets: ['Volunteer Guide', 'Poster Templates', 'Budget Sheet']
+        curriculumOverview: org.curriculumOverview || '',
+        guidelines: org.guidelines || '',
+        legalSupport: org.legalSupport || '',
+        toolkitAssets: org.toolkitAssets || []
       }
     };
     data.organizations = [newOrg, ...(data.organizations || [])];
