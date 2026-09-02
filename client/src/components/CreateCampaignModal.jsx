@@ -7,15 +7,15 @@ export default function CreateCampaignModal({ isOpen, orgs, onClose, onCreate })
     orgId: orgs?.[0]?.id || '',
     title: '',
     type: 'Start a Chapter',
-    targetLocation: 'Austin, TX',
-    commitment: '3-4 hours / week',
-    focusArea: 'Branch Leadership',
-    category: orgs?.[0]?.category || 'Environment & Climate',
-    prerequisites: 'Enrolled student or local resident, 3+ hrs/wk dedication, passion for cause',
-    deadline: 'Open',
-    spotsAvailable: 2,
+    targetLocation: '',
+    commitment: '',
+    focusArea: '',
+    category: orgs?.[0]?.category || '',
+    prerequisites: '',
+    deadline: '',
+    spotsAvailable: 1,
     description: '',
-    tags: 'Start a Branch, Leadership'
+    tags: ''
   });
 
   const popularCities = [

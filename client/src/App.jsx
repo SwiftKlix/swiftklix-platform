@@ -572,17 +572,17 @@ export default function App() {
      onSave={handleSavePreferences}
      onSavePreferences={handleSavePreferences}
      onResetAll={() => {
-       const defaults = {
-         causes: ['Environment & Climate', 'Technology & Coding'],
-         userLocation: 'Austin, TX',
-         roleType: 'both',
-         availability: 'medium',
-         onlyLocal: false,
-         completed: true,
-         updatedAt: new Date().toISOString()
-       };
-       handleSaveDiagnostic(defaults);
-     }}
+        const defaults = {
+          causes: [],
+          userLocation: '',
+          roleType: 'both',
+          availability: 'medium',
+          onlyLocal: false,
+          completed: false,
+          updatedAt: new Date().toISOString()
+        };
+        handleSaveDiagnostic(defaults);
+      }}
     />
 
     {/* Modals */}

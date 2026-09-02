@@ -6,8 +6,8 @@ export default function PostMatchmakerModal({ isOpen, onClose, onCreate }) {
     name: '',
     headline: '',
     location: '',
-    skills: 'Community Organizing, Social Media, Events',
-    lookingFor: 'A partner to co-lead a local chapter',
+    skills: '',
+    lookingFor: '',
     bio: '',
     contactEmail: ''
   });

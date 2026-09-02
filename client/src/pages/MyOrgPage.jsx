@@ -60,10 +60,10 @@ export default function MyOrgPage({
     institution: '',
     leadName: '',
     leadEmail: '',
-    activeMembers: 15,
-    eventsHosted: 2,
-    recentEvent: 'Inaugural Meeting',
-    meetingSchedule: 'Bi-weekly Wednesdays 6:00 PM',
+    activeMembers: 0,
+    eventsHosted: 0,
+    recentEvent: '',
+    meetingSchedule: '',
     status: 'Active'
   });
 
@@ -72,11 +72,11 @@ export default function MyOrgPage({
   const [oppFormData, setOppFormData] = useState({
     title: '',
     type: 'Position',
-    targetLocation: 'Remote / All Locations',
-    commitment: '3-5 hours / week',
-    focusArea: 'General',
-    category: 'Environment',
-    spotsAvailable: 2,
+    targetLocation: '',
+    commitment: '',
+    focusArea: '',
+    category: '',
+    spotsAvailable: 1,
     description: '',
     customQuestions: []
   });
@@ -98,12 +98,12 @@ export default function MyOrgPage({
       return {
         name: org.name || '',
         tagline: org.tagline || '',
-        category: org.category || 'Environment & Climate',
+        category: org.category || '',
         headquarters: org.headquarters || '',
         description: org.description || '',
         contactEmail: org.contactEmail || user?.email || '',
         website: org.website || '',
-        image: org.image || 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80',
+        image: org.image || '',
         logo: org.logo || '',
         externalApplyUrl: org.externalApplyUrl || '',
         socials: {
@@ -115,38 +115,25 @@ export default function MyOrgPage({
         },
         verification: {
           ein: org.verification?.ein || org.ein || '',
-          registryDoc: org.verification?.registryDoc || 'Official 501(c)(3) Letter',
+          registryDoc: org.verification?.registryDoc || '',
           status: org.verification?.status || org.status || 'Pending Review'
         },
-        customQuestions: org.customQuestions || [
-          'Which university campus or city do you plan to establish this branch in?',
-          'What is your target timeline for hosting your inaugural chapter kickoff?',
-          'How many founding co-leads or student officers will help you organize?'
-        ],
+        customQuestions: org.customQuestions || [],
         externalMembershipUrl: org.externalMembershipUrl || '',
-        membershipRequirements: org.membershipRequirements || 'Open to all enrolled students and local community members.',
-        membershipQuestions: org.membershipQuestions || [
-          'What specific initiatives or cause areas in our organization interest you most?',
-          'What previous volunteering, campus club, or project experience do you bring?'
-        ],
-        membershipCommittees: org.membershipCommittees || [
-          'Event Organizing & Planning',
-          'Community Outreach & Partnerships',
-          'Marketing & Social Media',
-          'Logistics & Operations',
-          'General Volunteer & Participant'
-        ]
+        membershipRequirements: org.membershipRequirements || '',
+        membershipQuestions: org.membershipQuestions || [],
+        membershipCommittees: org.membershipCommittees || []
       };
     }
     return {
       name: '',
       tagline: '',
-      category: 'Environment & Climate',
+      category: '',
       headquarters: '',
       description: '',
       contactEmail: user?.email || '',
       website: '',
-      image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80',
+      image: '',
       logo: '',
       externalApplyUrl: '',
       socials: {
@@ -158,27 +145,14 @@ export default function MyOrgPage({
       },
       verification: {
         ein: '',
-        registryDoc: 'Official 501(c)(3) Letter',
+        registryDoc: '',
         status: 'Pending Review'
       },
-      customQuestions: [
-        'Which university campus or city do you plan to establish this branch in?',
-        'What is your target timeline for hosting your inaugural chapter kickoff?',
-        'How many founding co-leads or student officers will help you organize?'
-      ],
+      customQuestions: [],
       externalMembershipUrl: '',
-      membershipRequirements: 'Open to all enrolled students and local community members.',
-      membershipQuestions: [
-        'What specific initiatives or cause areas in our organization interest you most?',
-        'What previous volunteering, campus club, or project experience do you bring?'
-      ],
-      membershipCommittees: [
-        'Event Organizing & Planning',
-        'Community Outreach & Partnerships',
-        'Marketing & Social Media',
-        'Logistics & Operations',
-        'General Volunteer & Participant'
-      ]
+      membershipRequirements: '',
+      membershipQuestions: [],
+      membershipCommittees: []
     };
   };
 

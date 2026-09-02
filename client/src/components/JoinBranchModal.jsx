@@ -23,14 +23,14 @@ export default function JoinBranchModal({ isOpen, branch, org, user, onClose, on
         'What previous volunteering or campus club experience do you bring?'
       ];
 
-  const requirements = org?.membershipRequirements || 'Open to all enrolled students and local community members.';
+  const requirements = org?.membershipRequirements || '';
 
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
   const [location, setLocation] = useState(branch?.institution || branch?.location || user?.location || '');
-  const [affiliation, setAffiliation] = useState('Student / Local Resident');
-  const [committee, setCommittee] = useState(committees[0] || 'Event Organizing & Planning');
-  const [hours, setHours] = useState('1-2 hours / week');
+  const [affiliation, setAffiliation] = useState('');
+  const [committee, setCommittee] = useState(committees[0] || '');
+  const [hours, setHours] = useState('');
   const [answers, setAnswers] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDone, setIsDone] = useState(false);

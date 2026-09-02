@@ -15,8 +15,8 @@ export default function DiagnosticModal({
   const [step, setStep] = useState(1);
   const initialPrefs = existingPrefs || currentPreferences || diagnosticPrefs || {};
   
-  const [causes, setCauses] = useState(initialPrefs.causes || ['Environment & Climate', 'Technology & Coding']);
-  const [userLocation, setUserLocation] = useState(initialPrefs.userLocation || 'Austin, TX');
+  const [causes, setCauses] = useState(initialPrefs.causes || []);
+  const [userLocation, setUserLocation] = useState(initialPrefs.userLocation || '');
   const [roleType, setRoleType] = useState(initialPrefs.roleType || 'both');
   const [availability, setAvailability] = useState(initialPrefs.availability || 'medium');
   const [onlyLocal, setOnlyLocal] = useState(initialPrefs.onlyLocal || false);
