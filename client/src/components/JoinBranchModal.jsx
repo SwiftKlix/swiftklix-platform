@@ -1,27 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { X, Check, CheckCircle2, Users, MapPin, ArrowRight, ExternalLink, HelpCircle } from 'lucide-react';
+import { X, Check, CheckCircle2, Users, MapPin, ArrowRight, ExternalLink, HelpCircle, Sparkles } from 'lucide-react';
 import LocationInput from './LocationInput';
 
 export default function JoinBranchModal({ isOpen, branch, org, user, onClose, onJoinSuccess }) {
 
-  const defaultCommittees = [
-    'Event Organizing & Planning',
-    'Community Outreach & Partnerships',
-    'Marketing & Social Media',
-    'Logistics & Operations',
-    'General Volunteer & Participant'
-  ];
+  const isOwnOrg = Boolean(
+    user && (
+      (user.email && org?.submittedBy && user.email.toLowerCase() === org.submittedBy.toLowerCase()) ||
+      (user.email && org?.contactEmail && user.email.toLowerCase() === org.contactEmail.toLowerCase()) ||
+      (user.email && branch?.leadEmail && user.email.toLowerCase() === branch.leadEmail.toLowerCase()) ||
+      (user.id && org?.creatorId && user.id === org.creatorId)
+    )
+  );
+
+  const isSetupPending = Boolean(
+    org && (
+      org.applicationSetupComplete === false ||
+      (!org.applicationSetupComplete && (!org.membershipQuestions || org.membershipQuestions.length === 0) && (!org.customQuestions || org.customQuestions.length === 0))
+    )
+  );
 
   const committees = (org?.membershipCommittees && org.membershipCommittees.length > 0)
     ? org.membershipCommittees
-    : defaultCommittees;
+    : ['General Member / Volunteer'];
 
-  const membershipQuestions = (org?.membershipQuestions && org.membershipQuestions.length > 0)
+  const membershipQuestions = (org?.membershipQuestions && Array.isArray(org.membershipQuestions))
     ? org.membershipQuestions
-    : [
-        'What specific projects or initiatives in our cause area interest you most?',
-        'What previous volunteering or campus club experience do you bring?'
-      ];
+    : [];
 
   const requirements = org?.membershipRequirements || '';
 
@@ -135,6 +140,32 @@ export default function JoinBranchModal({ isOpen, branch, org, user, onClose, on
         ) : (
           <form id="joinBranchForm" onSubmit={handleSubmit} className="p-5 sm:p-6 space-y-3.5 overflow-y-auto flex-1">
             
+            {/* Own Chapter / Org Founder Advisory */}
+            {isOwnOrg && (
+              <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-blue-950 space-y-1.5">
+                <div className="flex items-center gap-2 font-bold text-xs text-blue-900">
+                  <Users className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span>You are the Founder & Chapter Director of {org?.name || 'this Organization'}</span>
+                </div>
+                <p className="text-[11px] text-blue-800 leading-relaxed">
+                  You already lead and manage this chapter. You can inspect registered members, log chapter events, and manage volunteer tracks directly from your <strong>Organization Dashboard &rarr; Members</strong> tab.
+                </p>
+              </div>
+            )}
+
+            {/* Application Setup Pending Banner */}
+            {!isOwnOrg && isSetupPending && (
+              <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 space-y-1.5">
+                <div className="flex items-center gap-2 font-bold text-xs text-amber-900">
+                  <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span>Application Setup In Progress</span>
+                </div>
+                <p className="text-[11px] text-amber-800 leading-relaxed">
+                  {org?.name || 'Organization'} leadership is currently configuring their volunteer committee tracks and screening questions. Public applications will open as soon as setup is published.
+                </p>
+              </div>
+            )}
+
             {/* Single Compact Notice Pill */}
             <div className="p-3 rounded-2xl bg-blue-50/60 border border-blue-100/80 flex items-center justify-between gap-3 text-slate-700">
               <div className="flex items-center gap-2">
@@ -288,13 +319,21 @@ export default function JoinBranchModal({ isOpen, branch, org, user, onClose, on
             <button
               type="submit"
               form="joinBranchForm"
-              disabled={isSubmitting}
-              className="px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-2xs transition-colors flex items-center gap-1.5"
+              disabled={isSubmitting || isOwnOrg || isSetupPending}
+              className={`px-6 py-2 rounded-xl font-bold text-xs shadow-2xs transition-colors flex items-center gap-1.5 ${
+                isOwnOrg || isSetupPending
+                  ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer'
+              }`}
             >
               <span>
                 {isSubmitting 
                   ? 'Submitting...' 
-                  : (org?.membershipApprovalMode === 'review' ? 'Submit Membership Application' : 'Confirm Chapter Membership')}
+                  : (isOwnOrg 
+                      ? 'Managed in Org Dashboard' 
+                      : (isSetupPending 
+                          ? 'Setup In Progress' 
+                          : (org?.membershipApprovalMode === 'review' ? 'Submit Membership Application' : 'Confirm Chapter Membership')))}
               </span>
             </button>
           </div>

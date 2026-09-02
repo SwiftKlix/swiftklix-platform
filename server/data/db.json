@@ -31,24 +31,11 @@
         "status": "Verified Official",
         "verifiedAt": "2026-09-01T23:35:00.000Z"
       },
-      "customQuestions": [
-        "Which school, university campus, or local neighborhood do you plan to establish this branch in?",
-        "What is your target timeline for hosting your inaugural chapter kickoff or tutoring session?",
-        "How many founding student leaders or officers will help you organize?"
-      ],
-      "membershipRequirements": "Open to all enrolled students and community educators.",
-      "membershipQuestions": [
-        "What specific subject areas or age groups are you most interested in teaching or supporting?",
-        "What previous mentoring, tutoring, or campus club experience do you bring?"
-      ],
-      "membershipCommittees": [
-        "Teaching & Tutoring Curriculum",
-        "Student Outreach & School Partnerships",
-        "Event Operations & Workshops",
-        "Marketing & Media",
-        "General Volunteer & Peer Mentor"
-      ],
-      "applicationSetupComplete": true
+      "customQuestions": [],
+      "membershipRequirements": "",
+      "membershipQuestions": [],
+      "membershipCommittees": [],
+      "applicationSetupComplete": false
     }
   ],
   "opportunities": [
