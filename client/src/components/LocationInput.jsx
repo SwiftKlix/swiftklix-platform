@@ -80,14 +80,15 @@ export default function LocationInput({
   };
 
   const popularCities = [
+    'Redlands, CA',
+    'San Bernardino, CA',
+    'Los Angeles, CA',
+    'San Francisco, CA',
+    'New York, NY',
     'Austin, TX',
     'Boston, MA',
-    'New York, NY',
-    'San Francisco, CA',
     'Chicago, IL',
     'Seattle, WA',
-    'Ann Arbor, MI',
-    'Atlanta, GA',
     'Remote / All Locations'
   ];
 
