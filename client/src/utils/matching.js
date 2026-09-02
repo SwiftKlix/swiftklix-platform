@@ -1,28 +1,63 @@
 /**
- * Smart Location-First & Cause Compatibility Matching Engine for SwiftKlix
+ * Transparent Multi-Factor Compatibility Matching Engine for SwiftKlix
+ * 
+ * Weights:
+ * - Cause & Mission Match: 45%
+ * - Location & Chapter Proximity: 35%
+ * - Role & Opportunity Type: 12%
+ * - Weekly Availability / Bandwidth: 8%
  */
 
 export function calculateMatchScore(item, prefs, chapters = []) {
   if (!prefs || !prefs.completed) return null;
 
-  let score = 55; // Base compatibility
+  const itemCategory = (item?.category || '').trim().toLowerCase();
+  const itemRole = (item?.role || item?.type || item?.title || '').trim().toLowerCase();
+  const itemLocation = (item?.targetLocation || item?.headquarters || '').trim().toLowerCase();
+  const itemCommitment = (item?.commitment || '').trim().toLowerCase();
+  const userLoc = (typeof prefs.userLocation === 'string' ? prefs.userLocation : '').trim().toLowerCase();
 
-  const itemCategory = item?.category || '';
-  const itemRole = item?.role || item?.type || item?.title || '';
-  const itemLocation = (item?.targetLocation || item?.headquarters || '').toLowerCase();
-  const itemCommitment = (item?.commitment || '').toLowerCase();
-  const userLoc = (typeof prefs.userLocation === 'string' ? prefs.userLocation : '').toLowerCase().trim();
+  let causeScore = 0;
+  let locationScore = 0;
+  let roleScore = 0;
+  let availabilityScore = 0;
 
-  // 1. Check if this Org has an active chapter in user's city/campus
-  let hasLocalChapter = false;
-  if (userLoc && userLoc !== 'remote / all locations' && userLoc !== 'any') {
-    const locKeywords = userLoc.split(/[\s,&/]+/).filter(w => w && w.length > 2);
-    
-    // Check direct location keywords
+  // 1. Cause & Mission Match (0 to 45 pts)
+  if (prefs.causes && Array.isArray(prefs.causes) && prefs.causes.length > 0) {
+    const isDirectMatch = prefs.causes.some(c => {
+      const cleanC = (c || '').toLowerCase();
+      return itemCategory.includes(cleanC) || cleanC.includes(itemCategory);
+    });
+
+    if (isDirectMatch) {
+      causeScore = 45;
+    } else {
+      // Check partial keyword overlap
+      const itemWords = itemCategory.split(/[\s,&/]+/).filter(w => w.length > 3);
+      const partialMatch = prefs.causes.some(c => {
+        const cWords = (c || '').toLowerCase().split(/[\s,&/]+/).filter(w => w.length > 3);
+        return itemWords.some(iw => cWords.includes(iw));
+      });
+      if (partialMatch) {
+        causeScore = 24;
+      } else {
+        causeScore = 4; // Minimal baseline if no cause overlap
+      }
+    }
+  } else {
+    causeScore = 20; // Neutral if no cause filter set
+  }
+
+  // 2. Location & Chapter Proximity (0 to 35 pts)
+  if (!userLoc || userLoc === 'remote / all locations' || userLoc === 'any') {
+    locationScore = 25; // Neutral nationwide baseline
+  } else {
+    const locKeywords = userLoc.split(/[\s,&/]+/).filter(w => w.length > 2);
     const isDirectLocation = locKeywords.some(kw => itemLocation.includes(kw));
-    
-    // Check chapter database
+
+    // Check if organization has an active chapter in user's city/campus
     const orgId = item?.id || item?.orgId;
+    let hasLocalChapter = false;
     if (orgId && Array.isArray(chapters)) {
       hasLocalChapter = chapters.some(c => 
         c.orgId === orgId && locKeywords.some(kw => 
@@ -34,59 +69,58 @@ export function calculateMatchScore(item, prefs, chapters = []) {
     }
 
     if (hasLocalChapter || isDirectLocation) {
-      score += 28; // Major local boost
-    } else if (itemLocation.includes('remote')) {
-      score += 18;
-    } else if (prefs.onlyLocal) {
-      score -= 15;
+      locationScore = 35; // Direct municipal / campus match
+    } else if (itemLocation.includes('remote') || itemLocation.includes('all locations')) {
+      locationScore = 22; // Accessible remote
     } else {
-      score += 8;
+      // Check state-level proximity
+      const userState = userLoc.split(',')[1]?.trim();
+      const itemState = itemLocation.split(',')[1]?.trim();
+      if (userState && itemState && userState.toLowerCase() === itemState.toLowerCase()) {
+        locationScore = 18; // Same state
+      } else if (prefs.onlyLocal) {
+        locationScore = 0; // Filtered out by strict local filter
+      } else {
+        locationScore = 5; // Different city
+      }
+    }
+  }
+
+  // 3. Role Intent Match (0 to 12 pts)
+  if (prefs.roleType) {
+    const isBranchRole = itemRole.includes('branch') || itemRole.includes('chapter') || itemRole.includes('founding') || itemRole.includes('lead');
+    const isVolunteerRole = itemRole.includes('member') || itemRole.includes('volunteer') || itemRole.includes('position') || itemRole.includes('coordinator');
+
+    if (prefs.roleType === 'branch' && isBranchRole) {
+      roleScore = 12;
+    } else if (prefs.roleType === 'volunteer' && isVolunteerRole) {
+      roleScore = 12;
+    } else if (prefs.roleType === 'both') {
+      roleScore = 10;
+    } else {
+      roleScore = 4;
     }
   } else {
-    score += 15;
+    roleScore = 8;
   }
 
-  // 2. Cause Affinity (+25% max)
-  if (prefs.causes && Array.isArray(prefs.causes) && prefs.causes.length > 0) {
-    const directMatch = prefs.causes.some(c => 
-      c && (
-        itemCategory.toLowerCase().includes(c.toLowerCase()) || 
-        c.toLowerCase().includes(itemCategory.toLowerCase())
-      )
-    );
-    if (directMatch) {
-      score += 22;
-    } else {
-      score += 6;
-    }
-  }
-
-  // 3. Role Preference (+12% max)
-  if (prefs.roleType) {
-    if (prefs.roleType === 'branch' && (itemRole.toLowerCase().includes('branch') || itemRole.toLowerCase().includes('lead') || itemRole.toLowerCase().includes('chapter') || itemRole.toLowerCase().includes('founding'))) {
-      score += 12;
-    } else if (prefs.roleType === 'volunteer' && (itemRole.toLowerCase().includes('position') || itemRole.toLowerCase().includes('volunteer') || itemRole.toLowerCase().includes('coordinator') || itemRole.toLowerCase().includes('instructor'))) {
-      score += 12;
-    } else {
-      score += 8;
-    }
-  }
-
-  // 4. Availability / Commitment (+10% max)
+  // 4. Availability & Bandwidth Match (0 to 8 pts)
   if (prefs.availability) {
     if (prefs.availability === 'low' && (itemCommitment.includes('1-2') || itemCommitment.includes('flexible') || itemCommitment.includes('2-3'))) {
-      score += 10;
-    } else if (prefs.availability === 'medium' && (itemCommitment.includes('3-4') || itemCommitment.includes('3-5') || itemCommitment.includes('2-4'))) {
-      score += 10;
+      availabilityScore = 8;
+    } else if (prefs.availability === 'medium' && (itemCommitment.includes('2-4') || itemCommitment.includes('3-5') || itemCommitment.includes('3-4'))) {
+      availabilityScore = 8;
     } else if (prefs.availability === 'high') {
-      score += 10;
+      availabilityScore = 8;
     } else {
-      score += 5;
+      availabilityScore = 4;
     }
+  } else {
+    availabilityScore = 5;
   }
 
-  // Clamp score between 68% and 99%
-  return Math.min(Math.max(score, 68), 99);
+  const rawTotal = causeScore + locationScore + roleScore + availabilityScore;
+  return Math.min(Math.max(rawTotal, 12), 98);
 }
 
 export function isLocalMatch(item, prefs, chapters = []) {

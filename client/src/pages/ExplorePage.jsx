@@ -125,7 +125,7 @@ export default function ExplorePage({
                 </span>
               </div>
               <p className="text-slate-500 text-[11px] mt-0.5">
-                Location: <strong className="text-slate-800">{diagnosticPrefs.userLocation || 'Austin, TX'}</strong> • {(diagnosticPrefs.causes || []).length} Causes Selected • Matches Auto-Ranked
+                Location: <strong className="text-slate-800">{diagnosticPrefs.userLocation || 'All Locations'}</strong> • {(diagnosticPrefs.causes || []).length} Causes Selected • Matches Auto-Ranked
               </p>
             </div>
           </div>

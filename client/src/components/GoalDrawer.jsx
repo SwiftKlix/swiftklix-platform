@@ -79,7 +79,7 @@ export default function GoalDrawer({
   const handleSave = () => {
     const payload = {
       causes,
-      userLocation: userLocation.trim() || 'Austin, TX',
+      userLocation: userLocation.trim() || 'Remote / All Locations',
       roleType,
       availability,
       onlyLocal,
@@ -101,7 +101,7 @@ export default function GoalDrawer({
   const handleReset = () => {
     const defaultPayload = {
       causes: ['Environment & Climate', 'Technology & Coding'],
-      userLocation: 'Austin, TX',
+      userLocation: '',
       roleType: 'both',
       availability: 'medium',
       onlyLocal: false,

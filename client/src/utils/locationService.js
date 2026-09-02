@@ -1,6 +1,5 @@
 import { US_CITIES } from './usCities';
 
-// State name to 2-letter postal code map
 const STATE_MAP = {
   'alabama': 'AL', 'alaska': 'AK', 'arizona': 'AZ', 'arkansas': 'AR', 'california': 'CA',
   'colorado': 'CO', 'connecticut': 'CT', 'delaware': 'DE', 'florida': 'FL', 'georgia': 'GA',
@@ -23,12 +22,10 @@ export function getStateCode(stateName) {
   return stateName;
 }
 
-// Real-time US Places Search (Precision ranked autocomplete)
 export async function searchUSPlaces(query) {
   if (!query || query.trim().length < 2) return [];
   const cleanQ = query.trim().toLowerCase();
 
-  // 1. Instant local matching with priority ranking
   const prefixMatches = [];
   const containsMatches = [];
 
@@ -42,16 +39,15 @@ export async function searchUSPlaces(query) {
     }
   }
 
-  const localRanked = [...prefixMatches, ...containsMatches].slice(0, 7).map(city => ({
+  const localRanked = [...prefixMatches, ...containsMatches].slice(0, 8).map(city => ({
     display_name: city,
     city: city.split(',')[0].trim(),
     state: city.split(',')[1]?.trim() || ''
   }));
 
-  // 2. Query Nominatim for small towns, campuses, and metro subdivisions
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2200);
+    const timeoutId = setTimeout(() => controller.abort(), 1800);
     const res = await fetch(
       `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&countrycodes=us&format=json&addressdetails=1&limit=6`,
       {
@@ -76,7 +72,6 @@ export async function searchUSPlaces(query) {
         };
       }).filter(item => Boolean(item.city));
 
-      // Merge and deduplicate
       const merged = [...localRanked];
       for (const item of onlineMatches) {
         if (!merged.some(m => m.display_name.toLowerCase() === item.display_name.toLowerCase())) {
@@ -85,29 +80,25 @@ export async function searchUSPlaces(query) {
       }
       return merged.slice(0, 8);
     }
-  } catch (e) {
-    // Return local matches if offline
-  }
+  } catch (e) {}
 
   return localRanked;
 }
 
-// 1-Click High-Precision GPS Location Detector (Zero Mock Fallbacks)
 export async function detectPreciseLocation() {
-  // Method 1: HTML5 High-Accuracy Geolocation -> Reverse Geocode
+  // Method 1: HTML5 High-Accuracy Geolocation (Fast 3.5s timeout)
   if (navigator.geolocation) {
     try {
       const coords = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(
           pos => resolve(pos.coords),
           err => reject(err),
-          { timeout: 9000, enableHighAccuracy: true, maximumAge: 0 }
+          { timeout: 3500, enableHighAccuracy: true, maximumAge: 0 }
         );
       });
 
       const { latitude, longitude } = coords;
 
-      // 1A. Nominatim High-Accuracy Reverse Geocode
       try {
         const res = await fetch(
           `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`,
@@ -124,7 +115,6 @@ export async function detectPreciseLocation() {
         }
       } catch (err1) {}
 
-      // 1B. BigDataCloud Fallback
       try {
         const res2 = await fetch(
           `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
@@ -138,33 +128,37 @@ export async function detectPreciseLocation() {
           }
         }
       } catch (err2) {}
-    } catch (geoErr) {
-      // Browser permission denied or timed out, proceed to IP-based detection
-    }
+    } catch (geoErr) {}
   }
 
-  // Method 2: IP-based Network Geolocation Fallback
-  try {
-    const ipRes = await fetch('https://ipapi.co/json/');
-    if (ipRes.ok) {
-      const ipData = await ipRes.json();
-      if (ipData.city && (ipData.region_code || ipData.region)) {
-        const stateCode = ipData.region_code || getStateCode(ipData.region);
-        return `${ipData.city}, ${stateCode}`;
+  // Method 2: High-speed IP Network Geolocation
+  const ipSources = [
+    async () => {
+      const r = await fetch('https://ipapi.co/json/');
+      if (!r.ok) throw new Error();
+      const d = await r.json();
+      if (d.city && (d.region_code || d.region)) {
+        return `${d.city}, ${d.region_code || getStateCode(d.region)}`;
       }
-    }
-  } catch (ipErr) {}
-
-  try {
-    const ipRes2 = await fetch('https://ipwho.is/');
-    if (ipRes2.ok) {
-      const ipData2 = await ipRes2.json();
-      if (ipData2.city && (ipData2.region_code || ipData2.region)) {
-        const stateCode = ipData2.region_code || getStateCode(ipData2.region);
-        return `${ipData2.city}, ${stateCode}`;
+      throw new Error();
+    },
+    async () => {
+      const r = await fetch('https://ipwho.is/');
+      if (!r.ok) throw new Error();
+      const d = await r.json();
+      if (d.city && (d.region_code || d.region)) {
+        return `${d.city}, ${d.region_code || getStateCode(d.region)}`;
       }
+      throw new Error();
     }
-  } catch (ipErr2) {}
+  ];
 
-  throw new Error("Could not detect your exact location. Please type your city name in the search box.");
+  for (const source of ipSources) {
+    try {
+      const loc = await source();
+      if (loc) return loc;
+    } catch (e) {}
+  }
+
+  throw new Error("Could not detect your location. Please type your city name in the search box.");
 }

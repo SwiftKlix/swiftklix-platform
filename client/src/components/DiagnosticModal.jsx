@@ -76,7 +76,7 @@ export default function DiagnosticModal({
     if (saveFn) {
       saveFn({
         causes,
-        userLocation: userLocation.trim() || 'Austin, TX',
+        userLocation: userLocation.trim() || 'Remote / All Locations',
         roleType,
         availability,
         onlyLocal,
