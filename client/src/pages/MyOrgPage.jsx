@@ -115,7 +115,8 @@ export default function MyOrgPage({
         },
         verification: {
           ein: org.verification?.ein || org.ein || '',
-          registryDoc: org.verification?.registryDoc || '',
+          registryDoc: org.verification?.registryDoc || '501(c)(3) Non-Profit',
+          documentUrl: org.verification?.documentUrl || org.verification?.registryDoc || '',
           status: org.verification?.status || org.status || 'Pending Review'
         },
         customQuestions: org.customQuestions || [],
@@ -125,6 +126,14 @@ export default function MyOrgPage({
         membershipCommittees: org.membershipCommittees || []
       };
     }
+
+    try {
+      const savedDraft = localStorage.getItem('SwiftKlix_org_draft');
+      if (savedDraft) {
+        return JSON.parse(savedDraft);
+      }
+    } catch (e) {}
+
     return {
       name: '',
       tagline: '',
@@ -145,7 +154,8 @@ export default function MyOrgPage({
       },
       verification: {
         ein: '',
-        registryDoc: '',
+        registryDoc: '501(c)(3) Non-Profit',
+        documentUrl: '',
         status: 'Pending Review'
       },
       customQuestions: [],
@@ -158,6 +168,7 @@ export default function MyOrgPage({
 
   const [formData, setFormData] = useState(() => getInitialFormData(currentOrg));
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [draftSavedToast, setDraftSavedToast] = useState(false);
 
   useEffect(() => {
     setFormData(getInitialFormData(currentOrg));
@@ -191,6 +202,16 @@ export default function MyOrgPage({
     reader.readAsDataURL(file);
   };
 
+  const handleSaveOrgDraft = () => {
+    try {
+      localStorage.setItem('SwiftKlix_org_draft', JSON.stringify(formData));
+      setDraftSavedToast(true);
+      setTimeout(() => setDraftSavedToast(false), 3000);
+    } catch (e) {
+      console.error('Failed to save org draft', e);
+    }
+  };
+
   const handleSaveSubmit = (e) => {
     if (e) e.preventDefault();
     if (isRegisterMode || !currentOrg) {
@@ -198,6 +219,9 @@ export default function MyOrgPage({
         ...formData,
         submittedBy: user?.email || formData.contactEmail
       });
+      try {
+        localStorage.removeItem('SwiftKlix_org_draft');
+      } catch (err) {}
       setIsRegisterMode(false);
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
@@ -447,6 +471,12 @@ export default function MyOrgPage({
   const orgChapters = (chapters || []).filter(c => c?.orgId === currentOrg?.id);
   const totalVolunteers = orgChapters.reduce((acc, chap) => acc + (chap?.activeMembers || 0), 0);
 
+  const isOrgPending = currentOrg && (
+    currentOrg.approvalStatus === 'pending' || 
+    currentOrg.status === 'Pending Review' || 
+    (!currentOrg.isApproved && !currentOrg.status?.includes('Verified') && currentOrg.status !== 'Approved')
+  );
+
   if (!currentOrg && !isRegisterMode) {
     return (
       <div className="space-y-6 pb-24 max-w-4xl mx-auto text-center py-12">
@@ -460,10 +490,110 @@ export default function MyOrgPage({
           </p>
           <button
             onClick={() => setIsRegisterMode(true)}
-            className="px-6 py-3 bg-slate-900 text-white rounded-xl font-bold text-xs hover:bg-slate-800 transition-colors shadow-xs"
+            className="px-6 py-3 bg-slate-900 text-white rounded-xl font-bold text-xs hover:bg-slate-800 transition-colors shadow-xs cursor-pointer"
           >
             Register Your Organization
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Pending Review View for Founder
+  if (isOrgPending && !isPlatformAdmin && !isRegisterMode) {
+    return (
+      <div className="space-y-6 pb-24 max-w-5xl mx-auto">
+        <div className="clean-card p-6 sm:p-8 border-amber-200 bg-gradient-to-r from-amber-50/80 via-white to-amber-50/40 space-y-4">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 shadow-2xs">
+              <Clock className="w-6 h-6 animate-pulse" />
+            </div>
+            <div className="space-y-1 flex-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-500 text-white font-extrabold text-[10px] uppercase tracking-wider">
+                  Pending Admin Review
+                </span>
+                <span className="text-slate-400 text-xs font-semibold">• Submission Awaiting Verification</span>
+              </div>
+              <h2 className="text-lg sm:text-xl font-extrabold text-slate-900">
+                Your Organization Application Has Been Submitted
+              </h2>
+              <p className="text-slate-600 text-xs leading-relaxed max-w-2xl">
+                Thank you for applying to list <strong>{currentOrg.name}</strong> on SwiftKlix. Our platform administration team (<a href="mailto:swiftklix1@gmail.com" className="text-blue-600 font-semibold underline">swiftklix1@gmail.com</a>) verifies all non-profit, student club, and initiative credentials to maintain high community trust.
+              </p>
+            </div>
+          </div>
+
+          <div className="pt-3 border-t border-amber-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <span className="text-amber-900 font-medium">
+              Live branch chartering, member rosters, and candidate CRM pipelines will unlock immediately upon approval.
+            </span>
+            <button
+              onClick={() => setIsRegisterMode(true)}
+              className="px-4 py-2 rounded-xl bg-white border border-amber-200 hover:bg-amber-50 text-amber-950 font-bold text-xs flex items-center gap-1.5 shadow-2xs self-start sm:self-auto cursor-pointer"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              <span>Edit Submitted Application</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Submitted Organization Application Summary */}
+        <div className="clean-card p-6 sm:p-8 space-y-6 text-xs">
+          <div className="flex items-start justify-between border-b border-slate-100 pb-4">
+            <div>
+              <h3 className="font-bold text-base text-slate-900">Submitted Application Preview</h3>
+              <p className="text-slate-500 text-xs mt-0.5">Here is a summary of the details you submitted for review.</p>
+            </div>
+            <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-bold text-[11px]">
+              {currentOrg.category || 'General Cause'}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
+              <span className="font-bold text-slate-900 block">Organization Name & Slogan</span>
+              <p className="font-extrabold text-sm text-slate-900">{currentOrg.name}</p>
+              <p className="text-slate-600 italic text-[11px]">{currentOrg.tagline || 'No tagline provided'}</p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
+              <span className="font-bold text-slate-900 block">Headquarters & Contact</span>
+              <p className="text-slate-700"><strong>Headquarters:</strong> {currentOrg.headquarters || 'National / Remote'}</p>
+              <p className="text-slate-700"><strong>Contact Email:</strong> {currentOrg.contactEmail || currentOrg.submittedBy || 'N/A'}</p>
+              {currentOrg.website && <p className="text-slate-700"><strong>Website:</strong> <a href={currentOrg.website} target="_blank" rel="noreferrer" className="text-blue-600 underline">{currentOrg.website}</a></p>}
+            </div>
+          </div>
+
+          {currentOrg.description && (
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+              <span className="font-bold text-slate-900 block">Mission Statement & Description</span>
+              <p className="text-slate-600 leading-relaxed text-[11px]">{currentOrg.description}</p>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+              <span className="font-bold text-slate-900 block">Organization Classification</span>
+              <p className="text-slate-700 text-[11px] font-semibold">{currentOrg.verification?.registryDoc || '501(c)(3) Non-Profit'}</p>
+            </div>
+
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+              <span className="font-bold text-slate-900 block">EIN / Federal Tax ID</span>
+              <p className="text-slate-700 text-[11px] font-semibold">{currentOrg.verification?.ein || 'Not Provided / Pending'}</p>
+            </div>
+          </div>
+
+          {currentOrg.customQuestions && currentOrg.customQuestions.length > 0 && (
+            <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
+              <span className="font-bold text-slate-900 block">Custom Branch Screening Questions ({currentOrg.customQuestions.length})</span>
+              <ul className="list-disc pl-5 space-y-1 text-slate-600 text-[11px]">
+                {currentOrg.customQuestions.map((q, idx) => (
+                  <li key={idx}>{q}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -830,6 +960,7 @@ export default function MyOrgPage({
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                   className="w-full p-2.5 rounded-xl border border-slate-200 bg-white font-semibold text-slate-900 focus:outline-none"
                 >
+                  <option value="">Select Impact Sector</option>
                   <option value="Environment & Climate">Environment & Climate</option>
                   <option value="Education & Youth">Education & Youth</option>
                   <option value="Technology & Coding">Technology & Coding</option>
@@ -957,16 +1088,96 @@ export default function MyOrgPage({
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-              <span className="text-slate-400 text-[11px]">Changes update your live public profile immediately.</span>
-              <button
-                type="submit"
-                className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition-colors"
-              >
-                <Save className="w-4 h-4" />
-                <span>Save Organization Profile</span>
-              </button>
+            {/* Verification, Non-Profit Status, & EIN Section */}
+            <div className="pt-4 border-t border-slate-100 space-y-3">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-blue-600" />
+                <span className="font-bold text-slate-900 text-xs">Organization Verification & 501(c)(3) Details</span>
+              </div>
+              <p className="text-slate-500 text-[11px]">
+                Provide your non-profit or student club classification to help SwiftKlix HQ verify your listing.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block font-medium text-slate-600 mb-1">Organization Classification</label>
+                  <select
+                    value={formData.verification?.registryDoc || '501(c)(3) Non-Profit'}
+                    onChange={(e) => setFormData(prev => ({
+                      ...prev,
+                      verification: { ...(prev.verification || {}), registryDoc: e.target.value }
+                    }))}
+                    className="w-full p-2.5 rounded-xl border border-slate-200 bg-white font-medium text-slate-900 focus:outline-none text-xs"
+                  >
+                    <option value="501(c)(3) Non-Profit">501(c)(3) Registered Non-Profit</option>
+                    <option value="Student Organization / Campus Club">Student Club / Campus Organization</option>
+                    <option value="Grassroots Initiative / Movement">Grassroots Initiative / Movement</option>
+                    <option value="Unincorporated / Pending Incorporation">Unincorporated / Pending 501(c)(3)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-medium text-slate-600 mb-1">EIN / Federal Tax ID (Optional)</label>
+                  <input
+                    type="text"
+                    value={formData.verification?.ein || ''}
+                    onChange={(e) => setFormData(prev => ({
+                      ...prev,
+                      verification: { ...(prev.verification || {}), ein: e.target.value }
+                    }))}
+                    placeholder="e.g. 12-3456789 or Pending"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-medium text-slate-600 mb-1">Registry / IRS Letter URL (Optional)</label>
+                  <input
+                    type="url"
+                    value={formData.verification?.documentUrl || ''}
+                    onChange={(e) => setFormData(prev => ({
+                      ...prev,
+                      verification: { ...(prev.verification || {}), documentUrl: e.target.value }
+                    }))}
+                    placeholder="https://irs.gov/... or portal link"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none text-xs"
+                  />
+                </div>
+              </div>
             </div>
+
+            <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <span className="text-slate-400 text-[11px]">
+                {isRegisterMode 
+                  ? "Submissions are verified by SwiftKlix Admin before public publication." 
+                  : "Changes update your organization listing."}
+              </span>
+              <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                {isRegisterMode && (
+                  <button
+                    type="button"
+                    onClick={handleSaveOrgDraft}
+                    className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+                  >
+                    <Save className="w-3.5 h-3.5 text-slate-500" />
+                    <span>Save Draft</span>
+                  </button>
+                )}
+                <button
+                  type="submit"
+                  className="flex-1 sm:flex-none px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-colors cursor-pointer"
+                >
+                  <Check className="w-4 h-4" />
+                  <span>{isRegisterMode ? "Submit Application for Verification" : "Save Organization Profile"}</span>
+                </button>
+              </div>
+            </div>
+            {draftSavedToast && (
+              <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-xs font-semibold flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                <span>Draft Saved: Your organization application progress has been saved locally!</span>
+              </div>
+            )}
           </div>
         </form>
       )}
