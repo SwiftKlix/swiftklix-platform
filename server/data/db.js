@@ -47,13 +47,22 @@ export const db = {
     };
   },
 
-  getOrgs() {
+  getOrgs(includeAll = false) {
     const data = readData();
-    return data.organizations || [];
+    const all = data.organizations || [];
+    if (includeAll) return all;
+    // Public directory only displays approved / verified organizations
+    return all.filter(o => 
+      o.approvalStatus === 'approved' || 
+      o.status === 'Verified Official' || 
+      o.status === 'Verified 501(c)(3)' ||
+      o.status === 'Approved' ||
+      o.isApproved === true
+    );
   },
 
   getOrgById(id) {
-    const orgs = this.getOrgs();
+    const orgs = this.getOrgs(true);
     return orgs.find(o => o.id === id);
   },
 
@@ -64,7 +73,11 @@ export const db = {
       activeChaptersCount: 1,
       focusArea: org.focusArea || 'Active Chapter',
       membersCount: 1,
-      status: org.verification?.status || 'Verified Official',
+      status: org.status || 'Pending Review',
+      approvalStatus: org.approvalStatus || 'pending',
+      isApproved: Boolean(org.isApproved),
+      submittedBy: org.submittedBy || org.contactEmail || '',
+      submittedAt: new Date().toISOString(),
       image: org.image || 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80',
       logo: org.logo || '',
       socials: org.socials || {
@@ -75,10 +88,10 @@ export const db = {
         discord: ''
       },
       verification: org.verification || {
-        ein: '84-1928472',
-        registryDoc: 'Official 501(c)(3) IRS Determination Letter',
-        status: 'Verified Official',
-        verifiedAt: new Date().toISOString()
+        ein: org.ein || '84-1928472',
+        registryDoc: 'Official 501(c)(3) Letter',
+        status: 'Pending Review',
+        submittedAt: new Date().toISOString()
       },
       customQuestions: org.customQuestions || [
         "Why do you want to lead a branch in your city?",
@@ -93,11 +106,48 @@ export const db = {
       }
     };
     data.organizations = [newOrg, ...(data.organizations || [])];
-    if (data.stats) {
-      data.stats.activeOrgs = (data.stats.activeOrgs || 0) + 1;
-    }
     writeData(data);
     return newOrg;
+  },
+
+  approveOrg(id, adminNotes = '') {
+    const data = readData();
+    const index = (data.organizations || []).findIndex(o => o.id === id);
+    if (index === -1) return null;
+
+    data.organizations[index] = {
+      ...data.organizations[index],
+      status: 'Verified Official',
+      approvalStatus: 'approved',
+      isApproved: true,
+      verification: {
+        ...(data.organizations[index].verification || {}),
+        status: 'Verified Official',
+        adminNotes: adminNotes || 'Approved by SwiftKlix Platform Administrator',
+        verifiedAt: new Date().toISOString()
+      },
+      approvedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    writeData(data);
+    return data.organizations[index];
+  },
+
+  rejectOrg(id, rejectionReason = '') {
+    const data = readData();
+    const index = (data.organizations || []).findIndex(o => o.id === id);
+    if (index === -1) return null;
+
+    data.organizations[index] = {
+      ...data.organizations[index],
+      status: 'Rejected',
+      approvalStatus: 'rejected',
+      isApproved: false,
+      rejectionReason: rejectionReason || 'Does not meet current verification criteria',
+      updatedAt: new Date().toISOString()
+    };
+    writeData(data);
+    return data.organizations[index];
   },
 
   updateOrg(id, updates) {

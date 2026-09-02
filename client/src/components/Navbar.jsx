@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, SlidersHorizontal, LogIn, LogOut, Building2, Plus, User, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Menu, X, SlidersHorizontal, LogIn, LogOut, Building2, Plus, User, Sparkles, CheckCircle2, ShieldCheck } from 'lucide-react';
 import Logo from './Logo';
 
 export default function Navbar({ 
@@ -10,10 +10,18 @@ export default function Navbar({
   onLogout,
   openGoalDrawer,
   onOpenAboutSwiftKlix,
-  onOpenUserProfile
+  onOpenUserProfile,
+  pendingOrgsCount = 0
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+
+  const isPlatformAdmin = user && (
+    user.email?.toLowerCase().includes('swiftklix') || 
+    user.email?.toLowerCase() === 'swiftklix1@gmail.com' || 
+    user.role === 'admin' || 
+    user.accountType === 'admin'
+  );
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
@@ -77,6 +85,25 @@ export default function Navbar({
               >
                 My Dashboard
               </button>
+
+              {isPlatformAdmin && (
+                <button
+                  onClick={() => setCurrentTab('admin_review')}
+                  className={`px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1.5 ${
+                    currentTab === 'admin_review'
+                      ? 'text-blue-900 font-bold bg-blue-100'
+                      : 'text-blue-700 hover:bg-blue-50 font-semibold'
+                  }`}
+                >
+                  <ShieldCheck className="w-4 h-4 text-blue-600" />
+                  <span>HQ Review</span>
+                  {pendingOrgsCount > 0 && (
+                    <span className="px-1.5 py-0.2 rounded-full bg-amber-500 text-white font-black text-[10px] animate-pulse">
+                      {pendingOrgsCount}
+                    </span>
+                  )}
+                </button>
+              )}
             </nav>
           </div>
 
@@ -86,22 +113,44 @@ export default function Navbar({
               <div className="relative">
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center gap-2 p-1 pl-3 rounded-full border border-slate-200 hover:bg-slate-50 transition-colors text-xs font-semibold text-slate-800 shadow-2xs"
+                  className="flex items-center gap-2 p-1 pl-3 rounded-full border border-slate-200 hover:bg-slate-50 transition-colors text-xs font-semibold text-slate-800 shadow-2xs cursor-pointer"
                 >
                   <span>{user.name ? user.name.split(' ')[0] : (user.email ? user.email.split('@')[0] : 'Account')}</span>
                   <img src={user.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"} alt="Avatar" className="w-7 h-7 rounded-full object-cover" />
                 </button>
 
                 {userDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-60 bg-white rounded-2xl shadow-xl border border-slate-200 py-2 text-xs text-slate-700 z-50">
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-200 py-2 text-xs text-slate-700 z-50">
                     <div className="px-4 py-2.5 border-b border-slate-100 mb-1">
-                      <p className="font-bold text-slate-900 truncate">{user.name || 'Community Member'}</p>
+                      <div className="flex items-center justify-between">
+                        <p className="font-bold text-slate-900 truncate">{user.name || 'Community Member'}</p>
+                        {isPlatformAdmin && (
+                          <span className="text-[9px] font-black uppercase bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">HQ Admin</span>
+                        )}
+                      </div>
                       <p className="text-slate-400 text-[11px] truncate">{user.email || 'user@example.org'}</p>
                     </div>
+
+                    {isPlatformAdmin && (
+                      <button
+                        onClick={() => { setCurrentTab('admin_review'); setUserDropdownOpen(false); }}
+                        className="w-full text-left px-4 py-2 hover:bg-blue-50 font-bold flex items-center justify-between text-blue-900 cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4 text-blue-600" />
+                          <span>Platform Review Portal</span>
+                        </div>
+                        {pendingOrgsCount > 0 && (
+                          <span className="px-1.5 py-0.5 rounded-full bg-amber-500 text-white font-bold text-[10px]">
+                            {pendingOrgsCount}
+                          </span>
+                        )}
+                      </button>
+                    )}
                     
                     <button
                       onClick={() => { onOpenUserProfile && onOpenUserProfile(); setUserDropdownOpen(false); }}
-                      className="w-full text-left px-4 py-2 hover:bg-slate-50 font-medium flex items-center gap-2 text-slate-900"
+                      className="w-full text-left px-4 py-2 hover:bg-slate-50 font-medium flex items-center gap-2 text-slate-900 cursor-pointer"
                     >
                       <User className="w-4 h-4 text-blue-600" />
                       <span>My Profile (Profile Showcase)</span>
@@ -109,7 +158,7 @@ export default function Navbar({
 
                     <button
                       onClick={() => { setCurrentTab('my_org'); setUserDropdownOpen(false); }}
-                      className="w-full text-left px-4 py-2 hover:bg-slate-50 font-medium flex items-center gap-2 text-slate-700"
+                      className="w-full text-left px-4 py-2 hover:bg-slate-50 font-medium flex items-center gap-2 text-slate-700 cursor-pointer"
                     >
                       <Building2 className="w-4 h-4 text-slate-400" />
                       <span>Organization Dashboard</span>
@@ -117,7 +166,7 @@ export default function Navbar({
 
                     <button
                       onClick={() => { setCurrentTab('my_applications'); setUserDropdownOpen(false); }}
-                      className="w-full text-left px-4 py-2 hover:bg-slate-50 font-medium flex items-center gap-2 text-slate-700"
+                      className="w-full text-left px-4 py-2 hover:bg-slate-50 font-medium flex items-center gap-2 text-slate-700 cursor-pointer"
                     >
                       <CheckCircle2 className="w-4 h-4 text-slate-400" />
                       <span>My Applications & Drafts</span>
@@ -224,6 +273,22 @@ export default function Navbar({
           >
             My Organization Hub
           </button>
+          {isPlatformAdmin && (
+            <button
+              onClick={() => { setCurrentTab('admin_review'); setMobileMenuOpen(false); }}
+              className={`w-full text-left px-3 py-2 rounded-lg flex items-center justify-between ${currentTab === 'admin_review' ? 'bg-blue-100 font-bold text-blue-900' : 'bg-blue-50 text-blue-800'}`}
+            >
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-blue-600" />
+                <span>HQ Organization Review</span>
+              </div>
+              {pendingOrgsCount > 0 && (
+                <span className="px-1.5 py-0.5 rounded-full bg-amber-500 text-white font-bold text-[10px]">
+                  {pendingOrgsCount}
+                </span>
+              )}
+            </button>
+          )}
           {user && (
             <button
               onClick={() => { onOpenUserProfile(); setMobileMenuOpen(false); }}

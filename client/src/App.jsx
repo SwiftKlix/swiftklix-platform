@@ -22,6 +22,7 @@ import PositionsPage from './pages/PositionsPage';
 import MyOrgPage from './pages/MyOrgPage';
 import MyApplicationsPage from './pages/MyApplicationsPage';
 import OrgDetailPage from './pages/OrgDetailPage';
+import AdminReviewPage from './pages/AdminReviewPage';
 
 export default function App() {
  const [currentTab, setCurrentTab] = useState('explore');
@@ -41,6 +42,13 @@ export default function App() {
  });
  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
+ const isPlatformAdmin = user && (
+  user.email?.toLowerCase().includes('swiftklix') || 
+  user.email?.toLowerCase() === 'swiftklix1@gmail.com' || 
+  user.role === 'admin' || 
+  user.accountType === 'admin'
+ );
+
  // Diagnostic / Match State (1-100% Score)
  const [diagnosticPrefs, setDiagnosticPrefs] = useState(() => {
   const saved = localStorage.getItem('SwiftKlix_diagnostic');
@@ -50,6 +58,7 @@ export default function App() {
 
  const [stats, setStats] = useState(null);
  const [orgs, setOrgs] = useState([]);
+ const [allOrgs, setAllOrgs] = useState([]);
  const [opportunities, setOpportunities] = useState([]);
  const [applications, setApplications] = useState([]);
  const [chapters, setChapters] = useState([]);
@@ -73,15 +82,17 @@ export default function App() {
 
  const loadAllData = async () => {
   try {
-   const [s, o, opp, a, ch] = await Promise.all([
+   const [s, o, allO, opp, a, ch] = await Promise.all([
     api.getStats(),
-    api.getOrgs(),
+    api.getOrgs(false),
+    api.getOrgs(true),
     api.getOpportunities(),
     api.getApplications(),
     api.getChapters()
    ]);
    setStats(s);
    setOrgs(o);
+   setAllOrgs(allO);
    setOpportunities(opp);
    setApplications(a);
    setChapters(ch);
@@ -89,6 +100,12 @@ export default function App() {
    console.error('Error loading data:', err);
   }
  };
+
+ const pendingOrgsCount = (allOrgs || []).filter(o => 
+  o?.approvalStatus === 'pending' || 
+  (!o?.approvalStatus && o?.status === 'Pending Review') ||
+  (!o?.isApproved && o?.status !== 'Rejected' && !o?.status?.includes('Verified'))
+ ).length;
 
  const handleLogin = (userData) => {
   setUser(userData);
@@ -311,10 +328,46 @@ export default function App() {
  };
 
  const handleCreateOrg = async (orgData) => {
-  const newOrg = await api.createOrg(orgData);
-  setOrgs(prev => [newOrg, ...prev]);
+  const isAutoApproved = isPlatformAdmin;
+  const newOrg = await api.createOrg({
+    ...orgData,
+    submittedBy: user?.email || orgData.contactEmail || '',
+    approvalStatus: isAutoApproved ? 'approved' : 'pending',
+    status: isAutoApproved ? 'Verified Official' : 'Pending Review'
+  });
+  await loadAllData();
   setCurrentTab('my_org');
-  setToast({ type: 'success', title: 'Organization Created', message: 'Welcome! Your organization is registered and live.' });
+  if (isAutoApproved) {
+    setToast({ type: 'success', title: 'Organization Created', message: 'Your organization is registered and live.' });
+  } else {
+    setToast({ 
+      type: 'success', 
+      title: 'Submitted for Review', 
+      message: 'Your organization request has been submitted to the SwiftKlix Admin Team for verification and will appear in the directory once approved.' 
+    });
+  }
+ };
+
+ const handleApproveOrg = async (orgId, notes) => {
+  try {
+    await api.approveOrg(orgId, notes);
+    await loadAllData();
+    setToast({ type: 'success', title: 'Organization Approved', message: 'Organization is now live and published in the Explore directory!' });
+  } catch (e) {
+    console.error(e);
+    setToast({ type: 'error', title: 'Approval Failed', message: 'Could not approve organization.' });
+  }
+ };
+
+ const handleRejectOrg = async (orgId, reason) => {
+  try {
+    await api.rejectOrg(orgId, reason);
+    await loadAllData();
+    setToast({ type: 'info', title: 'Submission Rejected', message: 'Organization submission marked as rejected.' });
+  } catch (e) {
+    console.error(e);
+    setToast({ type: 'error', title: 'Action Failed', message: 'Could not reject organization.' });
+  }
  };
 
  const handleSaveOrg = async (orgId, orgData) => {
@@ -356,6 +409,7 @@ export default function App() {
     openGoalDrawer={() => setIsGoalDrawerOpen(true)}
     onOpenAboutSwiftKlix={() => setIsAboutSwiftKlixOpen(true)}
     onOpenUserProfile={() => setIsUserProfileOpen(true)}
+    pendingOrgsCount={pendingOrgsCount}
    />
 
    {/* Main Content */}
@@ -370,6 +424,13 @@ export default function App() {
       onSelectBranch={(branch) => setSelectedBranch(branch)}
       onJoinBranch={handleOpenJoinBranch}
       diagnosticPrefs={diagnosticPrefs}
+     />
+    ) : currentTab === 'admin_review' ? (
+     <AdminReviewPage
+      allOrgs={allOrgs}
+      onApproveOrg={handleApproveOrg}
+      onRejectOrg={handleRejectOrg}
+      onViewOrg={(orgId) => setSelectedOrgId(orgId)}
      />
     ) : currentTab === 'explore' ? (
      <ExplorePage

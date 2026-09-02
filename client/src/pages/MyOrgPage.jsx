@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Building2, Plus, CheckCircle2, ShieldCheck, Globe, 
+  Building2, Plus, CheckCircle2, ShieldCheck, Globe, Clock,
   Linkedin, Twitter, Instagram, Github, MessageSquare, 
   Save, Sparkles, FileText, ImageIcon, Trash2, ArrowUpRight,
   Send, ThumbsUp, Upload, X, Check, MapPin, Users, Briefcase, UserCheck, Eye, Edit3, Link, Calendar, Sliders, HelpCircle
@@ -549,6 +549,24 @@ export default function MyOrgPage({
           </button>
         </div>
       </div>
+
+      {/* Pending Review Notice Banner */}
+      {!isRegisterMode && (currentOrg?.approvalStatus === 'pending' || currentOrg?.status === 'Pending Review' || (!currentOrg?.isApproved && !currentOrg?.status?.includes('Verified'))) && (
+        <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-3 text-xs text-amber-900 shadow-2xs">
+          <Clock className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+          <div className="space-y-1 flex-1">
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold uppercase tracking-wide text-[10px] bg-amber-200/80 px-2 py-0.5 rounded text-amber-900">
+                Pending Admin Review
+              </span>
+              <span className="font-bold text-amber-950">Your organization submission is currently under review</span>
+            </div>
+            <p className="text-amber-800 text-[11px] leading-relaxed">
+              The SwiftKlix Admin Team reviews all new organization listings to ensure verified non-profit/club authenticity. Once approved by platform moderation, your organization and opportunities will automatically be published to the public Explore directory.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Organization KPI Summary Badges */}
       {!isRegisterMode && (

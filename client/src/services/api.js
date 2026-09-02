@@ -7,8 +7,8 @@ export const api = {
     return res.json();
   },
 
-  async getOrgs() {
-    const res = await fetch(`${BASE_URL}/orgs`);
+  async getOrgs(includeAll = false) {
+    const res = await fetch(`${BASE_URL}/orgs${includeAll ? '?all=true' : ''}`);
     if (!res.ok) throw new Error('Failed to fetch orgs');
     return res.json();
   },
@@ -26,6 +26,26 @@ export const api = {
       body: JSON.stringify(org)
     });
     if (!res.ok) throw new Error('Failed to create org');
+    return res.json();
+  },
+
+  async approveOrg(id, notes = '') {
+    const res = await fetch(`${BASE_URL}/orgs/${id}/approve`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ notes })
+    });
+    if (!res.ok) throw new Error('Failed to approve organization');
+    return res.json();
+  },
+
+  async rejectOrg(id, reason = '') {
+    const res = await fetch(`${BASE_URL}/orgs/${id}/reject`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reason })
+    });
+    if (!res.ok) throw new Error('Failed to reject organization');
     return res.json();
   },
 

@@ -29,7 +29,8 @@ app.get('/api/stats', (req, res) => {
 
 // Organizations
 app.get('/api/orgs', (req, res) => {
-  const orgs = db.getOrgs();
+  const includeAll = req.query.all === 'true' || req.query.includePending === 'true';
+  const orgs = db.getOrgs(includeAll);
   res.json(orgs);
 });
 
@@ -42,7 +43,7 @@ app.get('/api/orgs/:id', (req, res) => {
 });
 
 app.post('/api/orgs', (req, res) => {
-  const { name, tagline, category, headquarters, description, focusArea, contactEmail, website, image, logo, socials, verification, customQuestions } = req.body;
+  const { name, tagline, category, headquarters, description, focusArea, contactEmail, website, image, logo, socials, verification, customQuestions, submittedBy, approvalStatus } = req.body;
   if (!name || !tagline) {
     return res.status(400).json({ error: 'name and tagline are required' });
   }
@@ -54,6 +55,7 @@ app.post('/api/orgs', (req, res) => {
     description: description || '',
     focusArea: focusArea || 'Active Chapter',
     contactEmail: contactEmail || 'hello@nonprofit.org',
+    submittedBy: submittedBy || contactEmail || '',
     website: website || 'https://nonprofit.org',
     image: image || 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80',
     logo: logo || '',
@@ -61,9 +63,10 @@ app.post('/api/orgs', (req, res) => {
     verification: verification || {
       ein: '84-1928472',
       registryDoc: 'Official 501(c)(3) Letter',
-      status: 'Verified Official'
+      status: 'Pending Review'
     },
-    customQuestions: customQuestions || []
+    customQuestions: customQuestions || [],
+    approvalStatus: approvalStatus || 'pending'
   });
   res.status(201).json(newOrg);
 });
@@ -82,6 +85,25 @@ app.patch('/api/orgs/:id', (req, res) => {
     return res.status(404).json({ error: 'Organization not found' });
   }
   res.json(updated);
+});
+
+// Admin Approval Endpoints
+app.patch('/api/orgs/:id/approve', (req, res) => {
+  const { notes } = req.body || {};
+  const approved = db.approveOrg(req.params.id, notes);
+  if (!approved) {
+    return res.status(404).json({ error: 'Organization not found' });
+  }
+  res.json(approved);
+});
+
+app.patch('/api/orgs/:id/reject', (req, res) => {
+  const { reason } = req.body || {};
+  const rejected = db.rejectOrg(req.params.id, reason);
+  if (!rejected) {
+    return res.status(404).json({ error: 'Organization not found' });
+  }
+  res.json(rejected);
 });
 
 // Admin Verification Endpoint: Grant or Update Verified Badge
