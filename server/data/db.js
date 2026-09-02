@@ -32,36 +32,39 @@ const CloudStore = mongoose.model('CloudStore', CloudStoreSchema);
 
 let inMemoryData = null;
 
-async function connectMongoIfConfigured() {
-  if (!MONGODB_URI || isMongoConnected) return;
-  try {
-    await mongoose.connect(MONGODB_URI);
-    isMongoConnected = true;
-    console.log(' Successfully connected to 100% Free Persistent Cloud Database (MongoDB Atlas)');
-    
-    // Load existing cloud data
-    const existing = await CloudStore.findOne({ key: 'swiftklix_main_data' });
-    if (existing && existing.data && existing.data.organizations) {
-      inMemoryData = existing.data;
-      fs.writeFileSync(DB_FILE, JSON.stringify(inMemoryData, null, 2), 'utf-8');
-      console.log(' Synced data from Cloud Database to local runtime.');
-    } else {
-      // First cloud seed from initialData
-      const initialData = JSON.parse(fs.readFileSync(INITIAL_DATA_FILE, 'utf-8'));
-      await CloudStore.findOneAndUpdate(
-        { key: 'swiftklix_main_data' },
-        { key: 'swiftklix_main_data', data: initialData, updatedAt: new Date() },
-        { upsert: true, new: true }
-      );
-      inMemoryData = initialData;
-      console.log(' Seeded initial dataset to Cloud Database.');
+export async function initDbAsync() {
+  if (MONGODB_URI && !isMongoConnected) {
+    try {
+      await mongoose.connect(MONGODB_URI);
+      isMongoConnected = true;
+      console.log(' Connected to MongoDB Atlas Cloud Database.');
+      
+      const existing = await CloudStore.findOne({ key: 'swiftklix_main_data' });
+      if (existing && existing.data && Array.isArray(existing.data.organizations) && existing.data.organizations.length > 0) {
+        inMemoryData = existing.data;
+        fs.writeFileSync(DB_FILE, JSON.stringify(inMemoryData, null, 2), 'utf-8');
+        console.log(' Loaded persistent data from Cloud Database into runtime.');
+        return inMemoryData;
+      } else {
+        const initialData = JSON.parse(fs.readFileSync(INITIAL_DATA_FILE, 'utf-8'));
+        await CloudStore.findOneAndUpdate(
+          { key: 'swiftklix_main_data' },
+          { key: 'swiftklix_main_data', data: initialData, updatedAt: new Date() },
+          { upsert: true, new: true }
+        );
+        inMemoryData = initialData;
+        return inMemoryData;
+      }
+    } catch (err) {
+      console.error('MongoDB Cloud connection notice:', err.message);
     }
-  } catch (err) {
-    console.error('MongoDB Cloud connection notice:', err.message);
   }
-}
 
-connectMongoIfConfigured();
+  // Fallback local file load
+  initDb();
+  readData();
+  return inMemoryData;
+}
 
 function initDb() {
   if (!fs.existsSync(DB_FILE)) {

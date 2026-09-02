@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { db } from './data/db.js';
+import { db, initDbAsync } from './data/db.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -401,7 +401,14 @@ if (fs.existsSync(clientDist)) {
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`Canopy Full-Stack Server running on http://localhost:${PORT}`);
+initDbAsync().then(() => {
+  app.listen(PORT, () => {
+    console.log(`SwiftKlix Server successfully running on http://localhost:${PORT}`);
+  });
+}).catch(err => {
+  console.error('Database startup error:', err);
+  app.listen(PORT, () => {
+    console.log(`SwiftKlix Server fallback running on http://localhost:${PORT}`);
+  });
 });
 
