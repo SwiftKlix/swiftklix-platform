@@ -427,22 +427,22 @@ export default function OrgDetailPage({
           </p>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
           <button
             type="button"
             onClick={() => {
-              if (orgBranches.length > 0) {
-                if (onJoinBranch) onJoinBranch(orgBranches[0]);
-              } else {
-                const branchOpp = (orgOpps || []).find(o => o?.type === 'Start a Chapter' || o?.type === 'Branch');
-                if (branchOpp) onApply(branchOpp);
-                else onApply({ orgId: org?.id, orgName: org?.name, title: `Start a ${org?.name || 'Local'} Branch or Chapter`, targetLocation: 'Your City' });
+              if (onJoinBranch) {
+                onJoinBranch(
+                  orgBranches.length > 0 
+                    ? orgBranches[0] 
+                    : { orgId: org?.id, name: `${org?.name || 'Organization'} Volunteer Network`, location: org?.headquarters || 'Remote / Local', institution: org?.headquarters || 'National' }
+                );
               }
             }}
-            className="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs flex items-center gap-2 shadow-lg transition-all transform hover:scale-105 active:scale-95"
+            className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs flex items-center justify-center gap-2 shadow-lg transition-all transform hover:scale-105 active:scale-95 cursor-pointer"
           >
             <Users className="w-4 h-4" />
-            <span>Become a Member</span>
+            <span>Join as Member / Volunteer</span>
           </button>
 
           <button
@@ -450,11 +450,11 @@ export default function OrgDetailPage({
             onClick={() => {
               const branchOpp = (orgOpps || []).find(o => o?.type === 'Start a Chapter' || o?.type === 'Branch');
               if (branchOpp) onApply(branchOpp);
-              else onApply({ orgId: org?.id, orgName: org?.name, title: `Start a ${org?.name || 'Local'} Branch or Chapter`, targetLocation: 'Your City' });
+              else onApply({ orgId: org?.id, orgName: org?.name, title: `Start a ${org?.name || 'Local'} Branch or Chapter`, type: 'Start a Chapter', targetLocation: '' });
             }}
-            className="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 transition-all"
+            className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 transition-all cursor-pointer text-center"
           >
-            <span>Start a Branch or Chapter</span>
+            <span>Start a Chapter in Your City</span>
           </button>
         </div>
       </div>
