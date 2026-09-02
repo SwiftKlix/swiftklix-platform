@@ -468,6 +468,8 @@ export default function App() {
     ) : (currentTab === 'my_org' || currentTab === 'hq_dashboard') ? (
       <MyOrgPage
         orgs={orgs}
+        allOrgs={allOrgs}
+        user={user}
         opportunities={opportunities}
         applications={applications}
         chapters={chapters}

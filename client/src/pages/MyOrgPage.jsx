@@ -10,10 +10,12 @@ import KanbanBoard from '../components/KanbanBoard';
 import VerifiedBadge from '../components/VerifiedBadge';
 
 export default function MyOrgPage({ 
-  orgs, 
-  opportunities, 
-  applications, 
-  chapters, 
+  orgs = [], 
+  allOrgs = [],
+  user = null,
+  opportunities = [], 
+  applications = [], 
+  chapters = [], 
   onSaveOrg, 
   onCreateOrg, 
   onUpdateStatus, 
@@ -25,11 +27,29 @@ export default function MyOrgPage({
   openCreateCampaignModal,
   onViewLiveProfile 
 }) {
-  const [selectedOrgId, setSelectedOrgId] = useState(orgs?.[0]?.id || '');
+  const isPlatformAdmin = user && (
+    user.email?.toLowerCase().includes('swiftklix') || 
+    user.email?.toLowerCase() === 'swiftklix1@gmail.com' || 
+    user.role === 'admin' || 
+    user.accountType === 'admin'
+  );
+
+  const orgSource = (allOrgs && allOrgs.length > 0) ? allOrgs : (orgs || []);
+  const accessibleOrgs = isPlatformAdmin
+    ? orgSource
+    : orgSource.filter(o => 
+        (user?.email && o.submittedBy?.toLowerCase() === user.email.toLowerCase()) ||
+        (user?.email && o.contactEmail?.toLowerCase() === user.email.toLowerCase()) ||
+        (user?.id && o.creatorId === user.id)
+      );
+
+  const [selectedOrgId, setSelectedOrgId] = useState(accessibleOrgs?.[0]?.id || '');
   const [activeSubTab, setActiveSubTab] = useState('profile'); // profile, posts, branches, branch_apps, members, openings, position_crm, verification
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [profileViewMode, setProfileViewMode] = useState('edit');
   const [memberViewMode, setMemberViewMode] = useState('pipeline'); // 'pipeline' or 'roster'
+
+  const currentOrg = accessibleOrgs?.find(o => o.id === selectedOrgId) || accessibleOrgs?.[0] || null;
 
   // Branch Editing State
   const [editingChapter, setEditingChapter] = useState(null);
@@ -73,118 +93,104 @@ export default function MyOrgPage({
   const [newPostImage, setNewPostImage] = useState('');
   const [postSuccess, setPostSuccess] = useState(false);
 
-  const currentOrg = orgs?.find(o => o.id === selectedOrgId) || orgs?.[0] || {
-    name: 'New Organization',
-    tagline: 'Empowering community action and local chapters',
-    category: 'Environment & Climate',
-    headquarters: 'Austin, TX',
-    description: '',
-    contactEmail: 'contact@org.org',
-    website: 'https://org.org',
-    image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80',
-    logo: '',
-    externalApplyUrl: '',
-    socials: {},
-    verification: { ein: '84-1928472', registryDoc: 'https://irs.gov/501c3', status: 'Verified Official' },
-    customQuestions: [],
-    externalMembershipUrl: '',
-    membershipRequirements: 'Open to all enrolled students and local community members.',
-    membershipQuestions: [],
-    membershipCommittees: []
-  };
-
-  const [formData, setFormData] = useState({
-    name: currentOrg.name || '',
-    tagline: currentOrg.tagline || '',
-    category: currentOrg.category || 'Environment & Climate',
-    headquarters: currentOrg.headquarters || '',
-    description: currentOrg.description || '',
-    contactEmail: currentOrg.contactEmail || '',
-    website: currentOrg.website || '',
-    image: currentOrg.image || 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80',
-    logo: currentOrg.logo || '',
-    externalApplyUrl: currentOrg.externalApplyUrl || '',
-    socials: {
-      linkedin: currentOrg.socials?.linkedin || 'https://linkedin.com',
-      twitter: currentOrg.socials?.twitter || 'https://x.com',
-      instagram: currentOrg.socials?.instagram || 'https://instagram.com',
-      github: currentOrg.socials?.github || '',
-      discord: currentOrg.socials?.discord || ''
-    },
-    verification: {
-      ein: currentOrg.verification?.ein || '84-1928472',
-      registryDoc: currentOrg.verification?.registryDoc || '',
-      status: currentOrg.verification?.status || 'Verified Official'
-    },
-    customQuestions: currentOrg.customQuestions || [
-      'Which university campus or city do you plan to establish this branch in?',
-      'What is your target timeline for hosting your inaugural chapter kickoff?',
-      'How many founding co-leads or student officers will help you organize?'
-    ],
-    externalMembershipUrl: currentOrg.externalMembershipUrl || '',
-    membershipRequirements: currentOrg.membershipRequirements || 'Open to all enrolled students and local community members.',
-    membershipQuestions: currentOrg.membershipQuestions || [
-      'What specific initiatives or cause areas in our organization interest you most?',
-      'What previous volunteering, campus club, or project experience do you bring?'
-    ],
-    membershipCommittees: currentOrg.membershipCommittees || [
-      'Event Organizing & Planning',
-      'Community Outreach & Partnerships',
-      'Marketing & Social Media',
-      'Logistics & Operations',
-      'General Volunteer & Participant'
-    ]
-  });
-
-  const [saveSuccess, setSaveSuccess] = useState(false);
-
-  useEffect(() => {
-    if (currentOrg && !isRegisterMode) {
-      setFormData({
-        name: currentOrg.name || '',
-        tagline: currentOrg.tagline || '',
-        category: currentOrg.category || 'Environment & Climate',
-        headquarters: currentOrg.headquarters || '',
-        description: currentOrg.description || '',
-        contactEmail: currentOrg.contactEmail || '',
-        website: currentOrg.website || '',
-        image: currentOrg.image || 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80',
-        logo: currentOrg.logo || '',
-        externalApplyUrl: currentOrg.externalApplyUrl || '',
+  const getInitialFormData = (org) => {
+    if (org && !isRegisterMode) {
+      return {
+        name: org.name || '',
+        tagline: org.tagline || '',
+        category: org.category || 'Environment & Climate',
+        headquarters: org.headquarters || '',
+        description: org.description || '',
+        contactEmail: org.contactEmail || user?.email || '',
+        website: org.website || '',
+        image: org.image || 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80',
+        logo: org.logo || '',
+        externalApplyUrl: org.externalApplyUrl || '',
         socials: {
-          linkedin: currentOrg.socials?.linkedin || 'https://linkedin.com',
-          twitter: currentOrg.socials?.twitter || 'https://x.com',
-          instagram: currentOrg.socials?.instagram || 'https://instagram.com',
-          github: currentOrg.socials?.github || '',
-          discord: currentOrg.socials?.discord || ''
+          linkedin: org.socials?.linkedin || '',
+          twitter: org.socials?.twitter || '',
+          instagram: org.socials?.instagram || '',
+          github: org.socials?.github || '',
+          discord: org.socials?.discord || ''
         },
         verification: {
-          ein: currentOrg.verification?.ein || '84-1928472',
-          registryDoc: currentOrg.verification?.registryDoc || '',
-          status: currentOrg.verification?.status || 'Verified Official'
+          ein: org.verification?.ein || org.ein || '',
+          registryDoc: org.verification?.registryDoc || 'Official 501(c)(3) Letter',
+          status: org.verification?.status || org.status || 'Pending Review'
         },
-        customQuestions: currentOrg.customQuestions || [
+        customQuestions: org.customQuestions || [
           'Which university campus or city do you plan to establish this branch in?',
           'What is your target timeline for hosting your inaugural chapter kickoff?',
           'How many founding co-leads or student officers will help you organize?'
         ],
-        externalMembershipUrl: currentOrg.externalMembershipUrl || '',
-        membershipRequirements: currentOrg.membershipRequirements || 'Open to all enrolled students and local community members.',
-        membershipQuestions: currentOrg.membershipQuestions || [
+        externalMembershipUrl: org.externalMembershipUrl || '',
+        membershipRequirements: org.membershipRequirements || 'Open to all enrolled students and local community members.',
+        membershipQuestions: org.membershipQuestions || [
           'What specific initiatives or cause areas in our organization interest you most?',
           'What previous volunteering, campus club, or project experience do you bring?'
         ],
-        membershipCommittees: currentOrg.membershipCommittees || [
+        membershipCommittees: org.membershipCommittees || [
           'Event Organizing & Planning',
           'Community Outreach & Partnerships',
           'Marketing & Social Media',
           'Logistics & Operations',
           'General Volunteer & Participant'
         ]
-      });
+      };
+    }
+    return {
+      name: '',
+      tagline: '',
+      category: 'Environment & Climate',
+      headquarters: '',
+      description: '',
+      contactEmail: user?.email || '',
+      website: '',
+      image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80',
+      logo: '',
+      externalApplyUrl: '',
+      socials: {
+        linkedin: '',
+        twitter: '',
+        instagram: '',
+        github: '',
+        discord: ''
+      },
+      verification: {
+        ein: '',
+        registryDoc: 'Official 501(c)(3) Letter',
+        status: 'Pending Review'
+      },
+      customQuestions: [
+        'Which university campus or city do you plan to establish this branch in?',
+        'What is your target timeline for hosting your inaugural chapter kickoff?',
+        'How many founding co-leads or student officers will help you organize?'
+      ],
+      externalMembershipUrl: '',
+      membershipRequirements: 'Open to all enrolled students and local community members.',
+      membershipQuestions: [
+        'What specific initiatives or cause areas in our organization interest you most?',
+        'What previous volunteering, campus club, or project experience do you bring?'
+      ],
+      membershipCommittees: [
+        'Event Organizing & Planning',
+        'Community Outreach & Partnerships',
+        'Marketing & Social Media',
+        'Logistics & Operations',
+        'General Volunteer & Participant'
+      ]
+    };
+  };
+
+  const [formData, setFormData] = useState(() => getInitialFormData(currentOrg));
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  useEffect(() => {
+    setFormData(getInitialFormData(currentOrg));
+    if (currentOrg?.id) {
       loadPosts(currentOrg.id);
     }
-  }, [selectedOrgId, isRegisterMode]);
+  }, [currentOrg?.id, isRegisterMode]);
 
   const loadPosts = async (orgId) => {
     try {
@@ -213,16 +219,11 @@ export default function MyOrgPage({
 
   const handleSaveSubmit = (e) => {
     if (e) e.preventDefault();
-    if (isRegisterMode) {
-      const newOrgData = {
+    if (isRegisterMode || !currentOrg) {
+      onCreateOrg({
         ...formData,
-        status: 'Verified Official',
-        verification: {
-          ...formData.verification,
-          status: 'Verified Official'
-        }
-      };
-      onCreateOrg(newOrgData);
+        submittedBy: user?.email || formData.contactEmail
+      });
       setIsRegisterMode(false);
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
