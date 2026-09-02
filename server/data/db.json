@@ -2,7 +2,7 @@
   "stats": {
     "totalChapters": 1,
     "activeOrgs": 1,
-    "totalMembers": 15,
+    "totalMembers": 0,
     "activeProjectsCount": 1,
     "campusFootprint": 1
   },
@@ -10,15 +10,15 @@
     {
       "id": "org-crementum-teaching",
       "name": "Crementum Teaching",
-      "tagline": "Empowering students and communities through education and chapter leadership",
+      "tagline": "",
       "category": "Education & Youth",
-      "headquarters": "San Bernardino, CA",
-      "description": "Crementum Teaching empowers students through accessible tutoring, peer-to-peer mentoring, and community educational workshops.",
+      "headquarters": "Redlands, CA",
+      "description": "",
       "contactEmail": "palash.raks@gmail.com",
       "submittedBy": "palash.raks@gmail.com",
-      "submittedAt": "2026-09-01T23:35:00.000Z",
+      "submittedAt": "2026-09-02T07:39:01.319Z",
       "website": "",
-      "image": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=80",
+      "image": "",
       "logo": "",
       "status": "Verified Official",
       "approvalStatus": "approved",
@@ -27,9 +27,9 @@
       "membersCount": 0,
       "verification": {
         "ein": "",
-        "registryDoc": "Student Organization / Non-Profit Initiative",
+        "registryDoc": "Official 501(c)(3) Letter",
         "status": "Verified Official",
-        "verifiedAt": "2026-09-01T23:35:00.000Z"
+        "verifiedAt": "2026-09-02T07:39:01.319Z"
       },
       "customQuestions": [],
       "membershipRequirements": "",
@@ -48,18 +48,17 @@
       "orgName": "Crementum Teaching",
       "title": "Start a Crementum Teaching Branch or Chapter",
       "type": "Start a Chapter",
-      "targetLocation": "San Bernardino, CA / All Locations",
-      "commitment": "2-4 hours / week",
-      "focusArea": "Branch Leadership & Teaching",
+      "targetLocation": "Redlands, CA / All Locations",
+      "commitment": "",
+      "focusArea": "",
       "category": "Education & Youth",
-      "prerequisites": "Passion for educational equity, 2+ hrs/week commitment",
+      "prerequisites": "",
       "deadline": "Open",
-      "spotsAvailable": 3,
-      "description": "Launch and lead a Crementum Teaching chapter at your local school, university campus, or community center.",
+      "spotsAvailable": 1,
+      "description": "",
       "tags": [
         "Chapter Lead",
-        "Teaching",
-        "Education"
+        "Teaching"
       ]
     }
   ],
@@ -69,14 +68,14 @@
       "orgId": "org-crementum-teaching",
       "orgName": "Crementum Teaching",
       "name": "Crementum Teaching - Founding Chapter",
-      "location": "San Bernardino, CA",
-      "institution": "San Bernardino, CA",
+      "location": "Redlands, CA",
+      "institution": "Redlands, CA",
       "leadName": "Palash",
       "leadEmail": "palash.raks@gmail.com",
       "activeMembers": 0,
-      "eventsHosted": 3,
-      "recentEvent": "Community Tutoring Workshop",
-      "meetingSchedule": "Bi-weekly Thursdays 5:30 PM",
+      "eventsHosted": 0,
+      "recentEvent": "",
+      "meetingSchedule": "",
       "status": "Active"
     }
   ],
