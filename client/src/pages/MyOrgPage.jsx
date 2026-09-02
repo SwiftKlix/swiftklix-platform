@@ -120,6 +120,7 @@ export default function MyOrgPage({
           status: org.verification?.status || org.status || 'Pending Review'
         },
         customQuestions: org.customQuestions || [],
+        membersCount: org.membersCount !== undefined ? org.membersCount : 0,
         externalMembershipUrl: org.externalMembershipUrl || '',
         membershipRequirements: org.membershipRequirements || '',
         membershipQuestions: org.membershipQuestions || [],
@@ -159,6 +160,7 @@ export default function MyOrgPage({
         status: 'Pending Review'
       },
       customQuestions: [],
+      membersCount: 0,
       externalMembershipUrl: '',
       membershipRequirements: '',
       membershipQuestions: [],
@@ -1071,7 +1073,19 @@ export default function MyOrgPage({
                   type="text"
                   value={formData.headquarters}
                   onChange={(e) => setFormData({ ...formData, headquarters: e.target.value })}
-                  placeholder="e.g. Austin, TX"
+                  placeholder="e.g. Redlands, CA"
+                  className="w-full p-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-slate-700 mb-1">Active Volunteers / Members Involved</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={formData.membersCount !== undefined ? formData.membersCount : 0}
+                  onChange={(e) => setFormData({ ...formData, membersCount: parseInt(e.target.value, 10) || 0 })}
+                  placeholder="e.g. 0 or 25"
                   className="w-full p-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none"
                 />
               </div>

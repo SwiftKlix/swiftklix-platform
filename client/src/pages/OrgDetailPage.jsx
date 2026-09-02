@@ -213,7 +213,7 @@ export default function OrgDetailPage({
             </div>
             <div>
               <span className="text-slate-400 block text-[11px]">Volunteers Involved</span>
-              <span className="font-bold text-slate-900 text-base">{org?.membersCount || 0}+</span>
+              <span className="font-bold text-slate-900 text-base">{org?.membersCount ? `${org.membersCount}+` : "0"}</span>
             </div>
             <div>
               <span className="text-slate-400 block text-[11px]">Verification</span>
