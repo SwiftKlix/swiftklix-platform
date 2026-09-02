@@ -50,20 +50,27 @@ app.post('/api/orgs', (req, res) => {
   }
   const newOrg = db.createOrg({
     name,
-    tagline,
-    category: category || 'Community',
-    headquarters: headquarters || 'National',
+    tagline: tagline || '',
+    category: category || '',
+    headquarters: headquarters || '',
     description: description || '',
-    focusArea: focusArea || 'Active Chapter',
-    contactEmail: contactEmail || 'hello@nonprofit.org',
+    focusArea: focusArea || '',
+    contactEmail: contactEmail || '',
     submittedBy: submittedBy || contactEmail || '',
-    website: website || 'https://nonprofit.org',
-    image: image || 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80',
+    website: website || '',
+    image: image || '',
     logo: logo || '',
-    socials: socials || {},
+    socials: socials || {
+      linkedin: '',
+      twitter: '',
+      instagram: '',
+      github: '',
+      discord: '',
+      tiktok: ''
+    },
     verification: verification || {
-      ein: '84-1928472',
-      registryDoc: 'Official 501(c)(3) Letter',
+      ein: '',
+      registryDoc: '',
       status: 'Pending Review'
     },
     customQuestions: customQuestions || [],
