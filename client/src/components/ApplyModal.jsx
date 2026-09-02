@@ -44,11 +44,20 @@ export default function ApplyModal({ opportunity, org, user, chapters, onJoinBra
 
   const externalUrl = org?.externalApplyUrl || org?.branchApplyUrl || opportunity?.externalApplyUrl || '';
 
+  const userEmail = (user?.email || '').toLowerCase().trim();
   const isOwnOrg = Boolean(
     user && org && (
-      (user.email && org.submittedBy && user.email.toLowerCase() === org.submittedBy.toLowerCase()) ||
-      (user.email && org.contactEmail && user.email.toLowerCase() === org.contactEmail.toLowerCase()) ||
+      (userEmail && org.submittedBy && userEmail === org.submittedBy.toLowerCase()) ||
+      (userEmail && org.contactEmail && userEmail === org.contactEmail.toLowerCase()) ||
+      (org.adminEmails && Array.isArray(org.adminEmails) && org.adminEmails.some(e => e.toLowerCase() === userEmail)) ||
       (user.id && org.creatorId && user.id === org.creatorId)
+    )
+  );
+
+  const isSetupPending = Boolean(
+    org && (
+      org.applicationSetupComplete === false ||
+      (!org.applicationSetupComplete && (!org.customQuestions || org.customQuestions.length === 0) && (!org.membershipQuestions || org.membershipQuestions.length === 0))
     )
   );
 
@@ -191,8 +200,51 @@ export default function ApplyModal({ opportunity, org, user, chapters, onJoinBra
           </button>
         </div>
 
-        {/* Scrollable Form Body */}
-        <form id="applyForm" onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 pr-3">
+        {isOwnOrg ? (
+          <div className="p-8 text-center space-y-4 my-auto">
+            <div className="w-14 h-14 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto border border-blue-200 shadow-2xs">
+              <Building2 className="w-7 h-7" />
+            </div>
+            <div className="space-y-1.5 max-w-sm mx-auto">
+              <h3 className="text-base font-bold text-slate-900">
+                You Lead {org?.name || 'this Organization'}
+              </h3>
+              <p className="text-slate-600 text-xs leading-relaxed">
+                You already own and lead this organization. You can charter campus branches and manage chapter directors directly from your <strong>Organization Dashboard &rarr; Chartered Branches</strong> tab.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs cursor-pointer shadow-2xs"
+            >
+              Close
+            </button>
+          </div>
+        ) : isSetupPending ? (
+          <div className="p-8 text-center space-y-4 my-auto">
+            <div className="w-14 h-14 rounded-3xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto border border-amber-200 shadow-2xs">
+              <Sparkles className="w-7 h-7" />
+            </div>
+            <div className="space-y-1.5 max-w-sm mx-auto">
+              <h3 className="text-base font-bold text-slate-900">
+                Chapter Applications Opening Soon
+              </h3>
+              <p className="text-slate-600 text-xs leading-relaxed">
+                <strong>{org?.name || 'Organization'}</strong> leadership is currently finalizing their chapter founding screening questions. Public applications will open as soon as setup is published.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs cursor-pointer shadow-2xs"
+            >
+              Close
+            </button>
+          </div>
+        ) : (
+          <>
+            <form id="applyForm" onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 pr-3">
           
           {/* Optional External Website Apply Direct Option */}
           {externalUrl && (
@@ -319,39 +371,39 @@ export default function ApplyModal({ opportunity, org, user, chapters, onJoinBra
           </div>
         </form>
 
-        {/* Footer Actions */}
-        <div className="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleSaveDraft}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-colors"
-            >
-              <Save className="w-3.5 h-3.5" />
-              <span>Save Draft</span>
-            </button>
-            {draftSavedToast && (
-              <span className="text-[11px] font-bold text-blue-700 animate-in fade-in">Draft saved!</span>
-            )}
-          </div>
+            {/* Footer Actions */}
+            <div className="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleSaveDraft}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 font-semibold text-xs transition-colors"
+                >
+                  <Save className="w-3.5 h-3.5" />
+                  <span>Save Draft</span>
+                </button>
+                {draftSavedToast && (
+                  <span className="text-[11px] font-bold text-blue-700 animate-in fade-in">Draft saved!</span>
+                )}
+              </div>
 
-          <button
-            type="submit"
-            form="applyForm"
-            disabled={Boolean(existingBranch) || isOwnOrg}
-            className={`px-5 py-2 rounded-xl font-bold text-xs shadow-2xs transition-colors ${
-              existingBranch || isOwnOrg
-                ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
-                : 'bg-slate-900 hover:bg-slate-800 text-white cursor-pointer'
-            }`}
-          >
-            {isOwnOrg 
-              ? "Managed on Your Org Dashboard"
-              : (existingBranch 
+              <button
+                type="submit"
+                form="applyForm"
+                disabled={Boolean(existingBranch)}
+                className={`px-5 py-2 rounded-xl font-bold text-xs shadow-2xs transition-colors ${
+                  existingBranch 
+                    ? 'bg-slate-300 text-slate-500 cursor-not-allowed' 
+                    : 'bg-slate-900 hover:bg-slate-800 text-white cursor-pointer'
+                }`}
+              >
+                {existingBranch 
                   ? "Branch Exists in this Area" 
-                  : (isBranchApplication ? "Submit Branch or Chapter Application" : "Submit Role Application"))}
-          </button>
-        </div>
+                  : (isBranchApplication ? "Submit Branch or Chapter Application" : "Submit Role Application")}
+              </button>
+            </div>
+          </>
+        )}
 
       </div>
     </div>

@@ -14,8 +14,8 @@
       "category": "Education & Youth",
       "headquarters": "San Bernardino, CA",
       "description": "Crementum Teaching empowers students through accessible tutoring, peer-to-peer mentoring, and community educational workshops.",
-      "contactEmail": "palash.raks@gmail.com",
-      "submittedBy": "palash.raks@gmail.com",
+      "contactEmail": "opticraider2010@gmail.com",
+      "submittedBy": "opticraider2010@gmail.com",
       "submittedAt": "2026-09-01T23:35:00.000Z",
       "website": "",
       "image": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=80",
@@ -35,7 +35,11 @@
       "membershipRequirements": "",
       "membershipQuestions": [],
       "membershipCommittees": [],
-      "applicationSetupComplete": false
+      "applicationSetupComplete": false,
+      "adminEmails": [
+        "opticraider2010@gmail.com",
+        "palash.raks@gmail.com"
+      ]
     }
   ],
   "opportunities": [
@@ -69,7 +73,7 @@
       "location": "San Bernardino, CA",
       "institution": "San Bernardino, CA",
       "leadName": "Palash / Optic Raider",
-      "leadEmail": "palash.raks@gmail.com",
+      "leadEmail": "opticraider2010@gmail.com",
       "activeMembers": 15,
       "eventsHosted": 3,
       "recentEvent": "Community Tutoring Workshop",
