@@ -86,79 +86,67 @@ export async function searchUSPlaces(query) {
 }
 
 export async function detectPreciseLocation() {
-  // Method 1: HTML5 High-Accuracy Geolocation (Fast 3.5s timeout)
-  if (navigator.geolocation) {
+  // Method 1: HTML5 High-Accuracy Geolocation (Fast 2.5s timeout)
+  if (typeof navigator !== 'undefined' && navigator.geolocation) {
     try {
       const coords = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(
           pos => resolve(pos.coords),
           err => reject(err),
-          { timeout: 3500, enableHighAccuracy: true, maximumAge: 0 }
+          { timeout: 2500, enableHighAccuracy: true, maximumAge: 0 }
         );
       });
 
-      const { latitude, longitude } = coords;
-
-      try {
-        const res = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`,
-          { headers: { 'Accept-Language': 'en-US,en;q=0.9' } }
-        );
-        if (res.ok) {
-          const data = await res.json();
-          const addr = data.address || {};
-          const city = addr.city || addr.town || addr.village || addr.municipality || addr.suburb || addr.neighbourhood || addr.county;
-          const stateCode = getStateCode(addr.state);
-          if (city && stateCode) {
-            return `${city}, ${stateCode}`;
+      if (coords && coords.latitude && coords.longitude) {
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json&addressdetails=1`,
+            { headers: { 'Accept-Language': 'en-US,en;q=0.9' } }
+          );
+          if (res.ok) {
+            const data = await res.json();
+            const addr = data.address || {};
+            const city = addr.city || addr.town || addr.village || addr.municipality || addr.suburb || addr.neighbourhood || addr.county;
+            const stateCode = getStateCode(addr.state);
+            if (city && stateCode) {
+              return `${city}, ${stateCode}`;
+            }
           }
-        }
-      } catch (err1) {}
-
-      try {
-        const res2 = await fetch(
-          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
-        );
-        if (res2.ok) {
-          const data2 = await res2.json();
-          const city = data2.city || data2.locality || data2.principalSubdivision;
-          const stateCode = data2.principalSubdivisionCode ? data2.principalSubdivisionCode.replace('US-', '') : getStateCode(data2.principalSubdivision);
-          if (city && stateCode) {
-            return `${city}, ${stateCode}`;
-          }
-        }
-      } catch (err2) {}
-    } catch (geoErr) {}
+        } catch (e) {}
+      }
+    } catch (e) {}
   }
 
-  // Method 2: High-speed IP Network Geolocation
-  const ipSources = [
+  // Method 2: Fast Multi-Provider IP Geolocation
+  const providers = [
     async () => {
-      const r = await fetch('https://ipapi.co/json/');
-      if (!r.ok) throw new Error();
-      const d = await r.json();
-      if (d.city && (d.region_code || d.region)) {
-        return `${d.city}, ${d.region_code || getStateCode(d.region)}`;
+      const res = await fetch('https://ipwho.is/');
+      if (!res.ok) throw new Error();
+      const d = await res.json();
+      if (d && d.success !== false && d.city && d.region_code) {
+        return `${d.city}, ${d.region_code}`;
       }
       throw new Error();
     },
     async () => {
-      const r = await fetch('https://ipwho.is/');
-      if (!r.ok) throw new Error();
-      const d = await r.json();
-      if (d.city && (d.region_code || d.region)) {
-        return `${d.city}, ${d.region_code || getStateCode(d.region)}`;
+      const res = await fetch('https://freeipapi.com/api/json');
+      if (!res.ok) throw new Error();
+      const d = await res.json();
+      if (d && d.cityName && d.regionCode) {
+        return `${d.cityName}, ${d.regionCode}`;
       }
       throw new Error();
     }
   ];
 
-  for (const source of ipSources) {
+  for (const p of providers) {
     try {
-      const loc = await source();
-      if (loc) return loc;
+      const loc = await p();
+      if (loc && !loc.includes('undefined')) {
+        return loc;
+      }
     } catch (e) {}
   }
 
-  throw new Error("Could not detect your location. Please type your city name in the search box.");
+  throw new Error("Could not detect your exact location. Please type your city name.");
 }
