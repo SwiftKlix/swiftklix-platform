@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Globe, Mail, MapPin, CheckCircle2, Plus, Sparkles, ExternalLink, Users, Calendar, ArrowRight, ThumbsUp, MessageSquare, Share2, Instagram, Twitter } from 'lucide-react';
 import { api } from '../services/api';
 import VerifiedBadge from '../components/VerifiedBadge';
+import { calculateMatchScore } from '../utils/matching';
 
 export default function OrgDetailPage({ 
   org, 
@@ -43,15 +44,7 @@ export default function OrgDetailPage({
   const orgBranches = (chapters || []).filter(c => c.orgId === org.id);
 
   // Calculate Match %
-  const calculateMatch = (itemCategory) => {
-    if (!diagnosticPrefs?.completed) return null;
-    let score = 70;
-    if (diagnosticPrefs.causes?.includes(itemCategory || org.category)) score += 20;
-    if (diagnosticPrefs.roleType === 'branch' || diagnosticPrefs.roleType === 'both') score += 8;
-    return Math.min(score, 99);
-  };
-
-  const orgMatch = calculateMatch(org.category);
+  const orgMatch = calculateMatchScore(org, diagnosticPrefs, chapters);
 
   return (
     <div className="space-y-6 pb-20 max-w-4xl mx-auto">
@@ -67,12 +60,18 @@ export default function OrgDetailPage({
       {/* Member Profile Header Card */}
       <div className="clean-card overflow-hidden">
         {/* Cover Photo */}
-        <div className="h-48 w-full bg-slate-800 relative">
-          <img 
-            src={org.image} 
-            alt={org.name} 
-            className="w-full h-full object-cover opacity-85" 
-          />
+        <div className="h-48 w-full bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 relative overflow-hidden">
+          {org.image ? (
+            <img 
+              src={org.image} 
+              alt={org.name} 
+              className="w-full h-full object-cover opacity-85" 
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center opacity-30">
+              <Sparkles className="w-16 h-16 text-white/40" />
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
         </div>
 

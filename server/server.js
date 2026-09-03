@@ -347,7 +347,7 @@ app.post('/api/chapters/:id/events', (req, res) => {
 
 app.post('/api/chapters/:id/members', (req, res) => {
   const { name } = req.body;
-  const updated = db.addChapterMember(req.params.id, name);
+  const updated = db.addChapterMember(req.params.id, req.body);
   if (!updated) {
     return res.status(404).json({ error: 'Branch not found' });
   }

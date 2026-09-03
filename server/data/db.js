@@ -40,7 +40,7 @@ export async function initDbAsync() {
       console.log(' Connected to MongoDB Atlas Cloud Database.');
       
       const existing = await CloudStore.findOne({ key: 'swiftklix_main_data' });
-      if (existing && existing.data && Array.isArray(existing.data.organizations) && existing.data.organizations.length > 0) {
+      if (existing && existing.data && existing.data.organizations) {
         inMemoryData = existing.data;
         fs.writeFileSync(DB_FILE, JSON.stringify(inMemoryData, null, 2), 'utf-8');
         console.log(' Loaded persistent data from Cloud Database into runtime.');
@@ -99,8 +99,8 @@ function writeData(data) {
   if (isMongoConnected) {
     CloudStore.findOneAndUpdate(
       { key: 'swiftklix_main_data' },
-      { key: 'swiftklix_main_data', data: data, updatedAt: new Date() },
-      { upsert: true }
+      { $set: { data: data, updatedAt: new Date() } },
+      { upsert: true, new: true }
     ).catch(err => console.error('Cloud async sync error:', err));
   }
 }

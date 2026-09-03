@@ -40,7 +40,8 @@ export default function MyOrgPage({
     : orgSource.filter(o => 
         (user?.email && o.submittedBy?.toLowerCase() === user.email.toLowerCase()) ||
         (user?.email && o.contactEmail?.toLowerCase() === user.email.toLowerCase()) ||
-        (user?.id && o.creatorId === user.id)
+        (user?.id && o.creatorId === user.id) ||
+        (user?.email && Array.isArray(o.adminEmails) && o.adminEmails.some(e => e.toLowerCase() === user.email.toLowerCase()))
       );
 
   const [selectedOrgId, setSelectedOrgId] = useState(accessibleOrgs?.[0]?.id || '');
