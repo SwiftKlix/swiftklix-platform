@@ -375,11 +375,7 @@ app.delete('/api/chapters/:id', (req, res) => {
   res.json({ message: 'Branch removed successfully' });
 });
 
-// Reset Database to Seed
-app.post('/api/reset', (req, res) => {
-  db.reset();
-  res.json({ message: 'Database reset to initial sample seed successfully.' });
-});
+// Note: Destructive /api/reset permanently removed for data protection
 
 // Dedicated Static Legal Pages for Google OAuth Compliance & Verification
 app.get('/privacy', (req, res) => {

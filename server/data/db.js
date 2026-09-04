@@ -28,35 +28,56 @@ const CloudStoreSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now }
 });
 
-const CloudStore = mongoose.model('CloudStore', CloudStoreSchema);
+const CloudStore = mongoose.models.CloudStore || mongoose.model('CloudStore', CloudStoreSchema);
 
 let inMemoryData = null;
+
+// Connection Event Listeners
+mongoose.connection.on('connected', () => {
+  isMongoConnected = true;
+  console.log('[Database] MongoDB Atlas Connected.');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('[Database] MongoDB Atlas connection error:', err.message);
+});
+
+mongoose.connection.on('disconnected', () => {
+  isMongoConnected = false;
+  console.log('[Database] MongoDB Atlas Disconnected. Reconnect will be attempted automatically.');
+});
 
 export async function initDbAsync() {
   if (MONGODB_URI && !isMongoConnected) {
     try {
-      await mongoose.connect(MONGODB_URI);
+      await mongoose.connect(MONGODB_URI, {
+        serverSelectionTimeoutMS: 6000,
+        socketTimeoutMS: 45000
+      });
       isMongoConnected = true;
-      console.log(' Connected to MongoDB Atlas Cloud Database.');
+      console.log('[Database] Verified Cloud Database connection.');
       
       const existing = await CloudStore.findOne({ key: 'swiftklix_main_data' });
       if (existing && existing.data && existing.data.organizations) {
         inMemoryData = existing.data;
-        fs.writeFileSync(DB_FILE, JSON.stringify(inMemoryData, null, 2), 'utf-8');
-        console.log(' Loaded persistent data from Cloud Database into runtime.');
+        try {
+          fs.writeFileSync(DB_FILE, JSON.stringify(inMemoryData, null, 2), 'utf-8');
+        } catch (e) {}
+        console.log('[Database] Loaded persistent data from Cloud Database into runtime.');
         return inMemoryData;
       } else {
         const initialData = JSON.parse(fs.readFileSync(INITIAL_DATA_FILE, 'utf-8'));
         await CloudStore.findOneAndUpdate(
           { key: 'swiftklix_main_data' },
-          { key: 'swiftklix_main_data', data: initialData, updatedAt: new Date() },
+          { $set: { key: 'swiftklix_main_data', data: initialData, updatedAt: new Date() } },
           { upsert: true, new: true }
         );
         inMemoryData = initialData;
+        console.log('[Database] Initialized new Cloud Database store.');
         return inMemoryData;
       }
     } catch (err) {
-      console.error('MongoDB Cloud connection notice:', err.message);
+      console.error('[Database] MongoDB startup notice:', err.message);
     }
   }
 
@@ -81,7 +102,7 @@ function readData() {
     inMemoryData = JSON.parse(content);
     return inMemoryData;
   } catch (err) {
-    console.error('Error reading db.json, restoring initial data...', err);
+    console.error('[Database] Error reading db.json, restoring initial data...', err);
     const initialData = fs.readFileSync(INITIAL_DATA_FILE, 'utf-8');
     fs.writeFileSync(DB_FILE, initialData, 'utf-8');
     inMemoryData = JSON.parse(initialData);
@@ -91,17 +112,36 @@ function readData() {
 
 function writeData(data) {
   inMemoryData = data;
+  
+  // 1. Atomic Local File Write
   try {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
-  } catch (e) {}
+    const tmpFile = `${DB_FILE}.tmp.${Date.now()}`;
+    fs.writeFileSync(tmpFile, JSON.stringify(data, null, 2), 'utf-8');
+    fs.renameSync(tmpFile, DB_FILE);
+  } catch (e) {
+    try {
+      fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
+    } catch (err) {}
+  }
 
-  // Async sync to free cloud MongoDB if connected
+  // 2. Atomic Cloud MongoDB Sync with Retry
   if (isMongoConnected) {
     CloudStore.findOneAndUpdate(
       { key: 'swiftklix_main_data' },
       { $set: { data: data, updatedAt: new Date() } },
       { upsert: true, new: true }
-    ).catch(err => console.error('Cloud async sync error:', err));
+    ).catch(err => {
+      console.error('[Database] Cloud sync error:', err.message);
+      setTimeout(() => {
+        if (isMongoConnected && inMemoryData) {
+          CloudStore.findOneAndUpdate(
+            { key: 'swiftklix_main_data' },
+            { $set: { data: inMemoryData, updatedAt: new Date() } },
+            { upsert: true, new: true }
+          ).catch(retryErr => console.error('[Database] Cloud retry sync error:', retryErr.message));
+        }
+      }, 2000);
+    });
   }
 }
 
@@ -145,7 +185,7 @@ export const db = {
       id: `org-${Date.now()}`,
       activeChaptersCount: 1,
       focusArea: org.focusArea || '',
-      membersCount: 1,
+      membersCount: org.membersCount !== undefined ? org.membersCount : 0,
       status: org.status || 'Pending Review',
       approvalStatus: org.approvalStatus || 'pending',
       isApproved: Boolean(org.isApproved),
@@ -259,9 +299,29 @@ export const db = {
     return data.organizations[index];
   },
 
-  getOpportunities() {
+  deleteOrg(id) {
     const data = readData();
-    return data.opportunities || [];
+    data.organizations = (data.organizations || []).filter(o => o.id !== id);
+    data.chapters = (data.chapters || []).filter(c => c.orgId !== id);
+    data.opportunities = (data.opportunities || []).filter(opp => opp.orgId !== id);
+    data.applications = (data.applications || []).filter(app => app.orgId !== id);
+    writeData(data);
+    return true;
+  },
+
+  getOpportunities(filter = {}) {
+    const data = readData();
+    let opps = data.opportunities || [];
+    if (filter.type) {
+      opps = opps.filter(o => o.type === filter.type);
+    }
+    if (filter.orgId) {
+      opps = opps.filter(o => o.orgId === filter.orgId);
+    }
+    if (filter.category) {
+      opps = opps.filter(o => o.category === filter.category);
+    }
+    return opps;
   },
 
   createOpportunity(opp) {
@@ -297,16 +357,20 @@ export const db = {
     return true;
   },
 
-  getChapters() {
+  getChapters(orgId = null) {
     const data = readData();
-    return data.chapters || [];
+    let chapters = data.chapters || [];
+    if (orgId) {
+      chapters = chapters.filter(c => c.orgId === orgId);
+    }
+    return chapters;
   },
 
   createChapter(chapter) {
     const data = readData();
     const newChap = {
       id: `chap-${Date.now()}`,
-      activeMembers: 1,
+      activeMembers: chapter.activeMembers !== undefined ? chapter.activeMembers : 0,
       eventsHosted: 0,
       recentEvent: 'Chapter Inauguration Pending',
       meetingSchedule: 'To be announced',
@@ -366,12 +430,14 @@ export const db = {
     if (index === -1) return null;
 
     const chap = data.chapters[index];
+    const memberName = typeof member === 'string' ? member : (member?.name || 'Volunteer Member');
+    const memberRole = typeof member === 'object' ? (member?.role || 'Volunteer Member') : 'Volunteer Member';
+
     const newMember = {
       id: `mem-${Date.now()}`,
-      name: member.name,
-      role: member.role || 'Volunteer Member',
-      joinedAt: new Date().toISOString(),
-      avatar: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80`
+      name: memberName,
+      role: memberRole,
+      joinedAt: new Date().toISOString()
     };
 
     chap.activeMembers = (chap.activeMembers || 0) + 1;
@@ -380,9 +446,13 @@ export const db = {
     return chap;
   },
 
-  getApplications() {
+  getApplications(orgId = null) {
     const data = readData();
-    return data.applications || [];
+    let apps = data.applications || [];
+    if (orgId) {
+      apps = apps.filter(a => a.orgId === orgId);
+    }
+    return apps;
   },
 
   createApplication(app) {
@@ -409,7 +479,7 @@ export const db = {
 
     const app = data.applications[index];
 
-    // If approved and is chapter lead app, automatically charter chapter
+    // If approved and is chapter lead app, charter chapter
     if (status === 'approved' && (app.type === 'Start a Chapter' || app.type === 'Branch' || (app.role || '').toLowerCase().includes('lead') || (app.title || '').toLowerCase().includes('lead') || (app.title || '').toLowerCase().includes('branch') || (app.title || '').toLowerCase().includes('chapter'))) {
       const org = (data.organizations || []).find(o => o.id === app.orgId);
       const newChap = {
@@ -461,7 +531,16 @@ export const db = {
     return data.impactFeed || [];
   },
 
-  createImpactPost(post) {
+  getPosts(orgId = null) {
+    const data = readData();
+    let posts = data.impactFeed || [];
+    if (orgId) {
+      posts = posts.filter(p => p.orgId === orgId);
+    }
+    return posts;
+  },
+
+  createPost(post) {
     const data = readData();
     const newPost = {
       id: `post-${Date.now()}`,
@@ -475,8 +554,13 @@ export const db = {
     return newPost;
   },
 
-  getPostsByOrg(orgId) {
+  likePost(id) {
     const data = readData();
-    return (data.impactFeed || []).filter(p => p.orgId === orgId);
+    const index = (data.impactFeed || []).findIndex(p => p.id === id);
+    if (index === -1) return null;
+
+    data.impactFeed[index].likes = (data.impactFeed[index].likes || 0) + 1;
+    writeData(data);
+    return data.impactFeed[index];
   }
 };
