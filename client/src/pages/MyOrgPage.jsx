@@ -117,7 +117,7 @@ export default function MyOrgPage({
         verification: {
           ein: org.verification?.ein || org.ein || '',
           registryDoc: org.verification?.registryDoc || '501(c)(3) Non-Profit',
-          documentUrl: org.verification?.documentUrl || org.verification?.registryDoc || '',
+          documentUrl: (org.verification?.documentUrl && org.verification.documentUrl.startsWith('http')) ? org.verification.documentUrl : '',
           status: org.verification?.status || org.status || 'Pending Review'
         },
         customQuestions: org.customQuestions || [],
