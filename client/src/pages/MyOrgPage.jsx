@@ -45,10 +45,20 @@ export default function MyOrgPage({
       );
 
   const [selectedOrgId, setSelectedOrgId] = useState(accessibleOrgs?.[0]?.id || '');
-  const [activeSubTab, setActiveSubTab] = useState('profile'); // profile, posts, branches, branch_apps, members, openings, position_crm, verification
+  const [activeSubTab, setActiveSubTab] = useState('profile'); // 'profile', 'branches', 'openings', 'members', 'posts'
+  const [branchSubView, setBranchSubView] = useState('chapters'); // 'chapters' or 'applicants'
+  const [rolesSubView, setRolesSubView] = useState('openings'); // 'openings' or 'crm'
+  const [memberSubView, setMemberSubView] = useState('roster'); // 'roster' or 'setup'
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [profileViewMode, setProfileViewMode] = useState('edit');
   const [memberViewMode, setMemberViewMode] = useState('pipeline'); // 'pipeline' or 'roster'
+
+  const handleSwitchTab = (tab, subView = null) => {
+    setActiveSubTab(tab);
+    if (tab === 'branches' && subView) setBranchSubView(subView);
+    if (tab === 'openings' && subView) setRolesSubView(subView);
+    if (tab === 'members' && subView) setMemberSubView(subView);
+  };
 
   const currentOrg = accessibleOrgs?.find(o => o.id === selectedOrgId) || accessibleOrgs?.[0] || null;
 
@@ -753,7 +763,7 @@ export default function MyOrgPage({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-1">
             <button
               type="button"
-              onClick={() => setActiveSubTab('branch_apps')}
+              onClick={() => handleSwitchTab('branches', 'applicants')}
               className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                 (formData.customQuestions || []).length > 0 
                   ? 'bg-emerald-50/60 border-emerald-200 text-emerald-950' 
@@ -771,7 +781,7 @@ export default function MyOrgPage({
 
             <button
               type="button"
-              onClick={() => setActiveSubTab('members')}
+              onClick={() => handleSwitchTab('members', 'setup')}
               className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                 (formData.membershipCommittees || []).length > 0 
                   ? 'bg-emerald-50/60 border-emerald-200 text-emerald-950' 
@@ -812,56 +822,148 @@ export default function MyOrgPage({
       {/* Organization KPI Summary Badges */}
       {!isRegisterMode && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-          <div className="clean-card p-4">
-            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Chartered Branches</span>
+          <button
+            type="button"
+            onClick={() => handleSwitchTab('branches', 'chapters')}
+            className="clean-card p-4 text-left hover:border-blue-300 hover:shadow-xs transition-all cursor-pointer group"
+          >
+            <div className="flex items-center justify-between text-slate-500 text-[10px] font-bold uppercase tracking-wider">
+              <span>Chartered Branches</span>
+              <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 transition-colors" />
+            </div>
             <span className="text-xl font-black text-slate-900 mt-1 block">{orgChapters.length} Active</span>
-          </div>
-          <div className="clean-card p-4">
-            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Registered Members</span>
+            <span className="text-[10px] text-slate-400 block mt-0.5">Manage chapters & leads</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSwitchTab('members', 'roster')}
+            className="clean-card p-4 text-left hover:border-blue-300 hover:shadow-xs transition-all cursor-pointer group"
+          >
+            <div className="flex items-center justify-between text-slate-500 text-[10px] font-bold uppercase tracking-wider">
+              <span>Registered Members</span>
+              <UserCheck className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 transition-colors" />
+            </div>
             <span className="text-xl font-black text-slate-900 mt-1 block">{orgMembers.length} Volunteers</span>
-          </div>
-          <div className="clean-card p-4">
-            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Branch Applicants</span>
-            <span className="text-xl font-black text-blue-800 mt-1 block">{orgBranchApplicants.length} In Review</span>
-          </div>
-          <div className="clean-card p-4">
-            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block">Position Applicants</span>
-            <span className="text-xl font-black text-purple-800 mt-1 block">{orgPositionApplicants.length} Candidates</span>
-          </div>
+            <span className="text-[10px] text-slate-400 block mt-0.5">View member roster & CRM</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSwitchTab('branches', 'applicants')}
+            className="clean-card p-4 text-left hover:border-blue-300 hover:shadow-xs transition-all cursor-pointer group"
+          >
+            <div className="flex items-center justify-between text-slate-500 text-[10px] font-bold uppercase tracking-wider">
+              <span>Branch Applicants</span>
+              <FileText className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 transition-colors" />
+            </div>
+            <span className="text-xl font-black text-blue-700 mt-1 block">{orgBranchApplicants.length} In Review</span>
+            <span className="text-[10px] text-slate-400 block mt-0.5">Screen chapter applicants</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSwitchTab('openings', 'crm')}
+            className="clean-card p-4 text-left hover:border-purple-300 hover:shadow-xs transition-all cursor-pointer group"
+          >
+            <div className="flex items-center justify-between text-slate-500 text-[10px] font-bold uppercase tracking-wider">
+              <span>Position Candidates</span>
+              <Users className="w-3.5 h-3.5 text-slate-400 group-hover:text-purple-600 transition-colors" />
+            </div>
+            <span className="text-xl font-black text-purple-700 mt-1 block">{orgPositionApplicants.length} Candidates</span>
+            <span className="text-[10px] text-slate-400 block mt-0.5">Open applicant pipeline</span>
+          </button>
         </div>
       )}
 
-      {/* Sleek Horizontal Tab Navigation Bar */}
+      {/* Sleek Tab Navigation Bar */}
       {!isRegisterMode && (
-        <div className="bg-white p-2 rounded-2xl border border-slate-200 shadow-2xs overflow-x-auto">
-          <div className="flex items-center gap-1.5 min-w-max">
+        <div className="bg-white p-1.5 rounded-2xl border border-slate-200 shadow-2xs">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
             
-            {/* 1. Organization Profile */}
+            {/* 1. Organization Profile & Team */}
             <button
               type="button"
-              onClick={() => setActiveSubTab('profile')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
-                activeSubTab === 'profile'
+              onClick={() => handleSwitchTab('profile')}
+              className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeSubTab === 'profile' || activeSubTab === 'verification'
                   ? 'bg-blue-600 text-white shadow-2xs'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
               }`}
             >
               <Building2 className="w-3.5 h-3.5" />
-              <span>Organization Profile</span>
+              <span>Profile & Team</span>
             </button>
 
-            {/* 2. Community Updates */}
+            {/* 2. Branches & Chapters */}
             <button
               type="button"
-              onClick={() => setActiveSubTab('posts')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+              onClick={() => handleSwitchTab('branches')}
+              className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeSubTab === 'branches' || activeSubTab === 'branch_apps'
+                  ? 'bg-blue-600 text-white shadow-2xs'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+              }`}
+            >
+              <MapPin className="w-3.5 h-3.5" />
+              <span>Branches</span>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                activeSubTab === 'branches' || activeSubTab === 'branch_apps' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'
+              }`}>
+                {orgChapters.length + orgBranchApplicants.length}
+              </span>
+            </button>
+
+            {/* 3. Roles & Positions */}
+            <button
+              type="button"
+              onClick={() => handleSwitchTab('openings')}
+              className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeSubTab === 'openings' || activeSubTab === 'position_crm'
+                  ? 'bg-blue-600 text-white shadow-2xs'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+              }`}
+            >
+              <Briefcase className="w-3.5 h-3.5" />
+              <span>Roles & CRM</span>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                activeSubTab === 'openings' || activeSubTab === 'position_crm' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'
+              }`}>
+                {orgOpportunities.length + orgPositionApplicants.length}
+              </span>
+            </button>
+
+            {/* 4. Chapter Membership & Signups */}
+            <button
+              type="button"
+              onClick={() => handleSwitchTab('members')}
+              className={`flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeSubTab === 'members'
+                  ? 'bg-blue-600 text-white shadow-2xs'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+              }`}
+            >
+              <UserCheck className="w-3.5 h-3.5" />
+              <span>Members</span>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
+                activeSubTab === 'members' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'
+              }`}>
+                {orgMembers.length}
+              </span>
+            </button>
+
+            {/* 5. Updates & News */}
+            <button
+              type="button"
+              onClick={() => handleSwitchTab('posts')}
+              className={`col-span-2 sm:col-span-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeSubTab === 'posts'
                   ? 'bg-blue-600 text-white shadow-2xs'
                   : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
               }`}
             >
               <MessageSquare className="w-3.5 h-3.5" />
-              <span>Updates & News</span>
+              <span>Updates</span>
               <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
                 activeSubTab === 'posts' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'
               }`}>
@@ -869,121 +971,12 @@ export default function MyOrgPage({
               </span>
             </button>
 
-            {/* 3. Chartered Branches */}
-            <button
-              type="button"
-              onClick={() => setActiveSubTab('branches')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
-                activeSubTab === 'branches'
-                  ? 'bg-blue-600 text-white shadow-2xs'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-              }`}
-            >
-              <MapPin className="w-3.5 h-3.5" />
-              <span>Chartered Branches</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-                activeSubTab === 'branches' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'
-              }`}>
-                {orgChapters.length}
-              </span>
-            </button>
-
-            {/* 4. Branch Applications & Questions */}
-            <button
-              type="button"
-              onClick={() => setActiveSubTab('branch_apps')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
-                activeSubTab === 'branch_apps'
-                  ? 'bg-blue-600 text-white shadow-2xs'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-              }`}
-            >
-              <FileText className="w-3.5 h-3.5" />
-              <span>Branch Applications & Questions</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-                activeSubTab === 'branch_apps' ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-800'
-              }`}>
-                {orgBranchApplicants.length}
-              </span>
-            </button>
-
-            {/* 5. Chapter Membership & Signups */}
-            <button
-              type="button"
-              onClick={() => setActiveSubTab('members')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
-                activeSubTab === 'members'
-                  ? 'bg-blue-600 text-white shadow-2xs'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-              }`}
-            >
-              <UserCheck className="w-3.5 h-3.5" />
-              <span>Chapter Membership & Signups</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-                activeSubTab === 'members' ? 'bg-white/20 text-white' : 'bg-blue-50 text-blue-800'
-              }`}>
-                {orgMembers.length}
-              </span>
-            </button>
-
-            {/* 6. Open Positions & Role Questions */}
-            <button
-              type="button"
-              onClick={() => setActiveSubTab('openings')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
-                activeSubTab === 'openings'
-                  ? 'bg-blue-600 text-white shadow-2xs'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-              }`}
-            >
-              <Briefcase className="w-3.5 h-3.5" />
-              <span>Open Positions & Role Questions</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-                activeSubTab === 'openings' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'
-              }`}>
-                {orgOpportunities.length}
-              </span>
-            </button>
-
-            {/* 7. Positions Applicants CRM */}
-            <button
-              type="button"
-              onClick={() => setActiveSubTab('position_crm')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
-                activeSubTab === 'position_crm'
-                  ? 'bg-blue-600 text-white shadow-2xs'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-              }`}
-            >
-              <Users className="w-3.5 h-3.5" />
-              <span>Position Applicants CRM</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${
-                activeSubTab === 'position_crm' ? 'bg-white/20 text-white' : 'bg-purple-50 text-purple-800'
-              }`}>
-                {orgPositionApplicants.length}
-              </span>
-            </button>
-
-            {/* 8. Verification & Credentials */}
-            <button
-              type="button"
-              onClick={() => setActiveSubTab('verification')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
-                activeSubTab === 'verification'
-                  ? 'bg-blue-600 text-white shadow-2xs'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-              }`}
-            >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Verification</span>
-            </button>
-
           </div>
         </div>
       )}
 
       {/* TAB 1: Organization Profile & Identity */}
-      {(activeSubTab === 'profile' || isRegisterMode) && (
+      {(activeSubTab === 'profile' || activeSubTab === 'verification' || isRegisterMode) && (
         <form onSubmit={handleSaveSubmit} className="space-y-6">
           <div className="clean-card p-6 sm:p-8 space-y-6 text-xs">
             <div className="flex items-center justify-between border-b border-slate-100 pb-4">
@@ -1515,621 +1508,651 @@ export default function MyOrgPage({
         </div>
       )}
 
-      {/* TAB 3: Chartered Branches */}
-      {activeSubTab === 'branches' && !isRegisterMode && (
-        <div className="space-y-4 text-xs">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h3 className="font-bold text-base text-slate-900">Active Chartered Branches & Chapters ({orgChapters.length})</h3>
-              <p className="text-slate-500 text-[11px]">Manage local branch directors, member counts, and chapter information.</p>
-            </div>
-
+      {/* TAB 2: Branches & Chapters (Unified) */}
+      {(activeSubTab === 'branches' || activeSubTab === 'branch_apps') && !isRegisterMode && (
+        <div className="space-y-6">
+          {/* Segmented Sub-View Switcher */}
+          <div className="flex items-center gap-1.5 p-1 bg-slate-100/90 rounded-xl w-fit border border-slate-200/60 text-xs font-bold">
             <button
-              onClick={handleOpenCharterNewBranch}
-              className="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 flex items-center gap-1.5 shadow-2xs self-start sm:self-auto"
+              type="button"
+              onClick={() => setBranchSubView('chapters')}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+                branchSubView === 'chapters'
+                  ? 'bg-white text-slate-900 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
-              <Plus className="w-4 h-4" />
-              <span>+ Charter New Branch</span>
+              <MapPin className="w-3.5 h-3.5 text-blue-600" />
+              <span>Chartered Branches ({orgChapters.length})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setBranchSubView('applicants')}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+                branchSubView === 'applicants'
+                  ? 'bg-white text-slate-900 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <FileText className="w-3.5 h-3.5 text-blue-600" />
+              <span>Branch Applicants & Screening ({orgBranchApplicants.length})</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {orgChapters.length === 0 ? (
-              <div className="clean-card p-12 text-center text-slate-500 md:col-span-2">
-                No active branches chartered yet. Click "+ Charter New Branch" above or approve applicants from Branch Applications.
-              </div>
-            ) : (
-              orgChapters.map(chap => (
-                <div key={chap.id} className="clean-card p-5 text-xs flex flex-col justify-between space-y-4 group hover:border-slate-300 transition-all">
-                  <div>
-                    <div className="flex items-start justify-between gap-2 mb-2">
-                      <div>
-                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-800 uppercase tracking-wider inline-block mb-1">
-                          {chap.status || 'Active Chapter'}
-                        </span>
-                        <h4 className="font-bold text-slate-900 text-sm">{chap.name}</h4>
-                        <p className="text-slate-500 text-[11px] flex items-center gap-1 mt-0.5">
-                          <MapPin className="w-3 h-3 text-slate-400" />
-                          <span>{chap.institution || chap.location}</span>
-                        </p>
-                      </div>
-
-                      <span className="px-2.5 py-1 rounded-full bg-slate-100 font-bold text-slate-700 text-[11px]">
-                        {chap.activeMembers || 15} Volunteers
-                      </span>
-                    </div>
-
-                    <div className="space-y-1.5 text-[11px] text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                      <div><strong className="text-slate-800">Chapter Lead:</strong> {chap.leadName} ({chap.leadEmail})</div>
-                      <div><strong className="text-slate-800">Schedule:</strong> {chap.meetingSchedule || 'Bi-weekly'}</div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-100">
-                    <button
-                      onClick={() => handleOpenEditBranch(chap)}
-                      className="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-[11px] flex items-center gap-1 shadow-2xs"
-                    >
-                      <Edit3 className="w-3.5 h-3.5" />
-                      <span>Edit Chapter</span>
-                    </button>
-
-                    <button
-                      onClick={() => handleDeleteBranchSubmit(chap.id)}
-                      className="text-rose-600 hover:text-rose-800 text-[11px] font-semibold flex items-center gap-1 px-2 py-1"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                      <span>Remove</span>
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* TAB 4: Branch Applications & Setup */}
-      {activeSubTab === 'branch_apps' && !isRegisterMode && (
-        <div className="space-y-6 text-xs">
-          
-          {/* Branch Application Screening Questions Setup */}
-          <div className="clean-card p-6 sm:p-8 space-y-6">
-            <div className="border-b border-slate-100 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <h3 className="font-bold text-base text-slate-900">Branch Founding Application & Screening Setup</h3>
-                <p className="text-slate-500 text-[11px]">
-                  Customize the screening questions and external link for changemakers applying to establish a new chapter.
-                </p>
-              </div>
-
-              <button
-                onClick={handleSaveSubmit}
-                className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-2xs self-start sm:self-auto"
-              >
-                Save Branch Questions
-              </button>
-            </div>
-
-            {/* External Portal Option */}
-            <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 space-y-2">
-              <div className="flex items-center gap-2 font-bold text-slate-900">
-                <Globe className="w-4 h-4 text-blue-600" />
-                <span>External Branch Application Link (Optional)</span>
-              </div>
-              <p className="text-slate-600 text-[11px] leading-relaxed">
-                If your organization uses a custom website portal or Typeform for branch founders, paste it here.
-              </p>
-              <input
-                type="url"
-                value={formData.externalApplyUrl || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, externalApplyUrl: e.target.value }))}
-                placeholder="https://yourorg.org/apply-chapter"
-                className="w-full p-2.5 rounded-xl border border-slate-200 bg-white font-medium focus:outline-none text-xs text-slate-900"
-              />
-            </div>
-
-            {/* In-App Branch Questions */}
-            <div className="space-y-3 pt-2">
-              <div className="flex items-center justify-between">
+          {branchSubView === 'chapters' ? (
+            <div className="space-y-4 text-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <span className="font-bold text-slate-800 text-xs block">
-                    Custom Branch Founding Questions ({(formData.customQuestions || []).length})
-                  </span>
-                  <p className="text-slate-500 text-[11px]">Presented to changemakers applying to start a branch.</p>
+                  <h3 className="font-bold text-base text-slate-900">Active Chartered Branches & Chapters ({orgChapters.length})</h3>
+                  <p className="text-slate-500 text-[11px]">Manage local branch directors, member counts, and chapter information.</p>
                 </div>
 
                 <button
                   type="button"
-                  onClick={addCustomQuestion}
-                  className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-[11px]"
+                  onClick={handleOpenCharterNewBranch}
+                  className="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 flex items-center gap-1.5 shadow-2xs self-start sm:self-auto cursor-pointer"
                 >
-                  + Add Question
+                  <Plus className="w-4 h-4" />
+                  <span>+ Charter New Branch</span>
                 </button>
               </div>
 
-              {(formData.customQuestions || []).map((q, idx) => (
-                <div key={idx} className="flex items-center gap-2">
-                  <span className="font-bold text-slate-400 w-6">#{idx + 1}</span>
-                  <input
-                    type="text"
-                    value={q}
-                    onChange={(e) => updateCustomQuestion(idx, e.target.value)}
-                    placeholder="Enter custom branch founding screening question..."
-                    className="flex-1 p-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeCustomQuestion(idx)}
-                    className="p-2 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Branch Applicants CRM Kanban Pipeline */}
-          <div className="space-y-4">
-            <div>
-              <h3 className="font-bold text-base text-slate-900">Branch Founding Applicants Pipeline ({orgBranchApplicants.length})</h3>
-              <p className="text-slate-500 text-xs">Review candidate dossiers, inspect screening answers, and charter new branches upon approval.</p>
-            </div>
-            <KanbanBoard 
-              applications={orgBranchApplicants} 
-              onUpdateStatus={onUpdateStatus} 
-            />
-          </div>
-
-        </div>
-      )}
-
-      {/* TAB 5: Chapter Membership & Signups */}
-      {activeSubTab === 'members' && !isRegisterMode && (
-        <div className="space-y-6 text-xs">
-          
-          {/* Customizable Membership Settings */}
-          <div className="clean-card p-6 sm:p-8 space-y-6">
-            <div className="border-b border-slate-100 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <h3 className="font-bold text-base text-slate-900">Chapter Membership Application Setup</h3>
-                <p className="text-slate-500 text-[11px]">
-                  Customize screening questions, available committee tracks, and requirements for volunteers joining local chapters.
-                </p>
-              </div>
-
-              <button
-                onClick={handleSaveSubmit}
-                className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-2xs self-start sm:self-auto"
-              >
-                Save Membership Setup
-              </button>
-            </div>
-
-            {/* Membership Onboarding & Approval Mode */}
-            <div className="space-y-3 p-4 rounded-2xl bg-slate-50 border border-slate-200/90">
-              <div>
-                <span className="font-bold text-slate-800 text-xs block">
-                  Membership Onboarding & Approval Mode
-                </span>
-                <p className="text-slate-500 text-[11px]">
-                  Choose whether new volunteers are confirmed immediately or require screening review by branch directors.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div
-                  onClick={() => setFormData(prev => ({ ...prev, membershipApprovalMode: 'auto' }))}
-                  className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
-                    (formData.membershipApprovalMode || 'auto') === 'auto'
-                      ? 'border-blue-600 bg-white shadow-xs'
-                      : 'border-slate-200 bg-white/60 hover:border-slate-300'
-                  }`}
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-slate-900 text-xs">Automatic Instant Confirmation</span>
-                      {(formData.membershipApprovalMode || 'auto') === 'auto' && (
-                        <span className="w-2 h-2 rounded-full bg-blue-600"></span>
-                      )}
-                    </div>
-                    <p className="text-slate-500 text-[11px] leading-relaxed">
-                      Volunteers are instantly confirmed upon signup, headcount updates immediately, and they can participate in chapter events right away.
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  onClick={() => setFormData(prev => ({ ...prev, membershipApprovalMode: 'review' }))}
-                  className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
-                    formData.membershipApprovalMode === 'review'
-                      ? 'border-blue-600 bg-white shadow-xs'
-                      : 'border-slate-200 bg-white/60 hover:border-slate-300'
-                  }`}
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-slate-900 text-xs">Requires Application & Review</span>
-                      {formData.membershipApprovalMode === 'review' && (
-                        <span className="w-2 h-2 rounded-full bg-blue-600"></span>
-                      )}
-                    </div>
-                    <p className="text-slate-500 text-[11px] leading-relaxed">
-                      Volunteers submit an application to the CRM pipeline. Leadership reviews answers and approves members before they become active.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* External Portal Option */}
-            <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 space-y-2">
-              <div className="flex items-center gap-2 font-bold text-slate-900">
-                <Globe className="w-4 h-4 text-blue-600" />
-                <span>External Member Signup Link (Optional)</span>
-              </div>
-              <input
-                type="url"
-                value={formData.externalMembershipUrl || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, externalMembershipUrl: e.target.value }))}
-                placeholder="https://yourorg.org/join-chapter"
-                className="w-full p-2.5 rounded-xl border border-slate-200 bg-white font-medium focus:outline-none text-xs text-slate-900"
-              />
-            </div>
-
-            {/* Committee Tracks */}
-            <div className="space-y-3 pt-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="font-bold text-slate-800 text-xs block">
-                    Available Chapter Committees ({(formData.membershipCommittees || []).length})
-                  </span>
-                  <p className="text-slate-500 text-[11px]">Tracks volunteers choose from when joining a chapter.</p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={addMembershipCommittee}
-                  className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-[11px]"
-                >
-                  + Add Committee
-                </button>
-              </div>
-
-              {(formData.membershipCommittees || []).map((comm, idx) => (
-                <div key={idx} className="flex items-center gap-2">
-                  <span className="font-bold text-slate-400 w-6">#{idx + 1}</span>
-                  <input
-                    type="text"
-                    value={comm}
-                    onChange={(e) => updateMembershipCommittee(idx, e.target.value)}
-                    placeholder="e.g. Event Organizing, Campus Outreach, Marketing..."
-                    className="flex-1 p-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none font-medium"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeMembershipCommittee(idx)}
-                    className="p-2 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            {/* Custom Membership Questions */}
-            <div className="space-y-3 pt-4 border-t border-slate-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="font-bold text-slate-800 text-xs block">
-                    Custom Member Screening Questions ({(formData.membershipQuestions || []).length})
-                  </span>
-                  <p className="text-slate-500 text-[11px]">Asked when volunteers click 'Join Local Branch'.</p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={addMembershipQuestion}
-                  className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-[11px]"
-                >
-                  + Add Question
-                </button>
-              </div>
-
-              {(formData.membershipQuestions || []).map((q, idx) => (
-                <div key={idx} className="flex items-center gap-2">
-                  <span className="font-bold text-slate-400 w-6">#{idx + 1}</span>
-                  <input
-                    type="text"
-                    value={q}
-                    onChange={(e) => updateMembershipQuestion(idx, e.target.value)}
-                    placeholder="Enter custom membership question..."
-                    className="flex-1 p-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeMembershipQuestion(idx)}
-                    className="p-2 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Members Pipeline & Roster Views */}
-          <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <h3 className="font-bold text-base text-slate-900">
-                  {memberViewMode === 'pipeline' ? 'Chapter Member Onboarding Pipeline' : 'Local Chapter Volunteer Roster'} ({orgMembers.length})
-                </h3>
-                <p className="text-slate-500 text-[11px]">
-                  {memberViewMode === 'pipeline' 
-                    ? 'Track member progression through onboarding, committee assignment, and active status.' 
-                    : 'Search and communicate directly with registered volunteers across all local branches.'}
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <div className="bg-slate-100 p-1 rounded-xl flex items-center gap-1 border border-slate-200">
-                  <button
-                    type="button"
-                    onClick={() => setMemberViewMode('pipeline')}
-                    className={`px-3 py-1.5 rounded-lg font-bold text-[11px] transition-all ${
-                      memberViewMode === 'pipeline'
-                        ? 'bg-white text-blue-800 shadow-2xs'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    Pipeline Board
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setMemberViewMode('roster')}
-                    className={`px-3 py-1.5 rounded-lg font-bold text-[11px] transition-all ${
-                      memberViewMode === 'roster'
-                        ? 'bg-white text-blue-800 shadow-2xs'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    Roster Table
-                  </button>
-                </div>
-
-                <span className="px-3 py-1.5 rounded-xl bg-blue-50 text-blue-900 font-bold text-[11px] border border-blue-200">
-                  {orgMembers.length} Volunteers
-                </span>
-              </div>
-            </div>
-
-            {/* Pipeline View (Kanban) */}
-            {memberViewMode === 'pipeline' && (
-              <KanbanBoard
-                applications={orgMembers}
-                onUpdateStatus={onUpdateStatus}
-                customColumns={[
-                  { id: 'submitted', title: 'New Signups', countColor: 'bg-blue-100 text-blue-800' },
-                  { id: 'screening', title: 'Welcome & Intro', countColor: 'bg-amber-100 text-amber-800' },
-                  { id: 'interview', title: 'Committee Assigned', countColor: 'bg-purple-100 text-purple-800' },
-                  { id: 'approved', title: 'Active Volunteer', countColor: 'bg-blue-100 text-blue-800' }
-                ]}
-              />
-            )}
-
-            {/* Roster Table View */}
-            {memberViewMode === 'roster' && (
-              <div className="clean-card overflow-hidden">
-                {orgMembers.length === 0 ? (
-                  <div className="p-12 text-center text-slate-500 space-y-2">
-                    <Users className="w-8 h-8 text-slate-300 mx-auto" />
-                    <p className="font-semibold text-slate-700">No local branch signups yet</p>
-                    <p className="text-xs text-slate-400">When community members click 'Join Local Branch', their details appear here.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {orgChapters.length === 0 ? (
+                  <div className="clean-card p-12 text-center text-slate-500 md:col-span-2">
+                    No active branches chartered yet. Click "+ Charter New Branch" above or approve applicants from Branch Applications.
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left divide-y divide-slate-100">
-                      <thead className="bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                        <tr>
-                          <th className="p-3.5 pl-5">Member Name</th>
-                          <th className="p-3.5">Email</th>
-                          <th className="p-3.5">City / Campus Location</th>
-                          <th className="p-3.5">Committee Track</th>
-                          <th className="p-3.5">Weekly Hours</th>
-                          <th className="p-3.5">Date Joined</th>
-                          <th className="p-3.5 pr-5 text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100 text-xs font-medium text-slate-700">
-                        {orgMembers.map((m) => (
-                          <tr key={m.id} className="hover:bg-slate-50/80 transition-colors">
-                            <td className="p-3.5 pl-5 font-bold text-slate-900">{m.applicantName}</td>
-                            <td className="p-3.5 text-slate-600">
-                              <a href={`mailto:${m.applicantEmail}`} className="text-blue-700 hover:underline">{m.applicantEmail}</a>
-                            </td>
-                            <td className="p-3.5">
-                              <span className="px-2.5 py-0.5 rounded-full bg-slate-100 font-semibold text-slate-800 text-[11px] flex items-center gap-1 w-fit">
-                                <MapPin className="w-3 h-3 text-slate-400" />
-                                <span>{m.proposedLocation || 'Local Chapter'}</span>
-                              </span>
-                            </td>
-                            <td className="p-3.5 text-slate-800 font-semibold">{m.committee || m.focusArea || 'General Volunteer'}</td>
-                            <td className="p-3.5 text-slate-500">{m.commitment || '1-2 hrs/wk'}</td>
-                            <td className="p-3.5 text-slate-400 text-[11px]">{m.appliedAt ? new Date(m.appliedAt).toLocaleDateString() : 'Recent'}</td>
-                            <td className="p-3.5 pr-5 text-right">
-                              <a
-                                href={`mailto:${m.applicantEmail}?subject=Welcome to ${formData.name} Local Chapter!`}
-                                className="px-3 py-1.5 rounded-xl bg-blue-50 text-blue-900 font-bold text-[11px] hover:bg-blue-100 border border-blue-200 transition-colors inline-block"
-                              >
-                                Email Member
-                              </a>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                  orgChapters.map(chap => (
+                    <div key={chap.id} className="clean-card p-5 text-xs flex flex-col justify-between space-y-4 group hover:border-slate-300 transition-all">
+                      <div>
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <div>
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-800 uppercase tracking-wider inline-block mb-1">
+                              {chap.status || 'Active Chapter'}
+                            </span>
+                            <h4 className="font-bold text-slate-900 text-sm">{chap.name}</h4>
+                            <p className="text-slate-500 text-[11px] flex items-center gap-1 mt-0.5">
+                              <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                              <span>{chap.institution || chap.location}</span>
+                            </p>
+                          </div>
+
+                          <span className="px-2.5 py-1 rounded-full bg-slate-100 font-bold text-slate-700 text-[11px]">
+                            {chap.activeMembers || 15} Volunteers
+                          </span>
+                        </div>
+
+                        <div className="space-y-1.5 text-[11px] text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                          <div><strong className="text-slate-800">Chapter Lead:</strong> {chap.leadName} ({chap.leadEmail})</div>
+                          <div><strong className="text-slate-800">Schedule:</strong> {chap.meetingSchedule || 'Bi-weekly'}</div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+                        <button
+                          type="button"
+                          onClick={() => handleOpenEditBranch(chap)}
+                          className="px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold text-[11px] flex items-center gap-1 shadow-2xs cursor-pointer"
+                        >
+                          <Edit3 className="w-3.5 h-3.5" />
+                          <span>Edit Chapter</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteBranchSubmit(chap.id)}
+                          className="text-rose-600 hover:text-rose-800 text-[11px] font-semibold flex items-center gap-1 px-2 py-1 cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Remove</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))
                 )}
               </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="space-y-6 text-xs">
+              {/* Branch Application Screening Questions Setup */}
+              <div className="clean-card p-6 sm:p-8 space-y-6">
+                <div className="border-b border-slate-100 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <h3 className="font-bold text-base text-slate-900">Branch Founding Application & Screening Setup</h3>
+                    <p className="text-slate-500 text-[11px]">
+                      Customize the screening questions and external link for changemakers applying to establish a new chapter.
+                    </p>
+                  </div>
 
+                  <button
+                    type="button"
+                    onClick={handleSaveSubmit}
+                    className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-2xs self-start sm:self-auto cursor-pointer"
+                  >
+                    Save Branch Questions
+                  </button>
+                </div>
+
+                {/* External Portal Option */}
+                <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 space-y-2">
+                  <div className="flex items-center gap-2 font-bold text-slate-900">
+                    <Globe className="w-4 h-4 text-blue-600" />
+                    <span>External Branch Application Link (Optional)</span>
+                  </div>
+                  <p className="text-slate-600 text-[11px] leading-relaxed">
+                    If your organization uses a custom website portal or Typeform for branch founders, paste it here.
+                  </p>
+                  <input
+                    type="url"
+                    value={formData.externalApplyUrl || ''}
+                    onChange={(e) => setFormData(prev => ({ ...prev, externalApplyUrl: e.target.value }))}
+                    placeholder="https://yourorg.org/apply-chapter"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 bg-white font-medium focus:outline-none text-xs text-slate-900"
+                  />
+                </div>
+
+                {/* In-App Branch Questions */}
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="font-bold text-slate-800 text-xs block">
+                        Custom Branch Founding Questions ({(formData.customQuestions || []).length})
+                      </span>
+                      <p className="text-slate-500 text-[11px]">Presented to changemakers applying to start a branch.</p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={addCustomQuestion}
+                      className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-[11px] cursor-pointer"
+                    >
+                      + Add Question
+                    </button>
+                  </div>
+
+                  {(formData.customQuestions || []).map((q, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <span className="font-bold text-slate-400 w-6">#{idx + 1}</span>
+                      <input
+                        type="text"
+                        value={q}
+                        onChange={(e) => updateCustomQuestion(idx, e.target.value)}
+                        placeholder="Enter custom branch founding screening question..."
+                        className="flex-1 p-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeCustomQuestion(idx)}
+                        className="p-2 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50 cursor-pointer"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Branch Applicants CRM Kanban Pipeline */}
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-bold text-base text-slate-900">Branch Founding Applicants Pipeline ({orgBranchApplicants.length})</h3>
+                  <p className="text-slate-500 text-xs">Review candidate dossiers, inspect screening answers, and charter new branches upon approval.</p>
+                </div>
+                <KanbanBoard 
+                  applications={orgBranchApplicants} 
+                  onUpdateStatus={onUpdateStatus} 
+                />
+              </div>
+            </div>
+          )}
         </div>
       )}
 
-      {/* TAB 6: Open Positions & Role Specific Questions */}
-      {activeSubTab === 'openings' && !isRegisterMode && (
-        <div className="space-y-4 text-xs">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h3 className="font-bold text-base text-slate-900">Open Positions & Campaigns ({orgOpportunities.length})</h3>
-              <p className="text-slate-500 text-[11px]">
-                Create new roles and customize specific application screening questions for each position.
-              </p>
-            </div>
-
+      {/* TAB 4: Chapter Membership & Signups */}
+      {activeSubTab === 'members' && !isRegisterMode && (
+        <div className="space-y-6">
+          {/* Segmented Sub-View Switcher */}
+          <div className="flex items-center gap-1.5 p-1 bg-slate-100/90 rounded-xl w-fit border border-slate-200/60 text-xs font-bold">
             <button
-              onClick={openCreateCampaignModal}
-              className="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 flex items-center gap-1.5 shadow-2xs self-start sm:self-auto"
+              type="button"
+              onClick={() => setMemberSubView('roster')}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+                memberSubView === 'roster'
+                  ? 'bg-white text-slate-900 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
-              <Plus className="w-4 h-4" />
-              <span>+ Post New Position or Branch</span>
+              <UserCheck className="w-3.5 h-3.5 text-blue-600" />
+              <span>Member Roster & Pipeline ({orgMembers.length})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMemberSubView('setup')}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+                memberSubView === 'setup'
+                  ? 'bg-white text-slate-900 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Sliders className="w-3.5 h-3.5 text-blue-600" />
+              <span>Volunteer Tracks & Setup</span>
             </button>
           </div>
 
-          <div className="space-y-3">
-            {orgOpportunities.length === 0 ? (
-              <div className="clean-card p-12 text-center text-slate-500">
-                No active openings posted yet. Click "+ Post New Position or Branch" above to publish your first campaign.
-              </div>
-            ) : (
-              orgOpportunities.map(opp => (
-                <div key={opp.id} className="clean-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:border-slate-300 transition-all">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-800">
-                        {opp.type}
-                      </span>
-                      <span className="text-slate-400">•</span>
-                      <span className="font-semibold text-slate-500">{opp.category}</span>
-                      <span className="text-slate-400">•</span>
-                      <span className="text-slate-500">{opp.targetLocation}</span>
-                    </div>
+          {memberSubView === 'setup' ? (
+            /* Customizable Membership Settings */
+            <div className="clean-card p-6 sm:p-8 space-y-6 text-xs">
+              <div className="border-b border-slate-100 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="font-bold text-base text-slate-900">Chapter Membership Application Setup</h3>
+                  <p className="text-slate-500 text-[11px]">
+                    Customize screening questions, available committee tracks, and requirements for volunteers joining local chapters.
+                  </p>
+                </div>
 
-                    <h4 className="font-bold text-sm text-slate-900">{opp.title}</h4>
-                    <p className="text-slate-600 line-clamp-1">{opp.description}</p>
-                    
-                    {opp.customQuestions && opp.customQuestions.length > 0 && (
-                      <div className="pt-1 text-[11px] text-blue-800 font-medium">
-                        {opp.customQuestions.length} custom role-specific questions configured
+                <button
+                  type="button"
+                  onClick={handleSaveSubmit}
+                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-2xs self-start sm:self-auto cursor-pointer"
+                >
+                  Save Membership Setup
+                </button>
+              </div>
+
+              {/* Membership Onboarding & Approval Mode */}
+              <div className="space-y-3 p-4 rounded-2xl bg-slate-50 border border-slate-200/90">
+                <div>
+                  <span className="font-bold text-slate-800 text-xs block">
+                    Membership Onboarding & Approval Mode
+                  </span>
+                  <p className="text-slate-500 text-[11px]">
+                    Choose whether new volunteers are confirmed immediately or require screening review by branch directors.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div
+                    onClick={() => setFormData(prev => ({ ...prev, membershipApprovalMode: 'auto' }))}
+                    className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
+                      (formData.membershipApprovalMode || 'auto') === 'auto'
+                        ? 'border-blue-600 bg-white shadow-xs'
+                        : 'border-slate-200 bg-white/60 hover:border-slate-300'
+                    }`}
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-900 text-xs">Automatic Instant Confirmation</span>
+                        {(formData.membershipApprovalMode || 'auto') === 'auto' && (
+                          <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+                        )}
                       </div>
-                    )}
+                      <p className="text-slate-500 text-[11px] leading-relaxed">
+                        Volunteers are instantly confirmed upon signup, headcount updates immediately, and they can participate in chapter events right away.
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      onClick={() => handleOpenEditOpp(opp)}
-                      className="px-3.5 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center gap-1 shadow-2xs"
-                    >
-                      <Edit3 className="w-3.5 h-3.5" />
-                      <span>Edit Role & Specific Questions</span>
-                    </button>
+                  <div
+                    onClick={() => setFormData(prev => ({ ...prev, membershipApprovalMode: 'review' }))}
+                    className={`p-3.5 rounded-xl border-2 cursor-pointer transition-all flex flex-col justify-between ${
+                      formData.membershipApprovalMode === 'review'
+                        ? 'border-blue-600 bg-white shadow-xs'
+                        : 'border-slate-200 bg-white/60 hover:border-slate-300'
+                    }`}
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-900 text-xs">Requires Application & Review</span>
+                        {formData.membershipApprovalMode === 'review' && (
+                          <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+                        )}
+                      </div>
+                      <p className="text-slate-500 text-[11px] leading-relaxed">
+                        Volunteers submit an application to the CRM pipeline. Leadership reviews answers and approves members before they become active.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
+              {/* External Portal Option */}
+              <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 space-y-2">
+                <div className="flex items-center gap-2 font-bold text-slate-900">
+                  <Globe className="w-4 h-4 text-blue-600" />
+                  <span>External Member Signup Link (Optional)</span>
+                </div>
+                <input
+                  type="url"
+                  value={formData.externalMembershipUrl || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, externalMembershipUrl: e.target.value }))}
+                  placeholder="https://yourorg.org/join-chapter"
+                  className="w-full p-2.5 rounded-xl border border-slate-200 bg-white font-medium focus:outline-none text-xs text-slate-900"
+                />
+              </div>
+
+              {/* Committee Tracks */}
+              <div className="space-y-3 pt-2">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-bold text-slate-800 text-xs block">
+                      Available Chapter Committees ({(formData.membershipCommittees || []).length})
+                    </span>
+                    <p className="text-slate-500 text-[11px]">Tracks volunteers choose from when joining a chapter.</p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={addMembershipCommittee}
+                    className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-[11px] cursor-pointer"
+                  >
+                    + Add Committee
+                  </button>
+                </div>
+
+                {(formData.membershipCommittees || []).map((comm, idx) => (
+                  <div key={idx} className="flex items-center gap-2">
+                    <span className="font-bold text-slate-400 w-6">#{idx + 1}</span>
+                    <input
+                      type="text"
+                      value={comm}
+                      onChange={(e) => updateMembershipCommittee(idx, e.target.value)}
+                      placeholder="e.g. Event Organizing, Campus Outreach, Marketing..."
+                      className="flex-1 p-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none font-medium"
+                    />
                     <button
-                      onClick={() => {
-                        if (window.confirm("Remove this opening?")) {
-                          onDeleteOpportunity(opp.id);
-                        }
-                      }}
-                      className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50"
+                      type="button"
+                      onClick={() => removeMembershipCommittee(idx)}
+                      className="p-2 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50 cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
+                ))}
+              </div>
+
+              {/* Custom Membership Questions */}
+              <div className="space-y-3 pt-4 border-t border-slate-100">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-bold text-slate-800 text-xs block">
+                      Custom Member Screening Questions ({(formData.membershipQuestions || []).length})
+                    </span>
+                    <p className="text-slate-500 text-[11px]">Asked when volunteers click 'Join Local Branch'.</p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={addMembershipQuestion}
+                    className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-[11px] cursor-pointer"
+                  >
+                    + Add Question
+                  </button>
                 </div>
-              ))
-            )}
-          </div>
-        </div>
-      )}
 
-      {/* TAB 7: Position Applicants CRM */}
-      {activeSubTab === 'position_crm' && !isRegisterMode && (
-        <div className="space-y-4">
-          <div>
-            <h3 className="font-bold text-base text-slate-900">Position Applicants Pipeline ({orgPositionApplicants.length})</h3>
-            <p className="text-slate-500 text-xs">
-              Review candidates applying for specialized volunteer and staff roles, inspect their role-specific answers, and advance statuses.
-            </p>
-          </div>
-          <KanbanBoard 
-            applications={orgPositionApplicants} 
-            onUpdateStatus={onUpdateStatus} 
-          />
-        </div>
-      )}
-
-      {/* TAB 8: Verification & Credentials */}
-      {activeSubTab === 'verification' && !isRegisterMode && (
-        <div className="clean-card p-6 sm:p-8 space-y-6 text-xs">
-          <div className="border-b border-slate-100 pb-4">
-            <h3 className="font-bold text-base text-slate-900">Non-Profit & Student Club Verification Credentials</h3>
-            <p className="text-slate-500 text-[11px]">Verify your 501(c)(3) tax ID, campus registry, or state non-profit status.</p>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <ShieldCheck className="w-6 h-6 text-blue-600" />
-              <div>
-                <h4 className="font-bold text-slate-900">Official Verification Status</h4>
-                <p className="text-slate-600 text-[11px]">Displays verified badge on organization profile and branch cards.</p>
+                {(formData.membershipQuestions || []).map((q, idx) => (
+                  <div key={idx} className="flex items-center gap-2">
+                    <span className="font-bold text-slate-400 w-6">#{idx + 1}</span>
+                    <input
+                      type="text"
+                      value={q}
+                      onChange={(e) => updateMembershipQuestion(idx, e.target.value)}
+                      placeholder="Enter custom membership question..."
+                      className="flex-1 p-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeMembershipQuestion(idx)}
+                      className="p-2 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50 cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
-            <span className="px-3 py-1 rounded-full bg-blue-600 text-white font-bold text-[11px]">
-              {formData.verification?.status || 'Verified Official'}
-            </span>
-          </div>
+          ) : (
+            /* Members Pipeline & Roster Views */
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="font-bold text-base text-slate-900">
+                    {memberViewMode === 'pipeline' ? 'Chapter Member Onboarding Pipeline' : 'Local Chapter Volunteer Roster'} ({orgMembers.length})
+                  </h3>
+                  <p className="text-slate-500 text-[11px]">
+                    {memberViewMode === 'pipeline' 
+                      ? 'Track member progression through onboarding, committee assignment, and active status.' 
+                      : 'Search and communicate directly with registered volunteers across all local branches.'}
+                  </p>
+                </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Registration / Tax ID (EIN)</label>
-              <input
-                type="text"
-                value={formData.verification?.ein || ''}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  verification: { ...(prev.verification || {}), ein: e.target.value }
-                }))}
-                placeholder="e.g. 84-1928472 or Campus Registry #"
-                className="w-full p-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none font-medium"
-              />
+                <div className="flex items-center gap-2">
+                  <div className="bg-slate-100 p-1 rounded-xl flex items-center gap-1 border border-slate-200">
+                    <button
+                      type="button"
+                      onClick={() => setMemberViewMode('pipeline')}
+                      className={`px-3 py-1.5 rounded-lg font-bold text-[11px] transition-all cursor-pointer ${
+                        memberViewMode === 'pipeline'
+                          ? 'bg-white text-blue-800 shadow-2xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      Pipeline Board
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setMemberViewMode('roster')}
+                      className={`px-3 py-1.5 rounded-lg font-bold text-[11px] transition-all cursor-pointer ${
+                        memberViewMode === 'roster'
+                          ? 'bg-white text-blue-800 shadow-2xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      Roster Table
+                    </button>
+                  </div>
+
+                  <span className="px-3 py-1.5 rounded-xl bg-blue-50 text-blue-900 font-bold text-[11px] border border-blue-200">
+                    {orgMembers.length} Volunteers
+                  </span>
+                </div>
+              </div>
+
+              {/* Pipeline View (Kanban) */}
+              {memberViewMode === 'pipeline' && (
+                <KanbanBoard
+                  applications={orgMembers}
+                  onUpdateStatus={onUpdateStatus}
+                  customColumns={[
+                    { id: 'submitted', title: 'New Signups', countColor: 'bg-blue-100 text-blue-800' },
+                    { id: 'screening', title: 'Welcome & Intro', countColor: 'bg-amber-100 text-amber-800' },
+                    { id: 'interview', title: 'Committee Assigned', countColor: 'bg-purple-100 text-purple-800' },
+                    { id: 'approved', title: 'Active Volunteer', countColor: 'bg-blue-100 text-blue-800' }
+                  ]}
+                />
+              )}
+
+              {/* Roster Table View */}
+              {memberViewMode === 'roster' && (
+                <div className="clean-card overflow-hidden">
+                  {orgMembers.length === 0 ? (
+                    <div className="p-12 text-center text-slate-500 space-y-2">
+                      <Users className="w-8 h-8 text-slate-300 mx-auto" />
+                      <p className="font-semibold text-slate-700">No local branch signups yet</p>
+                      <p className="text-xs text-slate-400">When community members click 'Join Local Branch', their details appear here.</p>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left divide-y divide-slate-100">
+                        <thead className="bg-slate-50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                          <tr>
+                            <th className="p-3.5 pl-5">Member Name</th>
+                            <th className="p-3.5">Email</th>
+                            <th className="p-3.5">City / Campus Location</th>
+                            <th className="p-3.5">Committee Track</th>
+                            <th className="p-3.5">Weekly Hours</th>
+                            <th className="p-3.5">Date Joined</th>
+                            <th className="p-3.5 pr-5 text-right">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                          {orgMembers.map((m) => (
+                            <tr key={m.id} className="hover:bg-slate-50/80 transition-colors">
+                              <td className="p-3.5 pl-5 font-bold text-slate-900">{m.applicantName}</td>
+                              <td className="p-3.5 text-slate-600">
+                                <a href={`mailto:${m.applicantEmail}`} className="text-blue-700 hover:underline">{m.applicantEmail}</a>
+                              </td>
+                              <td className="p-3.5">
+                                <span className="px-2.5 py-0.5 rounded-full bg-slate-100 font-semibold text-slate-800 text-[11px] flex items-center gap-1 w-fit">
+                                  <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                                  <span>{m.proposedLocation || 'Local Chapter'}</span>
+                                </span>
+                              </td>
+                              <td className="p-3.5 text-slate-800 font-semibold">{m.committee || m.focusArea || 'General Volunteer'}</td>
+                              <td className="p-3.5 text-slate-500">{m.commitment || '1-2 hrs/wk'}</td>
+                              <td className="p-3.5 text-slate-400 text-[11px]">{m.appliedAt ? new Date(m.appliedAt).toLocaleDateString() : 'Recent'}</td>
+                              <td className="p-3.5 pr-5 text-right">
+                                <a
+                                  href={`mailto:${m.applicantEmail}?subject=Welcome to ${formData.name} Local Chapter!`}
+                                  className="px-3 py-1.5 rounded-xl bg-blue-50 text-blue-900 font-bold text-[11px] hover:bg-blue-100 border border-blue-200 transition-colors inline-block cursor-pointer"
+                                >
+                                  Email Member
+                                </a>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
+          )}
+        </div>
+      )}
 
-            <div>
-              <label className="block font-semibold text-slate-700 mb-1">Registry Document / Verification Link</label>
-              <input
-                type="text"
-                value={formData.verification?.registryDoc || ''}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  verification: { ...(prev.verification || {}), registryDoc: e.target.value }
-                }))}
-                placeholder="e.g. IRS 501(c)(3) Letter or Student Club Registry Link"
-                className="w-full p-2.5 rounded-xl border border-slate-200 bg-white focus:outline-none font-medium"
-              />
-            </div>
-          </div>
-
-          <div className="pt-4 border-t border-slate-100 flex justify-end">
+      {/* TAB 3: Roles & Positions (Unified) */}
+      {(activeSubTab === 'openings' || activeSubTab === 'position_crm') && !isRegisterMode && (
+        <div className="space-y-6">
+          {/* Segmented Sub-View Switcher */}
+          <div className="flex items-center gap-1.5 p-1 bg-slate-100/90 rounded-xl w-fit border border-slate-200/60 text-xs font-bold">
             <button
-              onClick={handleSaveSubmit}
-              className="px-5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs"
+              type="button"
+              onClick={() => setRolesSubView('openings')}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+                rolesSubView === 'openings'
+                  ? 'bg-white text-slate-900 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
-              Update Credentials
+              <Briefcase className="w-3.5 h-3.5 text-blue-600" />
+              <span>Open Positions ({orgOpportunities.length})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setRolesSubView('crm')}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition-all cursor-pointer ${
+                rolesSubView === 'crm'
+                  ? 'bg-white text-slate-900 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Users className="w-3.5 h-3.5 text-purple-600" />
+              <span>Candidate CRM Pipeline ({orgPositionApplicants.length})</span>
             </button>
           </div>
+
+          {rolesSubView === 'openings' ? (
+            <div className="space-y-4 text-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="font-bold text-base text-slate-900">Open Positions & Campaigns ({orgOpportunities.length})</h3>
+                  <p className="text-slate-500 text-[11px]">
+                    Create new roles and customize specific application screening questions for each position.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={openCreateCampaignModal}
+                  className="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 flex items-center gap-1.5 shadow-2xs self-start sm:self-auto cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>+ Post New Position or Branch</span>
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {orgOpportunities.length === 0 ? (
+                  <div className="clean-card p-12 text-center text-slate-500">
+                    No active openings posted yet. Click "+ Post New Position or Branch" above to publish your first campaign.
+                  </div>
+                ) : (
+                  orgOpportunities.map(opp => (
+                    <div key={opp.id} className="clean-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:border-slate-300 transition-all">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-800">
+                            {opp.type}
+                          </span>
+                          <span className="text-slate-400">•</span>
+                          <span className="font-semibold text-slate-500">{opp.category}</span>
+                          <span className="text-slate-400">•</span>
+                          <span className="text-slate-500">{opp.targetLocation}</span>
+                        </div>
+
+                        <h4 className="font-bold text-sm text-slate-900">{opp.title}</h4>
+                        <p className="text-slate-600 line-clamp-1">{opp.description}</p>
+                        
+                        {opp.customQuestions && opp.customQuestions.length > 0 && (
+                          <div className="pt-1 text-[11px] text-blue-800 font-medium">
+                            {opp.customQuestions.length} custom role-specific questions configured
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => handleOpenEditOpp(opp)}
+                          className="px-3.5 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center gap-1 shadow-2xs cursor-pointer"
+                        >
+                          <Edit3 className="w-3.5 h-3.5" />
+                          <span>Edit Role & Questions</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (window.confirm("Remove this opening?")) {
+                              onDeleteOpportunity(opp.id);
+                            }
+                          }}
+                          className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-bold text-base text-slate-900">Position Applicants Pipeline ({orgPositionApplicants.length})</h3>
+                <p className="text-slate-500 text-xs">
+                  Review candidates applying for specialized volunteer and staff roles, inspect their role-specific answers, and advance statuses.
+                </p>
+              </div>
+              <KanbanBoard 
+                applications={orgPositionApplicants} 
+                onUpdateStatus={onUpdateStatus} 
+              />
+            </div>
+          )}
         </div>
       )}
 

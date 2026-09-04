@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Globe, Mail, MapPin, CheckCircle2, Plus, Sparkles, ExternalLink, Users, Calendar, ArrowRight, ThumbsUp, MessageSquare, Share2, Instagram, Twitter } from 'lucide-react';
+import { ArrowLeft, Globe, Mail, MapPin, CheckCircle2, Plus, Sparkles, ExternalLink, Users, Calendar, ArrowRight, ThumbsUp, MessageSquare, Share2, Instagram, Twitter, ChevronDown, ChevronUp } from 'lucide-react';
 import { api } from '../services/api';
 import VerifiedBadge from '../components/VerifiedBadge';
 import { calculateMatchScore } from '../utils/matching';
@@ -18,6 +18,22 @@ export default function OrgDetailPage({
   const [activeTab, setActiveTab] = useState('overview');
   const [posts, setPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState({});
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
+  // Truncate to first 3-4 sentences
+  const getTruncatedDescription = (text) => {
+    if (!text) return { isLong: false, displayText: '' };
+    // Split on sentence boundaries
+    const sentences = text.match(/[^.!?]+[.!?]+(\s|$)/g);
+    if (!sentences || sentences.length <= 3) {
+      if (text.length > 260) {
+        return { isLong: true, displayText: text.slice(0, 260) + '...' };
+      }
+      return { isLong: false, displayText: text };
+    }
+    const firstSentences = sentences.slice(0, 3).join('').trim();
+    return { isLong: true, displayText: firstSentences };
+  };
 
   useEffect(() => {
     if (org?.id) {
@@ -224,8 +240,7 @@ export default function OrgDetailPage({
         {/* Tab Navigation */}
         <div className="flex border-t border-slate-200 px-6 bg-slate-50/50 text-xs font-semibold overflow-x-auto">
           {[
-            { id: 'overview', label: 'About & Mission' },
-            { id: 'posts', label: `Activity & Updates (${posts.length})` },
+            { id: 'overview', label: `About & Updates (${posts.length})` },
             { id: 'openings', label: `Open Positions & Branches (${orgOpps.length})` },
             { id: 'branches', label: `Active Branches (${orgBranches.length})` }
           ].map((t) => (
@@ -244,83 +259,107 @@ export default function OrgDetailPage({
         </div>
       </div>
 
-      {/* Tab: About & Mission */}
+      {/* Tab: About & Updates */}
       {activeTab === 'overview' && (
-        <div className="clean-card p-6 sm:p-8 space-y-6 text-xs sm:text-sm">
-          <div>
-            <h3 className="font-bold text-base text-slate-900 mb-2">About {org.name}</h3>
-            <p className="text-slate-600 leading-relaxed">
-              {org.description}
-            </p>
+        <div className="space-y-6">
+          {/* About Card with 3-4 sentence truncation */}
+          <div className="clean-card p-6 sm:p-8 space-y-4 text-xs sm:text-sm">
+            <div>
+              <h3 className="font-bold text-base text-slate-900 mb-2">About {org.name}</h3>
+              {(() => {
+                const { isLong, displayText } = getTruncatedDescription(org.description || '');
+                return (
+                  <div>
+                    <p className="text-slate-600 leading-relaxed whitespace-pre-line">
+                      {isDescriptionExpanded ? org.description : displayText}
+                    </p>
+                    {isLong && (
+                      <button
+                        type="button"
+                        onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                        className="mt-3 font-bold text-blue-600 hover:text-blue-800 hover:underline inline-flex items-center gap-1 text-xs cursor-pointer"
+                      >
+                        <span>{isDescriptionExpanded ? 'Show less' : 'See more'}</span>
+                        {isDescriptionExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                      </button>
+                    )}
+                  </div>
+                );
+              })()}
+            </div>
           </div>
 
-
-        </div>
-      )}
-
-      {/* Tab: Member Activity & Updates Feed */}
-      {activeTab === 'posts' && (
-        <div className="space-y-4 text-xs">
-          {posts.length === 0 ? (
-            <div className="clean-card p-10 text-center text-slate-500">
-              No recent updates posted by this organization yet.
+          {/* Updates Feed placed right underneath About */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between px-1">
+              <h3 className="font-bold text-sm text-slate-900 flex items-center gap-2">
+                <MessageSquare className="w-4 h-4 text-blue-600" />
+                <span>Recent Updates & Activity ({posts.length})</span>
+              </h3>
             </div>
-          ) : (
-            posts.map((post) => (
-              <div key={post.id} className="clean-card p-6 space-y-4">
-                {/* Author Header */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-slate-900 text-white font-bold flex items-center justify-center text-sm">
-                      {(org?.name || "O").charAt(0)}
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-1.5">
-                        <h4 className="font-bold text-slate-900 text-sm">{org.name}</h4>
-                        <VerifiedBadge />
-                      </div>
-                      <p className="text-slate-400 text-[11px]">
-                        Posted by {post.authorName || 'Team'} - {new Date(post.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                      </p>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Content */}
-                {post.title && (
-                  <h3 className="font-bold text-sm text-slate-900">{post.title}</h3>
-                )}
-                <p className="text-slate-700 leading-relaxed text-xs sm:text-sm">{post.content}</p>
-
-                {/* Photo attachment */}
-                {post.image && (
-                  <div className="rounded-2xl overflow-hidden max-h-72 w-full border border-slate-200">
-                    <img src={post.image} alt="Update" className="w-full h-full object-cover" />
-                  </div>
-                )}
-
-                {/* Like & Interact Bar */}
-                <div className="flex items-center gap-4 pt-3 border-t border-slate-100 text-xs text-slate-500 font-semibold">
-                  <button
-                    onClick={() => handleLike(post.id)}
-                    className={`flex items-center gap-1.5 py-1 px-2.5 rounded-lg transition-colors ${
-                      likedPosts[post.id] 
-                        ? 'text-blue-700 bg-blue-50' 
-                        : 'hover:text-slate-900 hover:bg-slate-100'
-                    }`}
-                  >
-                    <ThumbsUp className="w-3.5 h-3.5" />
-                    <span>{post.likes || 0} Likes</span>
-                  </button>
-
-                  <div className="flex items-center gap-1 py-1 px-2.5 text-slate-400">
-                    <MessageSquare className="w-3.5 h-3.5" />
-                    <span>{post.commentsCount || 0} Comments</span>
-                  </div>
-                </div>
+            {posts.length === 0 ? (
+              <div className="clean-card p-8 text-center text-xs text-slate-400">
+                No recent updates posted by {org.name} yet.
               </div>
-            ))
-          )}
+            ) : (
+              posts.map((post) => (
+                <div key={post.id} className="clean-card p-6 space-y-4">
+                  {/* Author Header */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-slate-900 text-white font-bold flex items-center justify-center text-sm">
+                        {(org?.name || "O").charAt(0)}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <h4 className="font-bold text-slate-900 text-sm">{org.name}</h4>
+                          <VerifiedBadge />
+                        </div>
+                        <p className="text-slate-400 text-[11px]">
+                          Posted by {post.authorName || 'Team'} • {new Date(post.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  {post.title && (
+                    <h3 className="font-bold text-sm text-slate-900">{post.title}</h3>
+                  )}
+                  <p className="text-slate-700 leading-relaxed text-xs sm:text-sm">{post.content}</p>
+
+                  {/* Photo attachment */}
+                  {post.image && (
+                    <div className="rounded-2xl overflow-hidden max-h-72 w-full border border-slate-200">
+                      <img src={post.image} alt="Update" className="w-full h-full object-cover" />
+                    </div>
+                  )}
+
+                  {/* Like & Interact Bar */}
+                  <div className="flex items-center gap-4 pt-3 border-t border-slate-100 text-xs text-slate-500 font-semibold">
+                    <button
+                      type="button"
+                      onClick={() => handleLike(post.id)}
+                      className={`flex items-center gap-1.5 py-1 px-2.5 rounded-lg transition-colors cursor-pointer ${
+                        likedPosts[post.id] 
+                          ? 'text-blue-700 bg-blue-50 font-bold' 
+                          : 'hover:text-slate-900 hover:bg-slate-100'
+                      }`}
+                    >
+                      <ThumbsUp className="w-3.5 h-3.5" />
+                      <span>{post.likes || 0} Likes</span>
+                    </button>
+
+                    <div className="flex items-center gap-1 py-1 px-2.5 text-slate-400">
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      <span>{post.commentsCount || 0} Comments</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       )}
 
