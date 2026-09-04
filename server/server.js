@@ -1,23 +1,19 @@
 import dotenv from 'dotenv';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __server_filename = fileURLToPath(import.meta.url);
-const __server_dirname = path.dirname(__server_filename);
-
-dotenv.config({ path: path.resolve(__server_dirname, '.env') });
-dotenv.config({ path: path.resolve(process.cwd(), 'server/.env') });
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
-import express from 'express';
-import cors from 'cors';
-import morgan from 'morgan';
-import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { db, initDbAsync } from './data/db.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+dotenv.config({ path: path.resolve(process.cwd(), 'server/.env') });
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+
+import express from 'express';
+import cors from 'cors';
+import morgan from 'morgan';
+import { db, initDbAsync } from './data/db.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
