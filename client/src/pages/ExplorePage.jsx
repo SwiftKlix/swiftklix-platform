@@ -247,11 +247,11 @@ export default function ExplorePage({
                     </div>
 
                     {/* Logo Overlap Badge on Bottom Left - Circular Crop */}
-                    <div className="absolute -bottom-5 left-4 w-16 h-16 rounded-full bg-white p-1.5 shadow-lg border-2 border-slate-200 flex items-center justify-center z-10 overflow-hidden">
+                    <div className="absolute -bottom-6 left-4 w-20 h-20 rounded-full bg-white p-1.5 shadow-xl border-3 border-white flex items-center justify-center z-10 overflow-hidden ring-1 ring-slate-200/80">
                       {org.logo ? (
                         <img src={org.logo} alt={org.name} className="w-full h-full object-cover rounded-full" />
                       ) : (
-                        <div className="w-full h-full rounded-full bg-slate-900 text-white font-black text-base flex items-center justify-center">
+                        <div className="w-full h-full rounded-full bg-slate-900 text-white font-black text-xl flex items-center justify-center">
                           {(org?.name || "O").charAt(0)}
                         </div>
                       )}
@@ -259,7 +259,7 @@ export default function ExplorePage({
                   </div>
 
                   {/* Body */}
-                  <div className="p-5 pt-8 flex-1 flex flex-col justify-between text-xs">
+                  <div className="p-5 pt-9 flex-1 flex flex-col justify-between text-xs">
                     <div>
                       <div className="flex items-center justify-between mb-1.5">
                         <div className="flex items-center gap-1.5">
