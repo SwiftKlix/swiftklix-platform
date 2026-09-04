@@ -1,10 +1,10 @@
 {
   "stats": {
-    "totalChapters": 1,
-    "activeOrgs": 1,
-    "totalMembers": 0,
-    "activeProjectsCount": 1,
-    "campusFootprint": 1
+    "totalChapters": 4,
+    "activeOrgs": 7,
+    "totalMembers": 1040,
+    "activeProjectsCount": 5,
+    "campusFootprint": 4
   },
   "organizations": [
     {
@@ -39,6 +39,222 @@
       "adminEmails": [
         "palash.raks@gmail.com"
       ]
+    },
+    {
+      "id": "org-ecoroots-climate",
+      "name": "EcoRoots Climate Initiative",
+      "tagline": "Empowering students to restore urban ecosystems through tree planting and conservation",
+      "category": "Environment",
+      "headquarters": "San Francisco, CA",
+      "description": "EcoRoots mobilizes local school and campus chapters to plant native trees, organize community watershed cleanups, and advocate for sustainable municipal greening projects.",
+      "contactEmail": "team@ecoroots.org",
+      "submittedBy": "partner@ecoroots.org",
+      "submittedAt": "2026-08-15T12:00:00.000Z",
+      "website": "https://ecoroots.org",
+      "image": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80",
+      "logo": "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=200&q=80",
+      "status": "Verified Official",
+      "approvalStatus": "approved",
+      "isApproved": true,
+      "activeChaptersCount": 6,
+      "membersCount": 180,
+      "verification": {
+        "ein": "82-4910294",
+        "registryDoc": "501(c)(3) Determination Letter",
+        "status": "Verified Official",
+        "verifiedAt": "2026-08-16T10:00:00.000Z"
+      },
+      "applicationSetupComplete": true,
+      "membershipCommittees": [
+        "Tree Planting Operations",
+        "Community Outreach & Schools",
+        "Environmental Policy",
+        "Media & Storytelling"
+      ],
+      "membershipQuestions": [
+        "Why are you passionate about local urban tree planting?",
+        "How many hours per month can you dedicate to outdoor stewardship days?"
+      ]
+    },
+    {
+      "id": "org-codeforward-youth",
+      "name": "CodeForward Youth Project",
+      "tagline": "Democratizing computer science education and AI literacy for underserved students",
+      "category": "Tech & Coding",
+      "headquarters": "Austin, TX",
+      "description": "CodeForward establishes student-led coding clubs across high schools and community colleges, providing free Python, web development, and AI workshops.",
+      "contactEmail": "chapters@codeforward.org",
+      "submittedBy": "director@codeforward.org",
+      "submittedAt": "2026-08-20T14:00:00.000Z",
+      "website": "https://codeforward.org",
+      "image": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80",
+      "logo": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=200&q=80",
+      "status": "Verified Official",
+      "approvalStatus": "approved",
+      "isApproved": true,
+      "activeChaptersCount": 8,
+      "membersCount": 310,
+      "verification": {
+        "ein": "47-1928401",
+        "registryDoc": "State Non-Profit Certificate",
+        "status": "Verified Official",
+        "verifiedAt": "2026-08-21T09:00:00.000Z"
+      },
+      "applicationSetupComplete": true,
+      "membershipCommittees": [
+        "Curriculum & Workshop Instruction",
+        "Hackathon Logistics",
+        "High School Mentorship",
+        "Sponsorship & Hardware"
+      ],
+      "membershipQuestions": [
+        "What programming languages or technical topics are you comfortable mentoring?",
+        "Have you organized campus workshops or hackathons before?"
+      ]
+    },
+    {
+      "id": "org-mindwell-campus",
+      "name": "MindWell Peer Health Network",
+      "tagline": "Fostering empathetic student communities and accessible mental wellness circles",
+      "category": "Mental Health",
+      "headquarters": "Boston, MA",
+      "description": "MindWell provides peer-to-peer mental wellness support, active listening workshops, and de-stigmatization campaigns across universities and high schools.",
+      "contactEmail": "hello@mindwellnetwork.org",
+      "submittedBy": "wellness@mindwellnetwork.org",
+      "submittedAt": "2026-08-25T11:00:00.000Z",
+      "website": "https://mindwellnetwork.org",
+      "image": "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80",
+      "logo": "https://images.unsplash.com/photo-1579208575657-c595a053b977?auto=format&fit=crop&w=200&q=80",
+      "status": "Verified Official",
+      "approvalStatus": "approved",
+      "isApproved": true,
+      "activeChaptersCount": 5,
+      "membersCount": 145,
+      "verification": {
+        "ein": "91-3049182",
+        "registryDoc": "Official 501(c)(3) Status",
+        "status": "Verified Official",
+        "verifiedAt": "2026-08-26T15:00:00.000Z"
+      },
+      "applicationSetupComplete": true,
+      "membershipCommittees": [
+        "Peer Listening Circles",
+        "Campus Awareness & Events",
+        "Wellness Workshops",
+        "Resource Advocacy"
+      ],
+      "membershipQuestions": [
+        "What motivates you to advocate for youth mental health?",
+        "Are you interested in completing our 4-hour certified active listening training?"
+      ]
+    },
+    {
+      "id": "org-nourishall-relief",
+      "name": "NourishAll Food Security",
+      "tagline": "Bridging surplus food to community food pantries and local families in need",
+      "category": "Food Security",
+      "headquarters": "Chicago, IL",
+      "description": "NourishAll coordinates student volunteers to rescue surplus groceries from local markets and distribute fresh produce to campus pantries and underserved shelters.",
+      "contactEmail": "contact@nourishall.org",
+      "submittedBy": "relief@nourishall.org",
+      "submittedAt": "2026-08-28T09:00:00.000Z",
+      "website": "https://nourishall.org",
+      "image": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1200&q=80",
+      "logo": "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=200&q=80",
+      "status": "Verified Official",
+      "approvalStatus": "approved",
+      "isApproved": true,
+      "activeChaptersCount": 4,
+      "membersCount": 120,
+      "verification": {
+        "ein": "36-8291048",
+        "registryDoc": "501(c)(3) Federal Exemption",
+        "status": "Verified Official",
+        "verifiedAt": "2026-08-29T11:00:00.000Z"
+      },
+      "applicationSetupComplete": true,
+      "membershipCommittees": [
+        "Food Rescue & Logistics",
+        "Pantry Operations",
+        "Community Partnerships",
+        "Volunteer Scheduling"
+      ],
+      "membershipQuestions": [
+        "Do you have weekend morning or evening availability for food drive shifts?",
+        "Are you able to assist with loading or sorting produce boxes?"
+      ]
+    },
+    {
+      "id": "org-healthpioneers-clinic",
+      "name": "HealthPioneers Community Outreach",
+      "tagline": "Pre-health students bringing preventive health screenings and education to underserved areas",
+      "category": "Healthcare",
+      "headquarters": "San Diego, CA",
+      "description": "HealthPioneers pairs aspiring pre-medical, nursing, and public health students with certified clinicians to host free blood pressure, diabetes, and health literacy fairs.",
+      "contactEmail": "info@healthpioneers.org",
+      "submittedBy": "clinical@healthpioneers.org",
+      "submittedAt": "2026-08-30T10:00:00.000Z",
+      "website": "https://healthpioneers.org",
+      "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80",
+      "logo": "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&w=200&q=80",
+      "status": "Verified Official",
+      "approvalStatus": "approved",
+      "isApproved": true,
+      "activeChaptersCount": 4,
+      "membersCount": 95,
+      "verification": {
+        "ein": "95-4819203",
+        "registryDoc": "Clinical Non-Profit Certification",
+        "status": "Verified Official",
+        "verifiedAt": "2026-08-31T14:00:00.000Z"
+      },
+      "applicationSetupComplete": true,
+      "membershipCommittees": [
+        "Health Education & Fairs",
+        "Triage & Screenings Assistant",
+        "Clinic Partnerships",
+        "Multilingual Patient Navigators"
+      ],
+      "membershipQuestions": [
+        "What is your academic focus or interest in healthcare?",
+        "Are you fluent in Spanish, Mandarin, Vietnamese, or other community languages?"
+      ]
+    },
+    {
+      "id": "org-pawsforward-rescue",
+      "name": "PawsForward Animal Welfare",
+      "tagline": "Student-powered foster coordination, shelter volunteering, and wildlife rehabilitation",
+      "category": "Animal Welfare",
+      "headquarters": "Seattle, WA",
+      "description": "PawsForward mobilizes youth volunteers to support local no-kill shelters, organize campus adoption days, and build temporary cat and dog winter shelters.",
+      "contactEmail": "rescue@pawsforward.org",
+      "submittedBy": "volunteer@pawsforward.org",
+      "submittedAt": "2026-09-01T08:00:00.000Z",
+      "website": "https://pawsforward.org",
+      "image": "https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=1200&q=80",
+      "logo": "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=200&q=80",
+      "status": "Verified Official",
+      "approvalStatus": "approved",
+      "isApproved": true,
+      "activeChaptersCount": 3,
+      "membersCount": 85,
+      "verification": {
+        "ein": "91-8201948",
+        "registryDoc": "Animal Welfare 501(c)(3)",
+        "status": "Verified Official",
+        "verifiedAt": "2026-09-01T16:00:00.000Z"
+      },
+      "applicationSetupComplete": true,
+      "membershipCommittees": [
+        "Shelter Support & Dog Walking",
+        "Adoption Fair Logistics",
+        "Foster Network Coordination",
+        "Community Supply Drives"
+      ],
+      "membershipQuestions": [
+        "What previous experience do you have handling cats, dogs, or shelter animals?",
+        "Are you able to attend weekend shelter volunteering shifts?"
+      ]
     }
   ],
   "opportunities": [
@@ -60,6 +276,88 @@
         "Chapter Lead",
         "Teaching"
       ]
+    },
+    {
+      "id": "opp-ecoroots-lead",
+      "orgId": "org-ecoroots-climate",
+      "orgName": "EcoRoots Climate Initiative",
+      "title": "Start an EcoRoots Reforestation Chapter",
+      "type": "Start a Chapter",
+      "targetLocation": "All Cities / Campus Chapters",
+      "commitment": "3-4 hours / week",
+      "focusArea": "Tree Planting & Urban Greening",
+      "category": "Environment",
+      "prerequisites": "Passion for environmental conservation \u2022 3+ hrs/week",
+      "deadline": "Open",
+      "spotsAvailable": 5,
+      "description": "Charter an official EcoRoots branch at your university or high school. Lead tree planting events, coordinate watershed restoration, and recruit student environmental officers.",
+      "tags": [
+        "Chapter Director",
+        "Environment",
+        "Climate",
+        "Leadership"
+      ]
+    },
+    {
+      "id": "opp-codeforward-lead",
+      "orgId": "org-codeforward-youth",
+      "orgName": "CodeForward Youth Project",
+      "title": "Launch a CodeForward STEM Chapter",
+      "type": "Start a Chapter",
+      "targetLocation": "All Cities / Campus Chapters",
+      "commitment": "2-4 hours / week",
+      "focusArea": "Youth Coding & AI Workshops",
+      "category": "Tech & Coding",
+      "prerequisites": "Basic programming background \u2022 Enthusiasm for teaching",
+      "deadline": "Open",
+      "spotsAvailable": 6,
+      "description": "Establish a CodeForward chapter in your school or campus. Teach beginner Python & web development workshops to underserved middle and high school students.",
+      "tags": [
+        "Chapter Director",
+        "Tech",
+        "Coding",
+        "Teaching"
+      ]
+    },
+    {
+      "id": "opp-mindwell-lead",
+      "orgId": "org-mindwell-campus",
+      "orgName": "MindWell Peer Health Network",
+      "title": "Found a MindWell Campus Wellness Chapter",
+      "type": "Start a Chapter",
+      "targetLocation": "All Cities / Campus Chapters",
+      "commitment": "2-3 hours / week",
+      "focusArea": "Peer Mental Wellness Circles",
+      "category": "Mental Health",
+      "prerequisites": "Empathetic communication \u2022 Commitment to certified training",
+      "deadline": "Open",
+      "spotsAvailable": 4,
+      "description": "Lead a MindWell branch on your campus to host destigmatizing peer discussions, mindfulness circles, and campus wellness resource fairs.",
+      "tags": [
+        "Chapter Director",
+        "Mental Health",
+        "Wellness"
+      ]
+    },
+    {
+      "id": "opp-nourishall-lead",
+      "orgId": "org-nourishall-relief",
+      "orgName": "NourishAll Food Security",
+      "title": "Establish a NourishAll Food Rescue Branch",
+      "type": "Start a Chapter",
+      "targetLocation": "All Cities / Campus Chapters",
+      "commitment": "2-4 hours / week",
+      "focusArea": "Surplus Food Rescue & Pantries",
+      "category": "Food Security",
+      "prerequisites": "Organizational leadership \u2022 Weekend drive availability",
+      "deadline": "Open",
+      "spotsAvailable": 4,
+      "description": "Start a campus food recovery chapter. Connect dining halls and local grocery stores with local student pantries and shelters.",
+      "tags": [
+        "Chapter Director",
+        "Food Security",
+        "Community Relief"
+      ]
     }
   ],
   "chapters": [
@@ -76,6 +374,51 @@
       "eventsHosted": 0,
       "recentEvent": "",
       "meetingSchedule": "",
+      "status": "Active"
+    },
+    {
+      "id": "chap-ecoroots-sf",
+      "orgId": "org-ecoroots-climate",
+      "orgName": "EcoRoots Climate Initiative",
+      "name": "EcoRoots - UC Berkeley & Bay Area Chapter",
+      "location": "Berkeley, CA",
+      "institution": "UC Berkeley",
+      "leadName": "Maya Lin",
+      "leadEmail": "maya@ecoroots.org",
+      "activeMembers": 42,
+      "eventsHosted": 6,
+      "recentEvent": "Campus Native Oak Planting Day",
+      "meetingSchedule": "Every Tuesday 6:00 PM",
+      "status": "Active"
+    },
+    {
+      "id": "chap-codeforward-austin",
+      "orgId": "org-codeforward-youth",
+      "orgName": "CodeForward Youth Project",
+      "name": "CodeForward - UT Austin & Central TX",
+      "location": "Austin, TX",
+      "institution": "UT Austin",
+      "leadName": "Kevin Zhao",
+      "leadEmail": "kevin@codeforward.org",
+      "activeMembers": 35,
+      "eventsHosted": 8,
+      "recentEvent": "Youth Python & Game Dev Hackathon",
+      "meetingSchedule": "Thursdays 5:30 PM",
+      "status": "Active"
+    },
+    {
+      "id": "chap-mindwell-boston",
+      "orgId": "org-mindwell-campus",
+      "orgName": "MindWell Peer Health Network",
+      "name": "MindWell - Boston University Chapter",
+      "location": "Boston, MA",
+      "institution": "Boston University",
+      "leadName": "Sarah Jenkins",
+      "leadEmail": "sarah@mindwellnetwork.org",
+      "activeMembers": 28,
+      "eventsHosted": 5,
+      "recentEvent": "Midterm Exam Mindfulness & Peer Listening Circle",
+      "meetingSchedule": "Wednesdays 7:00 PM",
       "status": "Active"
     }
   ],
