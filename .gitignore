@@ -7,3 +7,6 @@ dist/
 cd
 git
 *.log
+
+server/data/db.json
+server/data/*.tmp.*

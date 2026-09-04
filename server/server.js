@@ -1,4 +1,13 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __server_filename = fileURLToPath(import.meta.url);
+const __server_dirname = path.dirname(__server_filename);
+
+dotenv.config({ path: path.resolve(__server_dirname, '.env') });
+dotenv.config({ path: path.resolve(process.cwd(), 'server/.env') });
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';

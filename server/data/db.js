@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -6,6 +6,13 @@ import mongoose from 'mongoose';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Explicitly resolve and load .env from all possible locations
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+dotenv.config({ path: path.resolve(process.cwd(), 'server/.env') });
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+
 const storageDir = process.env.DATA_DIR || process.env.RENDER_DISK_PATH || __dirname;
 
 if (!fs.existsSync(storageDir)) {
@@ -17,8 +24,9 @@ if (!fs.existsSync(storageDir)) {
 const DB_FILE = path.join(storageDir, 'db.json');
 const INITIAL_DATA_FILE = path.join(__dirname, 'initialData.json');
 
-// MongoDB Cloud Persistence (Free M0 Tier Support)
-const MONGODB_URI = process.env.MONGODB_URI || '';
+// MongoDB Cloud Persistence - guaranteed connection with fallback to Atlas cluster
+const FALLBACK_ATLAS_URI = 'mongodb+srv://swiftklix1_db_user:EfH8lrrrYUCw694Q@cluster0.xjpwc2f.mongodb.net/swiftklix?retryWrites=true&w=majority&appName=Cluster0';
+const MONGODB_URI = process.env.MONGODB_URI || FALLBACK_ATLAS_URI;
 let isMongoConnected = false;
 
 // Universal Document Schema for Cloud Storage
