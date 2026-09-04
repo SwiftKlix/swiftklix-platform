@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Building2, Plus, CheckCircle2, ShieldCheck, Globe, Clock,
+  Building2, Plus, UserPlus, CheckCircle2, ShieldCheck, Globe, Clock,
   Linkedin, Twitter, Instagram, Github, MessageSquare, 
   Save, Sparkles, FileText, ImageIcon, Trash2, ArrowUpRight,
   Send, ThumbsUp, Upload, X, Check, MapPin, Users, Briefcase, UserCheck, Eye, Edit3, Link, Calendar, Sliders, HelpCircle
@@ -122,6 +122,7 @@ export default function MyOrgPage({
         },
         customQuestions: org.customQuestions || [],
         membersCount: org.membersCount !== undefined ? org.membersCount : 0,
+        adminEmails: org.adminEmails || [],
         externalMembershipUrl: org.externalMembershipUrl || '',
         membershipRequirements: org.membershipRequirements || '',
         membershipQuestions: org.membershipQuestions || [],
@@ -172,6 +173,57 @@ export default function MyOrgPage({
   const [formData, setFormData] = useState(() => getInitialFormData(currentOrg));
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [draftSavedToast, setDraftSavedToast] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteError, setInviteError] = useState('');
+
+  const handleAddManager = () => {
+    setInviteError('');
+    const email = (inviteEmail || '').trim().toLowerCase();
+    if (!email || !email.includes('@') || !email.includes('.')) {
+      setInviteError('Please enter a valid email address.');
+      return;
+    }
+    const currentOwner = (currentOrg?.submittedBy || formData.contactEmail || '').toLowerCase();
+    if (email === currentOwner) {
+      setInviteError('The organization owner already has full administrative access.');
+      return;
+    }
+    const currentManagers = formData.adminEmails || [];
+    if (currentManagers.map(e => e.toLowerCase()).includes(email)) {
+      setInviteError('This email is already an authorized manager.');
+      return;
+    }
+    if (currentManagers.length >= 3) {
+      setInviteError('Maximum limit of 3 co-managers reached. Remove an existing manager first.');
+      return;
+    }
+    const updatedManagers = [...currentManagers, email];
+    setFormData(prev => ({
+      ...prev,
+      adminEmails: updatedManagers
+    }));
+    if (currentOrg && onSaveOrg) {
+      onSaveOrg(currentOrg.id, {
+        ...formData,
+        adminEmails: updatedManagers
+      });
+    }
+    setInviteEmail('');
+  };
+
+  const handleRemoveManager = (emailToRemove) => {
+    const updatedManagers = (formData.adminEmails || []).filter(e => e.toLowerCase() !== emailToRemove.toLowerCase());
+    setFormData(prev => ({
+      ...prev,
+      adminEmails: updatedManagers
+    }));
+    if (currentOrg && onSaveOrg) {
+      onSaveOrg(currentOrg.id, {
+        ...formData,
+        adminEmails: updatedManagers
+      });
+    }
+  };
 
   useEffect(() => {
     setFormData(getInitialFormData(currentOrg));
@@ -1240,6 +1292,102 @@ export default function MyOrgPage({
                   />
                 </div>
               </div>
+            </div>
+
+            {/* Organization Ownership & Co-Manager Permissions (Up to 3 People) */}
+            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
+                    <UserPlus className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 text-sm">Dashboard Access & Team Permissions</h4>
+                    <p className="text-slate-400 text-[11px]">Authorize trusted team members to manage this organization (up to 3 managers).</p>
+                  </div>
+                </div>
+                <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold text-[10px]">
+                  {(formData.adminEmails || []).length} / 3 Slots Filled
+                </span>
+              </div>
+
+              {/* Primary Owner */}
+              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-7 h-7 rounded-full bg-slate-900 text-white font-black text-xs flex items-center justify-center">
+                    {(currentOrg?.submittedBy || formData.contactEmail || "O").charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <span className="font-bold text-slate-900 block">{currentOrg?.submittedBy || formData.contactEmail || user?.email}</span>
+                    <span className="text-slate-400 text-[10px]">Primary Founder / Organization Owner</span>
+                  </div>
+                </div>
+                <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 font-extrabold text-[10px] uppercase tracking-wider">
+                  Main Account
+                </span>
+              </div>
+
+              {/* Active Co-Managers List */}
+              <div className="space-y-2">
+                <span className="font-bold text-slate-800 text-[11px] block">Authorized Co-Managers</span>
+                
+                {(!formData.adminEmails || formData.adminEmails.length === 0) ? (
+                  <div className="p-3.5 rounded-xl border border-dashed border-slate-200 text-center text-slate-400 text-[11px]">
+                    No co-managers added yet. Only the main founder account has dashboard access.
+                  </div>
+                ) : (
+                  <div className="space-y-1.5">
+                    {formData.adminEmails.map((email) => (
+                      <div key={email} className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200 text-xs shadow-2xs">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-full bg-slate-100 text-slate-700 font-bold text-[10px] flex items-center justify-center">
+                            {email.charAt(0).toUpperCase()}
+                          </div>
+                          <span className="font-semibold text-slate-800">{email}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveManager(email)}
+                          className="p-1 rounded-lg text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors cursor-pointer text-[11px] flex items-center gap-1 font-semibold"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                          <span>Revoke Access</span>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Invite New Manager Input */}
+              {(formData.adminEmails || []).length < 3 ? (
+                <div className="pt-2">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="email"
+                      value={inviteEmail}
+                      onChange={(e) => { setInviteEmail(e.target.value); setInviteError(''); }}
+                      placeholder="Enter manager email address (e.g. colleague@example.org)..."
+                      className="flex-1 p-2.5 rounded-xl border border-slate-200 bg-white text-xs focus:outline-none focus:border-blue-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddManager}
+                      className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center gap-1.5 shadow-2xs transition-colors cursor-pointer shrink-0"
+                    >
+                      <UserPlus className="w-3.5 h-3.5" />
+                      <span>Authorize Manager</span>
+                    </button>
+                  </div>
+                  {inviteError && (
+                    <p className="text-red-600 text-[11px] font-semibold mt-1.5">{inviteError}</p>
+                  )}
+                </div>
+              ) : (
+                <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-500 text-[11px] text-center">
+                  Maximum of 3 co-managers reached. Revoke access for an existing manager to add someone else.
+                </div>
+              )}
             </div>
 
             <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
