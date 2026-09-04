@@ -6,7 +6,6 @@ import GoalDrawer from './components/GoalDrawer';
 import AuthModal from './components/AuthModal';
 import DiagnosticModal from './components/DiagnosticModal';
 import BranchDetailModal from './components/BranchDetailModal';
-import AiAssistant from './components/AiAssistant';
 import Toast from './components/Toast';
 import ApplyModal from './components/ApplyModal';
 import CreateCampaignModal from './components/CreateCampaignModal';
@@ -551,13 +550,7 @@ export default function App() {
     </div>
    </footer>
 
-   {/* Omnipresent Floating AI Chat Assistant Bubble */}
-   <AiAssistant 
-    orgs={orgs} 
-    opportunities={opportunities} 
-    onViewOrg={(orgId) => setSelectedOrgId(orgId)}
-    onApply={(opp) => setApplyOpportunity(opp)}
-   />
+
 
    {/* Right-Side Goal / Mode Drawer */}
     <GoalDrawer

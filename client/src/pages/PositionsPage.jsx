@@ -231,11 +231,11 @@ export default function PositionsPage({
                   </div>
 
                   {/* Logo badge - Circular Crop */}
-                  <div className="absolute -bottom-2.5 left-3.5 w-10 h-10 rounded-full bg-white p-0.5 shadow-md border border-slate-200 flex items-center justify-center z-10 overflow-hidden">
+                  <div className="absolute -bottom-4 left-4 w-14 h-14 rounded-full bg-white p-1 shadow-lg border-2 border-slate-200 flex items-center justify-center z-10 overflow-hidden">
                     {org?.logo ? (
                       <img src={org.logo} alt={org.name} className="w-full h-full object-cover rounded-full" />
                     ) : (
-                      <div className="w-full h-full rounded-full bg-slate-900 text-white font-extrabold text-xs flex items-center justify-center">
+                      <div className="w-full h-full rounded-full bg-slate-900 text-white font-black text-sm flex items-center justify-center">
                         {(opp?.orgName || "O").charAt(0)}
                       </div>
                     )}
@@ -243,7 +243,7 @@ export default function PositionsPage({
                 </div>
 
                 {/* Content */}
-                <div className="p-5 pt-4 flex-1 flex flex-col justify-between text-xs">
+                <div className="p-5 pt-7 flex-1 flex flex-col justify-between text-xs">
                   <div>
                     <h3 className="font-bold text-base text-slate-900 mb-1 leading-snug">
                       {opp.title}

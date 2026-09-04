@@ -79,11 +79,11 @@ export default function OrgDetailPage({
         <div className="p-6 sm:p-8 pt-0 relative">
           {/* Logo Avatar overlapping cover */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between -mt-12 sm:-mt-14 mb-4 gap-4">
-            <div className="w-24 h-24 rounded-full bg-white p-1.5 shadow-md border border-slate-200 overflow-hidden flex items-center justify-center">
+            <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-white p-2 shadow-xl border-2 border-slate-200 overflow-hidden flex items-center justify-center shrink-0">
               {org.logo ? (
                 <img src={org.logo} alt={org.name} className="w-full h-full object-cover rounded-full" />
               ) : (
-                <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-white font-extrabold text-2xl">
+                <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-white font-black text-3xl">
                   {(org?.name || "O").charAt(0)}
                 </div>
               )}
@@ -254,12 +254,7 @@ export default function OrgDetailPage({
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
-            <h4 className="font-bold text-slate-900 mb-1">Branch Operating Model:</h4>
-            <p className="text-slate-600 leading-relaxed">
-              Branch directors receive direct mentorship, seed-funded materials, and pre-approved event guides to lead local campus and city projects.
-            </p>
-          </div>
+
         </div>
       )}
 
